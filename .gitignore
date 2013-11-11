@@ -14,3 +14,6 @@
 
 #vim swap file
 .*.swp
+
+# Compiled Dependencies
+.*.d
