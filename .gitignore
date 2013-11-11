@@ -11,3 +11,9 @@
 *.lai
 *.la
 *.a
+
+#vim swap file
+.*.swp
+
+# Compiled Dependencies
+.*.d
