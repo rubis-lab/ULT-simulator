@@ -12,21 +12,25 @@ char* strtok_r(char* str, char* delim, char** context)
 }
 #endif
 
-Vector::Vector(bool isValid)
+bool dEQ(double x, double y)
 {
-	x = y = z = 0;
-//	this->isValid = isValid;
+	const double precision = 0.0001;
+	return fabs(x - y) <= precision;
 }
 
-Vector::Vector(double x, double y, double z, bool isValid = true)
+Vector::Vector()
+{
+	x = y = z = 0;
+}
+
+Vector::Vector(double x, double y, double z)
 {
 	this->x = x;
 	this->y = y;
 	this->z = z;
-//	isValid = true;
 }
 
-Vector::Vector(char *string, bool isValid = true)
+Vector::Vector(char *string)
 {
 	char buf[255];
 	strcpy(buf, string + 1);
@@ -40,7 +44,6 @@ Vector::Vector(char *string, bool isValid = true)
 	this->y = atof(tok);
 	tok = strtok_r(NULL, ",)", &context);
 	this->z = atof(tok);
-	isValid = true;
 }
 
 Vector::~Vector(void)
@@ -53,7 +56,6 @@ Vector Vector::operator +(Vector v)
 	ret.x = this->x + v.x;
 	ret.y = this->y + v.y;
 	ret.z = this->z + v.z;
-	ret.isValid = this->isValid & v.isValid;
 
 	return ret;
 }
@@ -64,7 +66,6 @@ Vector Vector::operator -(Vector v)
 	ret.x = this->x - v.x;
 	ret.y = this->y - v.y;
 	ret.z = this->z - v.z;
-	ret.isValid = this->isValid & v.isValid;
 	
 	return ret;
 }
@@ -75,7 +76,6 @@ Vector Vector::operator -()
 	ret.x = - this->x;
 	ret.y = - this->y;
 	ret.z = - this->z;
-	ret.isValid = this->isValid;
 
 	return ret;
 }
@@ -86,7 +86,6 @@ Vector Vector::operator *(Vector v)
 	ret.x = this->y * v.z - this->z * v.y;
 	ret.y = this->z * v.x - this->x * v.z;
 	ret.z = this->x * v.y - this->y * v.x;
-	ret.isValid = this->isValid & v.isValid;
 
 	return ret;
 }
@@ -102,57 +101,50 @@ Vector Vector::operator *(double val)
 	ret.x = x * val;
 	ret.y = y * val;
 	ret.z = z * val;
-	ret.isValid = this->isValid;
 
 	return ret;
 }
 
-double Vector::GetSize()
+double Vector::getSize()
 {
 	return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 }
-double Vector::GetSqrSize()
+double Vector::getSqrSize()
 {
 	return pow(x,2) + pow (y, 2) + pow (z, 2);
 }
-Vector Vector::GetUnitVector()
+Vector Vector::getUnitVector()
 {	
 	double size = getSize();
-	if (size == 0) return Vector(false);
+	if (size == 0) return Vector();
 	return Vector(x / size, y / size, z / size);
 }
 
-double Vector::GetDistance(Vector v)
+double Vector::getDistance(Vector v)
 {
 	return sqrt(this->getSqrDistance(v));	
 }
 
-double Vector::GetSqrDistance(Vector v)
+double Vector::getSqrDistance(Vector v)
 {
 	return pow(x - v.x, 2) +  pow(y - v.y, 2) + pow (z - v.z, 2);
 }
 
-bool dEQ(double x, double y)
-{
-	const double precision = 0.0001;
-	return fabs(x - y) <= precision;
-}
 
-bool Vector::IsEqual(const Vector& v)
+bool Vector::isEqual(const Vector& v)
 {
-	return (this->isValid & v.isValid) 
-		&& dEQ(x, v.x) && dEQ(y, v.y) && dEQ(z, v.z);	
+	return dEQ(x, v.x) && dEQ(y, v.y) && dEQ(z, v.z);	
 }
 
 
-double Vector::GetAngle(Vector &v)
+double Vector::getAngle(Vector &v)
 {
 	double angle_pi = getAnglePI(v);
 	return (angle_pi / M_PI * 180);
 }
 
 
-double Vector::GetAnglePI(Vector &v)
+double Vector::getAnglePI(Vector &v)
 {
 	Vector vNorm = this->getUnitVector();
 	double vDist = v & vNorm;	
@@ -166,19 +158,19 @@ double Vector::GetAnglePI(Vector &v)
 	return angle_pi;
 }
 
-Vector Vector::GetCompCross(Vector &v)
+Vector Vector::getCompCross(Vector &v)
 {
 	return Vector(x * v.x, y * v.y, z * v.z);
 }
 
-void Vector::Print()
+void Vector::print()
 {
 	printf("(%4.3f, %4.3f, %4.3f)", x, y, z);
 }
 
-void Vector::Println()
+void Vector::println()
 {
-	Print();
+	print();
 	printf("\n");
 }
 

@@ -1,5 +1,4 @@
 #pragma once
-//#include "Position.h"
 #include "Vector.h"
 #include "HeardList.h"
 #include "Argument.h"
@@ -10,28 +9,11 @@
 #include <gsl/gsl_multifit_nlin.h>
 #include <gsl/gsl_linalg.h>
 
-#define REFLECTION_LIMIT 1
+//#define REFLECTION_LIMIT 1 
+// REFLECTOIN_LIMIT is defined in HeardList.h
 #define LSQ_THRESHOLD 100
 #define MAX_HISTORY 1024
 #define MAX_VAL 99999
-//#define SPEED_LIMIT 120		// cm per second
-/*
-#define FILTER1 0x0001
-#define FILTER2 0x0002
-#define FILTER3 0x0004
-#define FILTER4 0x0008
-#define FILTER5 0x0010
-#define FILTER_LOG 0x8000
-#define FILTER_FLAG (0x0 | FILTER2 \
-	| FILTER1 \
-	| FILTER2 \
-	| FILTER3 \
-	| FILTER4 \
-	| FILTER5 \
-	| FILTER_LOG \
-	)
-*/
-const int mobilityLimit = 100;
 
 class SolvedPosition
 {
@@ -50,9 +32,6 @@ public:
 	bool valid;
 };
 
-
-
-		
 
 class PositionSolver
 {

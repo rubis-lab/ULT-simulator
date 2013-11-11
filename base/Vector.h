@@ -9,10 +9,10 @@ char* strtok_r(char* str, char* delim, char** context);
 class Vector
 {
 public:
-	Vector(bool isValid);
+	Vector();
 	~Vector(void);
-	Vector(double x, double y, double z, bool isValid);
-	Vector(char* string, bool isValid);
+	Vector(double x, double y, double z);
+	Vector(char* string);
 
 
 private:
@@ -26,15 +26,15 @@ public:
 	Vector operator * (Vector v);
 	Vector operator * (double val);
 	double operator & (Vector v);
-	Vector GetUnitVector();
-	double GetSize();
-	double GetSqrSize();
-	double GetDistance(Vector v);
-	double GetSqrDistance(Vector v);
-	bool IsEqual(const Vector &v);
-	double GetAngle(Vector &v);	
-	double GetAnglePI(Vector &v);
-	void Print();
-	void Println();
-	Vector GetCompCross(Vector &v);
+	Vector getUnitVector();
+	double getSize();
+	double getSqrSize();
+	double getDistance(Vector v);
+	double getSqrDistance(Vector v);
+	bool isEqual(const Vector &v);
+	double getAngle(Vector &v);	
+	double getAnglePI(Vector &v);
+	void print();
+	void println();
+	Vector getCompCross(Vector &v);
 };
