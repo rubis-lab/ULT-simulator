@@ -1,48 +1,49 @@
-#include "Esttimator.h"
+#include "Estimator.h"
 
-void Estimator::Estimator()
+Estimator::Estimator()
 {
+	measurementList = NULL;
+	input = NULL;
+	filterManager = NULL;
 	reset();
 }
 
-void Estimator::~Estimator()
+Estimator::~Estimator()
 {
-	if (measurementList != NULL)
-	{
-		delete measurementList;
-		measurementList = NULL;
-	}
-	if (input != NULL)
-	{
-		delete input;
-		input = NULL;
-	}
-
+	destructor();	
 }
-
-void Estimator::reset()
+void Estimator::destructor()
 {
 	if (measurementList != NULL)
 		delete measurementList;
 	measurementList = NULL;
-
+	
 	if (input != NULL)
 		delete input;
+	input = NULL;
+
+	if (filterManager != NULL)
+		delete filterManager;
+	filterManager = NULL;
+}
+
+void Estimator::reset()
+{
+	destructor();
 
 	prevLocation = Vector();
 }
 
 
-void Estimator::setEstimator(EstimatorArguement estimatorArgument)
+void Estimator::setEstimator(EstimatorArgument estimatorArgument)
 {
 	reset();
-	args = estimatorArguement;
+	args = estimatorArgument;
 	args.setCutThreshold();
 
 	setMeasurementList();
 	setSolver();
 	setInput();
-	setCutThreshold();
 	setFilterManager();
 
 }
@@ -51,7 +52,7 @@ void Estimator::setEstimator(EstimatorArguement estimatorArgument)
 void Estimator::setMeasurementList()
 {
 
-	measurementList = new MeasurementList(args.lid, args.beacons., args.beacons, args.planes);
+	measurementList = new MeasurementList(args.lid, args.beacons, args.planes);
 
 
 	MeasurementCondition measurementCondition;
@@ -59,13 +60,13 @@ void Estimator::setMeasurementList()
 	measurementCondition.minSize = args.minBeaconSize;
 	measurementCondition.validSize = args.validSize;
 	measurementCondition.strictValidSize = args.strictValidSize;
-	measurementCondition.timeWindow = timeWindow;
+	measurementCondition.timeWindow = args.timeWindow;
 
 	measurementCondition.shortDistanceFirst = (bool)(!args.estimatorMode == EST::TRADITIONAL);
-	measurementCondition.smallerNVSSFirst = (bool)(args.optimizastion & OPT::SELECTION);
+	measurementCondition.smallerNVSSFirst = (bool)(args.optimization & OPT::SELECTION);
 
 	
-	measurementList.setMeasurementCondition(measurementCondition);
+	measurementList->setMeasurementCondition(measurementCondition);
 
 	
 
@@ -93,7 +94,12 @@ void Estimator::setInput()
 
 void Estimator::setFilterManager()
 {
-
+	KFArgument kfArgs;
+	kfArgs.mode = args.kfMode;
+	kfArgs.timeSlot = args.timeSlot;
+	kfArgs.KFMeasError = args.kfMeasError;
+	kfArgs.KFSystemError = args.kfSystemError;
+	filterManager = new FilterManager(kfArgs);
 }
 
 
@@ -108,14 +114,53 @@ EstimatorResult Estimator::solve(long currentTime)
 	measurementList->makeSnapshot(currentTime, args.timeWindow);
 	input->setup(currentTime, prevLocation);
 
-	SolverResult result;
+	SolverResultList results;
 	
-	solver.solve(input, &result);
+	solver.solve(input, &results);
 
 	if (args.optimization & OPT::THRESHOLD)
 	{
-		result->cutThreshold(pow(args.cutThreshold, 2));
+		results.cutThreshold(pow(args.cutThreshold, 2));
 	}
+
+	EstimatorResult ret;
+
+	if (args.estimatorMode == EST::KFONLY || args.estimatorMode == EST::PROPOSED1)
+	{
+		filterManager->getCorrectedResult(&results);
+		SolverResult filteredResult = results.getFilteredResult();
+		
+		ret.location = filteredResult.getCorrectedLocation();
+		ret.error = filteredResult.getCorrectedError();
+
+		if (!filteredResult.isValid())
+		{
+			ret.location = prevLocation;
+			ret.error = filteredResult.getError(prevLocation);
+		}
+	}
+	else
+	{
+		if (results.size() == 0)
+		{
+			printf("unexpected error. results size is zero. in Estimator::solve\n");
+			exit(20);
+		}
+		SolverResult result = results.getFirstResult();
+			
+		if (result.isValid())
+		{
+			ret.location = result.location;
+			ret.error = result.error;
+		}
+		else
+		{
+			ret.location = prevLocation;
+			ret.error = result.getError(prevLocation);
+		}
+	}
+
+	return ret;
 
 }
 

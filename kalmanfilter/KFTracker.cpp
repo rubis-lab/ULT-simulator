@@ -175,7 +175,7 @@ Vector KFTracker::predict()
 	
 }
 
-Vector KFTracker::correct(SolverResult::Result *result)
+Vector KFTracker::correct(SolverResult *result)
 {
 	Vector location = result->location;
 	double baseZ[3] = {location.x, location.y, location.z};
@@ -206,7 +206,7 @@ Vector KFTracker::correct(SolverResult::Result *result)
 
 }
 
-void KFTracker::initTracker(SolverResult::Result *result)
+void KFTracker::initTracker(SolverResult *result)
 {
 	Vector location = result->location;
 

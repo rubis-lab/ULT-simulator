@@ -1,28 +1,18 @@
 #pragma once
 #include "Solver.h"
-
 #include "BeaconList.h"
 #include "PlaneList.h"
+#include "FilterManager.h"
 
 namespace OPT
 {
 	enum options
 	{
-		NONE = 			0x00;
+		NONE = 			0x00,
 		SELECTION = 	0x01,
 		THRESHOLD = 	0x02,
-		BRANCHCUT = 	0x04;
+		BRANCHCUT = 	0x04,
 		BRANCHCUT_2 =	0x08,
-	};
-}
-
-namespace KF
-{
-	enum mode
-	{
-		P, 
-		PV,
-		PVA,
 	};
 }
 
@@ -31,6 +21,7 @@ namespace EST
 	enum mode
 	{
 		TRADITIONAL,
+		KFONLY,
 		PROPOSED1,
 	};
 }
@@ -39,8 +30,17 @@ namespace EST
 class EstimatorResult
 {
 public:
-	EstimatorResult();
-	~EsitmatorResult();
+	EstimatorResult()
+	{
+	}
+	EstimatorResult(Vector location, double error):
+		location(location), 
+		error(error)
+	{
+	}
+	~EstimatorResult()
+	{
+	}
 	
 	Vector location;
 	double error;
@@ -56,11 +56,11 @@ public:
 	class EstimatorArgument
 	{
 	public:
-		EstimatorArguement()
+		EstimatorArgument()
 		{
 			setDefault();
 		}
-		~EstimatorArguement();
+		~EstimatorArgument();
 		void setDefault()
 		{
 			timeSlot = 50;
@@ -95,8 +95,11 @@ public:
 
 		
 		OPT::options optimization;
-		KF::mode kfMode;
 		EST::mode estimatorMode;
+
+		KF::mode kfMode;
+		double kfMeasError;
+		double kfSystemError;
 
 		BeaconList *beacons;
 		PlaneList *planes;
@@ -114,9 +117,9 @@ public:
 	~Estimator();
 
 	void reset();
+	void destructor();
 
 	void setEstimator(EstimatorArgument estimatorArgument);
-	void setSolver();
 	void measure(int userBid, unsigned long timestamp, double distance);
 	EstimatorResult solve(long currentTime);
 

@@ -14,7 +14,7 @@
 #define MAX_VAL 99999
 
 
-class SolverResult;
+class SolverResultList;
 
 
 class SolverCondition
@@ -58,71 +58,61 @@ private:
 
 class SolverResult
 {
-public:
+public:	
 	SolverResult();
-	~SolverResult();
+	SolverResult(Vector location, std::vector<Measurement*> snapshot);
+	
+	Vector location;
+	double error;		//squared error
+	std::vector<Measurement*> snapshot;
+	bool cutThreshold;
+	bool isEmpty;
 
-	class Result
-	{
-	public:	
-		Result() : isEmpty(true) {}
-		Result(Vector location, double error, std::vector<Measurement*> snapshot) :
-				location(location), 
-				error(error), 
-				snapshot(snapshot), 
-				cutThreshold(false), 
-				isEmpty(false)
-		{
-		}
-		Vector location;
-		double error;		//squared error
-		std::vector<Measurement*> snapshot;
-		bool cutThreshold;
-		bool isEmpty;
-		bool isValid()
-		{
-			if (cutThreshold || isEmpty) return false;
-			return true;
-		}
 
-		void setCorrectedLocation(Vector vCorrect)
-		{
-			correctedLocation = vCorrect;
-			distErrorCorrected = vCorrect.getDistance(location);
-		}
-		void setPredictedLocation(Vector vPredict)
-		{
-			predictedLocation = vPredict;
-			distErrorPredicted = vPredict.getDistance(location);
-		}
-		double getPredictedDistanceError()
-		{
-			return distErrorPredicted;
-		}
-	private:
-		Vector correctedLocation;
-		Vector predictedLocation;
-		double distErrorCorrected;
-		double distErrorPredicted;
+	bool isValid();
+	void setCorrectedLocation(Vector vCorrect);
+	void setPredictedLocation(Vector vPredict);
+	Vector getCorrectedLocation();
+	Vector getPredictedLocation();
 
-	};
 
+	double getPredictedDistanceError();
+	double getError(Vector location);
+	double getError();
+	double getCorrectedError();
+	double getPredictedError();
+	
+
+private:
+	Vector correctedLocation;
+	Vector predictedLocation;
+	double distErrorCorrected;
+	double distErrorPredicted;
+};
+
+class SolverResultList
+{
+public:
+	SolverResultList();
+	~SolverResultList();
 
 	void addResult(SolverInput *input, Vector location);
 	void cutThreshold(double thresholdErrorSquare);
 	size_t size();
 	bool isValid(int idx);
 	Vector getLocation(int idx);
-	Result* at(int idx);
+	SolverResult* at(int idx);
+	
 
-	Result getFilteredResult();
-	void setFilteredResult(Result result);
+	SolverResult getFilteredResult();
+	SolverResult getFirstResult();
+	void setFilteredResult(SolverResult result);
 
 private:
 	double getError(SolverInput *input, Vector location);
-	std::vector<Result> results;
+	std::vector<SolverResult> results;
 
-	Result filteredResult;
+	SolverResult filteredResult;
 
 };
 
@@ -132,7 +122,7 @@ public:
 	Solver();
 	~Solver();
 
-	void solve(SolverInput *input, SolverResult *result);
+	void solve(SolverInput *input, SolverResultList *results);
 
 	void setSolverCondition(SolverCondition condition);
 
@@ -143,8 +133,8 @@ private:
 	BeaconList *beacons;
 
 
-	void solveNaive(SolverInput *input, SolverResult *result);
-	void solveWithPlanes(SolverInput *input, SolverResult *result, int currentIdx = 0);
+	void solveNaive(SolverInput *input, SolverResultList *results);
+	void solveWithPlanes(SolverInput *input, SolverResultList *results, int currentIdx = 0);
 	Vector NLLeastSquareSolver(SolverInput *input);
 	Vector LeastSquareSolver2D(SolverInput *input);
 

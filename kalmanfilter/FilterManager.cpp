@@ -32,7 +32,7 @@ void FilterManager::reset()
 }
 
 
-void FilterManager::getCorrectedResult(SolverResult *results)
+void FilterManager::getCorrectedResult(SolverResultList *results)
 {
 	bool ret;
 	if (blInit)
@@ -43,7 +43,7 @@ void FilterManager::getCorrectedResult(SolverResult *results)
 		return;
 	}
 
-	SolverResult::Result *result;
+	SolverResult *result;
 
 	result = processNextStep(results);
 
@@ -60,7 +60,7 @@ void FilterManager::getCorrectedResult(SolverResult *results)
 	//instead of processNext, 
 	//find the closest predicted value, and then correct it.
 	//
-	//Result *result;
+	//SolverResult *result;
 	//result = findMostAccurateResult(results);
 	//correctResult(result);
 	
@@ -68,18 +68,18 @@ void FilterManager::getCorrectedResult(SolverResult *results)
 }
 
 
-SolverResult::Result* FilterManager::processNextStep(SolverResult *results)
+SolverResult* FilterManager::processNextStep(SolverResultList *results)
 {
 	std::vector <KFTracker *> filterInfoTemp;
 
 	double minError = -1;
 	KFTracker *minTracker = NULL;
-	SolverResult::Result *minResult = NULL;
+	SolverResult *minResult = NULL;
 	for (size_t i = 0; i < results->size(); i++)
 	{
 		if (!results->isValid(i)) continue;
 		KFTracker *repKFT = new KFTracker(currentTracker);
-		SolverResult::Result *result = results->at(i);
+		SolverResult *result = results->at(i);
 
 		Vector vPredict = repKFT->predict();
 		result->setPredictedLocation(vPredict);
@@ -117,7 +117,7 @@ SolverResult::Result* FilterManager::processNextStep(SolverResult *results)
 	return minResult;
 }
 
-bool FilterManager::initFilterInfo(SolverResult *result)
+bool FilterManager::initFilterInfo(SolverResultList *result)
 {
 	int minIdx = -1;
 	double minValue;

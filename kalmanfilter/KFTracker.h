@@ -49,8 +49,8 @@ public:
 
 	void setTracker(KFArgument args);
 	Vector predict();
-	Vector correct(SolverResult::Result *result);
-	void initTracker(SolverResult::Result *result);	
+	Vector correct(SolverResult *result);
+	void initTracker(SolverResult *result);	
 	Vector getX();
 	Vector getX0();
 	
@@ -59,7 +59,7 @@ public:
 	double period;	
 	bool IsSame(KFTracker *tracker);
 
-	SolverResult::Result* getRecentResult();
+	SolverResult* getRecentResult();
 
 
 private:
@@ -70,7 +70,7 @@ private:
 					gsl_matrix* A, gsl_matrix* B, gsl_matrix* H, 
 					gsl_matrix* Q, gsl_matrix* R, gsl_matrix* P);
 
-	SolverResult::Result *recentResult;
+	SolverResult *recentResult;
 
 
 };

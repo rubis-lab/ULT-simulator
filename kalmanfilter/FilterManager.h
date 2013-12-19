@@ -11,7 +11,7 @@ public:
 	~FilterManager();
 
 	void reset();
-	void getCorrectedResult(SolverResult *results);
+	void getCorrectedResult(SolverResultList *results);
 
 
 private:
@@ -20,10 +20,10 @@ private:
 	bool blInit;
 
 	void destructor();
-	SolverResult::Result* findMostAccurateResult(SolverResult results);
-	void correctResult(SolverResult::Result *result);
-	bool initFilterInfo(SolverResult *result);
-	SolverResult::Result* processNextStep(SolverResult *results);
+	SolverResult* findMostAccurateResult(SolverResultList results);
+	void correctResult(SolverResult *result);
+	bool initFilterInfo(SolverResultList *result);
+	SolverResult* processNextStep(SolverResultList *results);
 
 
 

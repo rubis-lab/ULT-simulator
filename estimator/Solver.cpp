@@ -37,26 +37,92 @@ void SolverInput::resetGatherFlags()
 }
 
 
+//////////SolverResult//////////
+///////////////////////////////
+//
+SolverResult::SolverResult() : isEmpty(true)
+{
+}
 
-///////SolverResult///////////////////////
+
+SolverResult::SolverResult(Vector location, std::vector<Measurement*> snapshot) :
+	location(location), 
+	snapshot(snapshot), 
+	cutThreshold(false), 
+	isEmpty(false)
+{
+	error = getError(location);
+}
+
+bool SolverResult::isValid()
+{
+	if (cutThreshold || isEmpty) return false;
+	return true;
+}
+void SolverResult::setCorrectedLocation(Vector vCorrect)
+{
+	correctedLocation = vCorrect;
+	distErrorCorrected = vCorrect.getDistance(location);
+}
+void SolverResult::setPredictedLocation(Vector vPredict)
+{
+	predictedLocation = vPredict;
+	distErrorPredicted = vPredict.getDistance(location);
+}
+double SolverResult::getPredictedDistanceError()
+{
+	return distErrorPredicted;
+}
+double SolverResult::getError(Vector location)
+{
+	double err = 0;
+	for (size_t i = 0; i <snapshot.size(); i++)
+	{
+		err += pow(snapshot[i]->getDistance() - 
+				(snapshot[i]->getLocation().getDistance(location)), 2);
+	}
+
+	return err;
+}
+double SolverResult::getCorrectedError()
+{
+	return getError(correctedLocation);
+}
+double SolverResult::getPredictedError()
+{
+	return getError(predictedLocation);
+}
+double SolverResult::getError()
+{
+	return error;
+}
+Vector SolverResult::getCorrectedLocation()
+{
+	return correctedLocation;
+}
+Vector SolverResult::getPredictedLocation()
+{
+	return predictedLocation;
+}
+
+///////SolverResultList///////////////////////
 ///////////////////////////////////////////
 
-SolverResult::SolverResult()
+SolverResultList::SolverResultList()
 {
 }
-SolverResult::~SolverResult()
+SolverResultList::~SolverResultList()
 {
 }
 
-void SolverResult::addResult(SolverInput *input, Vector location)
+void SolverResultList::addResult(SolverInput *input, Vector location)
 {
-	results.push_back(Result(
+	results.push_back(SolverResult(
 			location,
-			getError(input, location),
 			input->measurements));
 }
 
-double SolverResult::getError(SolverInput *input, Vector location)
+double SolverResultList::getError(SolverInput *input, Vector location)
 {
 	double err = 0;
 	for (size_t i = 0; i < input->measurements.size(); i++)
@@ -68,11 +134,11 @@ double SolverResult::getError(SolverInput *input, Vector location)
 
 }
 
-void SolverResult::cutThreshold(double thresholdErrorSquare)
+void SolverResultList::cutThreshold(double thresholdErrorSquare)
 {
 	for (size_t i = 0; i < results.size(); i++)
 	{
-		if (results[i].error > thresholdErrorSquare)
+		if (results[i].getError() > thresholdErrorSquare)
 		{
 			results[i].cutThreshold = true;
 			// TODO : ANLZ
@@ -80,32 +146,37 @@ void SolverResult::cutThreshold(double thresholdErrorSquare)
 	}
 }
 
-size_t SolverResult::size()
+size_t SolverResultList::size()
 {
 	return results.size();
 }
 
-SolverResult::Result* SolverResult::at(int idx)
+SolverResult* SolverResultList::at(int idx)
 {
 	return &results[idx];
 }
 
-bool SolverResult::isValid(int idx)
+bool SolverResultList::isValid(int idx)
 {
 	return results[idx].isValid();
 }
 
-Vector SolverResult::getLocation(int idx)
+Vector SolverResultList::getLocation(int idx)
 {
 	return results[idx].location;
 }
 
-SolverResult::Result SolverResult::getFilteredResult()
+SolverResult SolverResultList::getFilteredResult()
 {
 	return filteredResult;
 }
 
-void SolverResult::setFilteredResult(Result result)
+SolverResult SolverResultList::getFirstResult()
+{
+	return results[0];
+}
+
+void SolverResultList::setFilteredResult(SolverResult result)
 {
 	filteredResult = result;
 }
@@ -126,33 +197,33 @@ void Solver::setSolverCondition(SolverCondition condition)
 	this->condition = condition;
 }
 
-void Solver::solve(SolverInput *input, SolverResult *result)
+void Solver::solve(SolverInput *input, SolverResultList *results)
 {
 	if (condition.solveNaive) 
 	{
-		solveNaive(input, result);
+		solveNaive(input, results);
 	}
 	else
 	{
-		solveWithPlanes(input, result);
+		solveWithPlanes(input, results);
 	}
 }
 
 
 
-void Solver::solveNaive(SolverInput *input, SolverResult *result)
+void Solver::solveNaive(SolverInput *input, SolverResultList *results)
 {
 	Vector location = NLLeastSquareSolver(input);
-	result->addResult(input, location);
+	results->addResult(input, location);
 }
 
-void Solver::solveWithPlanes(SolverInput *input, SolverResult *result, int currentIdx)
+void Solver::solveWithPlanes(SolverInput *input, SolverResultList *results, int currentIdx)
 {
 	if ((size_t)currentIdx == input->measurements.size())
 	{
 		//end condition
 		Vector location = NLLeastSquareSolver(input);
-		result->addResult(input, location);
+		results->addResult(input, location);
 #ifdef GATHER_DATA
 // add more codes to treat gather data option.
 #endif
@@ -193,7 +264,7 @@ void Solver::solveWithPlanes(SolverInput *input, SolverResult *result, int curre
 		}
 #endif
 
-		solveWithPlanes(input, result, currentIdx + 1);
+		solveWithPlanes(input, results, currentIdx + 1);
 #ifdef GATHER_DATA
 		input->resetGatherFlag();
 #endif
