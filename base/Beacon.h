@@ -9,6 +9,10 @@
 // depth one is for non-reflect beacons which reflectionCount is 0.
 // AddReflectionBeacon find reflected Beacon, and then make child node
 
+class BeaconIterator;
+
+
+
 class Beacon
 {
 public:
@@ -18,12 +22,27 @@ public:
 
 	void addReflectedBeacon(Plane *plane);
 	Vector getLocation();
-	size_t size();
-	Beacon* at(size_t idx);
+	size_t childrenSize();
+	Beacon* childAt(size_t idx);
+	int getReflectionCount();
+	int getLastPlaneId();
+	void setUserBid(int bid);
+	int getUserBid();
+	int getBid();
+	BeaconIterator* getIterator();
+//	void setIterator(BeaconIterator* iterator);
+	void setIterator(bool isDFS = true);
+	Beacon* getRoot();
+	Beacon* next();
+	
+	
+	
 
 	
 private:
-	int bid;
+	int bid;								// beacon id allocated by system
+	int userBid;
+
 	int reflectionCount;
 	std::vector<Vector> vLocations;			// track reflected location of beacons
 	std::vector<Plane*> pPlanes;			// track which planes are reflected to
@@ -32,6 +51,23 @@ private:
 	
 	void addChild(Beacon *beacon);
 	Beacon* newReflectedBeacon(Plane *plane);
+	BeaconIterator* iterator;
 };
 		
 
+class BeaconIterator
+{
+public:
+
+	BeaconIterator() {}
+	~BeaconIterator() {}
+	void makeIndex(Beacon* beacon, bool isDFS = true, bool isFirst = true);
+	Beacon* reset();
+	Beacon* next();
+	Beacon* current();
+
+private:
+	int curIdx;
+	std::vector<Beacon*> beaconIndex;
+
+};

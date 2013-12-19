@@ -291,7 +291,7 @@ int Plane::getVertexSize()
 
 void Plane::print()
 {
-	printf("PID (%d) :", idx);
+	printf("PID (%d) :", pid);
 	for (size_t i = 0; i < vertex.size(); i++)
 	{
 		vertex[i].print();
@@ -305,9 +305,13 @@ void Plane::println()
 	printf("\n");
 }
 
-void Plane::setId(int idx)
+void Plane::setId(int pid)
 {
-	this->idx = idx;
+	this->pid = pid;
+}
+int Plane::getPid()
+{
+	return pid;
 }
 
 void Plane::initProperty()

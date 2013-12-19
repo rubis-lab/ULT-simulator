@@ -30,7 +30,7 @@ private:
 	double getSignedAnglePI(Vector &v1, Vector &v2);	
 	uint32_t property;
 	bool checkInside(Vector &p);
-	int idx;
+	int pid;
 
 
 	
@@ -62,7 +62,8 @@ public:
 	int getVertexSize();	
 	void print();
 	void println();
-	void setId(int idx);
+	void setId(int pid);
+	int getPid();
 	void setBoundary(bool isBoundary);
 	bool isBoundary();
 	void setInfinite(bool isInfinite);

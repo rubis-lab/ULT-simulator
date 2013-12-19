@@ -1,52 +1,110 @@
 #include "BeaconList.h"
 
-
 BeaconList::BeaconList()
 {
-	Clear();
+	baseBeaconList.clear();
 }
 
 BeaconList::~BeaconList()
 {
-	for (size_t i; i < baseBeaconList.size(); i++)
+	clear();
+}
+
+void BeaconList::clear()
+{
+	for (size_t i = 0; i < baseBeaconList.size(); i++)
 		delete baseBeaconList[i];
-}
-
-void BeaconList::Clear()
-{
-	beacons.clear();
 	baseBeaconList.clear();
-	planeList.clear();
+	
 }
 
-void BeaconList::AddBeacon(int bid, Vector location)
+void BeaconList::addBeacon(int userBid, Vector location)
 {
-	Beacon beacon = new Beacon(bid, location);
-	AddBeacon(beacon);
+	int bid = baseBeaconList.size();
+	Beacon *beacon = new Beacon(bid, location);
+	beacon->setUserBid(userBid);
+	addBeacon(beacon);
 }
 
-void BeaconList::AddBeacon(Beacon *beacon)
+void BeaconList::addBeacon(Beacon *beacon)
 {
 	baseBeaconList.push_back(beacon);
 }
 
-void BeaconList::ApplyPlanes(PlaneList *planeList, int maxReflectionCount)
+void BeaconList::applyPlanes(PlaneList *planeList, int maxReflectionCount)
 {
 	this->planeList = planeList;
 	this->maxReflectionCount = maxReflectionCount;
 
-	for (int i = 0; i < maxReflectionCount; i++)
+	for (size_t i = 0; i < baseBeaconList.size(); i++)
 	{
-		baseBeaconList
+		applyPlanes(baseBeaconList[i]);
+
+		// after planes are added, make iterators
+		baseBeaconList[i]->setIterator(false/*isDFS*/);
 	}
+
+	
 	
 }
 
-void BeaconList::Setup()
+void BeaconList::applyPlanes(Beacon *beacon)
 {
-	beacon.clear();
-	beacon = baseBeaconList;
+	if (beacon->getReflectionCount() == maxReflectionCount) return;
+
+	for (size_t i = 0; i < planeList->size(); i++)
+	{
+		int pid = beacon->getLastPlaneId();
+
+		// signal can not be reflected on same plane twice
+		if (pid >= 0 && pid == planeList->at(i)->getPid()) 
+			continue;		
+
+		beacon->addReflectedBeacon(planeList->at(i));
+	}
+
+	for (size_t i = 0; i < beacon->childrenSize(); i++)
+	{
+		applyPlanes(beacon->childAt(i));
+	}
 }
 
 
-void 
+/*
+void BeaconList::makeIterators()
+{
+	for (size_t i = 0; i < baseBeaconList.size(); i++)
+	{
+		BeaconIterator *iter = baseBeaconList[i]->getIterator();
+
+		iter->makeIndex(baseBeaconList[i], false);
+
+		beaconIterators.push_back(iter);
+		baseBeaconList[i]->setIterator(&beaconIterators[i]);
+	}
+}
+
+void BeaconList::setup()
+{
+	beacons = baseBeaconList;
+	for (size_t i = 0; i < beaconIterators.size(); i++)
+	{
+		beacons[i] = beaconIterators.reset();
+	}
+}
+
+
+bool BeaconList::moveNext(int bid)
+{
+}
+*/
+
+size_t BeaconList::size()
+{
+	return baseBeaconList.size();
+}
+
+Beacon* BeaconList::at(int idx)
+{
+	return baseBeaconList[idx];
+}

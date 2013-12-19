@@ -8,19 +8,22 @@ Beacon::Beacon(int bid, Vector vLocation) : bid(bid)
 	pPlanes.clear();
 	children.clear();
 	parent = NULL;
+	iterator = new BeaconIterator();
 }
-Beacon::Beacon(Beacon *beacon)
+Beacon::Beacon(Beacon *beacon) : bid(bid)
 {
-	this->bid = beacon->bid;
 	this->reflectionCount = beacon->reflectionCount;
 	this->vLocations = beacon->vLocations;
 	this->pPlanes = beacon->pPlanes;
-	this->parent = beacon->parent;
+	this->parent = this;
 	this->children = beacon->children;
+	this->iterator = beacon->iterator;
 
 }
 Beacon::~Beacon()
 {
+	if (parent == NULL)
+		delete iterator;
 	for (size_t i = 0; i < children.size(); i++)
 		delete children[i];
 }
@@ -42,7 +45,6 @@ Vector Beacon::getLocation()
 void Beacon::addChild(Beacon* child)
 {
 	children.push_back(child);
-	child->parent = this;
 }
 
 Beacon* Beacon::newReflectedBeacon(Plane *plane)
@@ -57,13 +59,125 @@ Beacon* Beacon::newReflectedBeacon(Plane *plane)
 	return newBeacon;
 }
 
-size_t Beacon::size()
+size_t Beacon::childrenSize()
 {
 	return children.size();
 }
 
-Beacon* Beacon::at(size_t idx)
+Beacon* Beacon::childAt(size_t idx)
 {
 	if (idx >= children.size()) return NULL;
 	return children[idx];
 }
+
+
+int Beacon::getReflectionCount()
+{
+	return reflectionCount;
+}
+
+int Beacon::getLastPlaneId()
+{
+	if (pPlanes.size() == 0) return -1;
+	return pPlanes.back()->getPid();
+}
+
+void Beacon::setUserBid(int bid)
+{
+	userBid = bid;
+}
+
+int Beacon::getUserBid()
+{
+	return userBid;
+}
+
+int Beacon::getBid()
+{
+	return bid;
+}
+
+Beacon* Beacon::getRoot()
+{
+	if (parent == NULL) return this;
+	return parent->getRoot();
+}
+
+void Beacon::setIterator(bool isDFS)
+{
+	iterator->makeIndex(getRoot(), isDFS);
+}
+/*
+void Beacon::setIterator(BeaconIterator *iterator)
+{
+	this->iterator = iterator;
+}
+*/
+BeaconIterator* Beacon::getIterator()
+{
+	return iterator;
+}
+
+Beacon* Beacon::next()
+{
+	return iterator->next();
+}
+
+
+///////////////////////////////////////////////////////////////////////
+void BeaconIterator::makeIndex(Beacon *beacon, bool isDFS, bool isFirst)
+{
+	if (isFirst)
+	{
+		beaconIndex.clear();
+		curIdx = -1;
+	}
+
+	beaconIndex.push_back(beacon);
+	if (isDFS)
+	{
+		// DFS. recursive
+		for (size_t i = 0; i < beacon->childrenSize(); i++)
+		{
+			makeIndex(beacon->childAt(i), isDFS, false/*isFirst*/);
+		}
+	}
+	else
+	{
+		// BFS
+		int cur = 0;
+		Beacon *curBeacon;
+		while(cur < (int)beaconIndex.size())
+		{
+			curBeacon = beaconIndex[cur];
+			
+			for (size_t i = 0; i < curBeacon->childrenSize(); i++)
+			{
+				beaconIndex.push_back(beacon->childAt(i));
+			}
+		}
+	}
+}
+
+Beacon* BeaconIterator::reset()
+{
+	curIdx = -1;
+	return current();
+}
+
+Beacon* BeaconIterator::next()
+{
+	curIdx++;
+	return current();
+}
+
+Beacon* BeaconIterator::current()
+{
+	if (curIdx < 0) 
+		return beaconIndex[0];
+	if (curIdx >= (int)beaconIndex.size())
+		return NULL;
+	return beaconIndex[curIdx];
+}
+
+

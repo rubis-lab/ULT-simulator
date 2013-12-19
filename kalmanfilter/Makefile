@@ -1,7 +1,8 @@
 CC=g++
-OBJS= BeaconList.o \
-	  Measurement.o \
-	  Solver.o \
+OBJS= \
+	  KalmanFilter.o \
+	  FilterManager.o \
+	  KFTracker.o \
 
 
 
