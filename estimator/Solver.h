@@ -28,7 +28,7 @@ public:
 		solveNaive = true;
 		maxMeasError = 50.0;
 	}
-	~SolverCondition();
+	~SolverCondition(){}
 
 	bool cutBranch1;
 	bool cutBranch2;

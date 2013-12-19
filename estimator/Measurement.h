@@ -44,7 +44,7 @@ public:
 	{
 	}
 
-	~MeasurementCondition();
+	~MeasurementCondition(){}
 
 	int minSize;
 	int validSize;
