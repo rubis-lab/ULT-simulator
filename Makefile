@@ -23,7 +23,7 @@ debug:
 	$(CC) -o $(TARGET) $(OBJS) $(CPPFLAGS) -g
 
 estimator:
-	$(MAKE) -C estimaotr
+	$(MAKE) -C estimator
 
 base:
 	$(MAKE) -C base

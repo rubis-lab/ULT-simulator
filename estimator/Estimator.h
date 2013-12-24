@@ -27,91 +27,86 @@ namespace EST
 }
 
 
+
 class EstimatorResult
 {
 public:
-	EstimatorResult()
-	{
-	}
+	EstimatorResult() 	{/**/}
 	EstimatorResult(Vector location, double error):
 		location(location), 
-		error(error)
-	{
-	}
-	~EstimatorResult()
-	{
-	}
+		error(error) 	{/**/}
+	~EstimatorResult()	{/**/}
 	
 	Vector location;
 	double error;
 };
 
 
+////////////////////////////
+//EstimatorArgument 
+class EstimatorArgument
+{
+public:
+	EstimatorArgument()
+	{
+		setDefault();
+	}
+	~EstimatorArgument(){}
+	void setDefault()
+	{
+		timeSlot = 50;
+		validSize = 4;
+		maxMeasError = 50;
+		minValidDistance = 1;
+		maxValidDistance = 700;
+		minBeaconSize = 3;
+		strictValidSize = false;
+		timeWindow = 1000;
+		optimization = OPT::NONE;
+		estimatorMode = EST::TRADITIONAL;
+		gatherData = false;
+
+		kfMode = KF::PV;
+		kfMeasError = 0.001;
+		kfSystemError = 0.0008;
+		
+	}
+	int lid;			// each listener has its own estimator
+	long timeSlot;		// in ms
+	int validSize;		// N_V
+	int maxMeasError;	// in cm
+	int minValidDistance;
+	int maxValidDistance;
+	int minBeaconSize;
+	bool strictValidSize;
+	long timeWindow;	// in ms. measurements later than current time - timeWindow will be valid
+
+	bool gatherData;
+	double cutThreshold;
+
+		
+	OPT::options optimization;
+	EST::mode estimatorMode;
+
+	KF::mode kfMode;
+	double kfMeasError;
+	double kfSystemError;
+
+	BeaconList *beacons;
+	PlaneList *planes;
+
+	void setCutThreshold()
+	{
+		cutThreshold = sqrt(pow((double)maxMeasError, 2) / validSize);
+	}
+
+
+};
+////////////////////////////
 	
 class Estimator
 {
 public:
-////////////////////////////
-//EstimatorArgument 
-	class EstimatorArgument
-	{
-	public:
-		EstimatorArgument()
-		{
-			setDefault();
-		}
-		~EstimatorArgument();
-		void setDefault()
-		{
-			timeSlot = 50;
-			validSize = 4;
-			maxMeasError = 50;
-			minValidDistance = 1;
-			maxValidDistance = 700;
-			minBeaconSize = 3;
-			strictValidSize = false;
-			timeWindow = 1000;
-
-			optimization = OPT::NONE;
-			kfMode = KF::PV;
-			estimatorMode = EST::TRADITIONAL;
-
-			gatherData = false;
-			
-		}
-
-		int lid;			// each listener has its own estimator
-		long timeSlot;		// in ms
-		int validSize;		// N_V
-		int maxMeasError;	// in cm
-		int minValidDistance;
-		int maxValidDistance;
-		int minBeaconSize;
-		bool strictValidSize;
-		long timeWindow;	// in ms. measurements later than current time - timeWindow will be valid
-
-		bool gatherData;
-		double cutThreshold;
-
-		
-		OPT::options optimization;
-		EST::mode estimatorMode;
-
-		KF::mode kfMode;
-		double kfMeasError;
-		double kfSystemError;
-
-		BeaconList *beacons;
-		PlaneList *planes;
-
-		void setCutThreshold()
-		{
-			cutThreshold = sqrt(pow((double)maxMeasError, 2) / validSize);
-		}
-
-
-	};
-////////////////////////////
 
 	Estimator();
 	~Estimator();
@@ -120,7 +115,7 @@ public:
 	void destructor();
 
 	void setEstimator(EstimatorArgument estimatorArgument);
-	void measure(int userBid, unsigned long timestamp, double distance);
+	void measure(unsigned long timestamp, int userBid, double distance);
 	EstimatorResult solve(long currentTime);
 
 

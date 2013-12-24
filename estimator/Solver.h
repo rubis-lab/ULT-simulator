@@ -23,7 +23,7 @@ public:
 	SolverCondition()
 	{
 		gatherData = false;
-		cutBranch1 = true;
+		cutBranch1 = true;		// this value will be ignored in naive mode
 		cutBranch2 = false;
 		solveNaive = true;
 		maxMeasError = 50.0;

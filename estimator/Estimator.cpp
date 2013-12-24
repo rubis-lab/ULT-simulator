@@ -76,7 +76,7 @@ void Estimator::setSolver()
 {
 	SolverCondition condition;
 
-	condition.solveNaive = (bool)(args.estimatorMode & EST::TRADITIONAL);
+	condition.solveNaive = (bool)(args.estimatorMode == EST::TRADITIONAL);
 
 	condition.cutBranch1 = (bool)(args.optimization & OPT::BRANCHCUT);
 	condition.cutBranch2 = (bool)(args.optimization & OPT::BRANCHCUT_2);
@@ -103,7 +103,7 @@ void Estimator::setFilterManager()
 }
 
 
-void Estimator::measure(int userBid, unsigned long timestamp, double distance)
+void Estimator::measure(unsigned long timestamp, int userBid, double distance)
 {
 	measurementList->measure(userBid, timestamp, distance);
 }

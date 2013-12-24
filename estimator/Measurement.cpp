@@ -78,12 +78,18 @@ MeasurementList::~MeasurementList()
 void MeasurementList::measure(int userBid, unsigned long timestamp, double distance)
 {
 	int idx = findBeaconIndexByUserId(userBid);
+	if (idx < 0) 
+	{
+		printf("cannot find bid %d\n", userBid);
+		exit(0);
+	}
 	Measurement *measurement = &allMeasurements[idx];
 
 	measurement->measure(timestamp, distance);
 
 	// set NVSS
 	measurement->clearNVSS();
+	if (planes == NULL) return;
 	for (size_t i = 0; i < planes->size(); i++)
 	{
 		Plane *plane = planes->at(i);
