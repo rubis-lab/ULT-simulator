@@ -77,6 +77,7 @@ MeasurementList::~MeasurementList()
 
 void MeasurementList::measure(int userBid, unsigned long timestamp, double distance)
 {
+	if (distance <= 0) return;
 	int idx = findBeaconIndexByUserId(userBid);
 	if (idx < 0) 
 	{

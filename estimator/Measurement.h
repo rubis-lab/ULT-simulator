@@ -40,7 +40,8 @@ public:
 			strictValidSize(false),
 			smallerNVSSFirst(true),
 			shortDistanceFirst(true),
-			timeWindow(1000)
+			timeWindow(1000),
+			minValidDistance(1)
 	{
 	}
 
@@ -62,6 +63,8 @@ public:
 	}
 
 	long timeWindow;
+	
+	int minValidDistance;
 };
 class MeasurementList
 {

@@ -65,6 +65,8 @@ void Estimator::setMeasurementList()
 	measurementCondition.shortDistanceFirst = (bool)(!args.estimatorMode == EST::TRADITIONAL);
 	measurementCondition.smallerNVSSFirst = (bool)(args.optimization & OPT::SELECTION);
 
+	measurementCondition.minValidDistance = args.minValidDistance;
+
 	
 	measurementList->setMeasurementCondition(measurementCondition);
 

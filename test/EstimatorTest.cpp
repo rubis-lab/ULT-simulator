@@ -280,10 +280,10 @@ int main()
 		Vector ori_point = logList[i].vPosition;
 		Vector slv_point1 = result.location;
 		
-
 		err1 += slv_point1.getDistance(ori_point);
 
 		fprintf(stderr, "%d\t%f\t%f\n", (int)i, err1/(double)i, 0.0);
+
 		slv_point1.println();
 		getchar();
 	}
