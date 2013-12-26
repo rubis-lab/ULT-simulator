@@ -17,3 +17,6 @@
 
 # Compiled Dependencies
 .*.d
+
+LocationEstimator/Debug
+LocationEstimator/Release

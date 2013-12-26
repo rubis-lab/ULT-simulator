@@ -18,5 +18,9 @@
 # Compiled Dependencies
 .*.d
 
+#VC files
 LocationEstimator/Debug
 LocationEstimator/Release
+*.suo
+*.filters
+*.user
