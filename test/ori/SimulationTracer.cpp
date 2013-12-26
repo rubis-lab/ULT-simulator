@@ -133,7 +133,7 @@ void simulate(Argument& args, LocationEstimator* estimator, LogRecorder* logger)
 
 		fprintf(stdout, "%d\t%f\t%f\n", (int)iterLogList, err1/(double)(iterLogList + 1), 0.0);
 		slv_point1.Println();
-		getchar();
+//		getchar();
 	}
 
 	fp = fopen(outname, "a");

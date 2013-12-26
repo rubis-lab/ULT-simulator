@@ -136,13 +136,6 @@ EstimatorResult Estimator::solve(long currentTime)
 	EstimatorResult prevResult(prevLocation, input->getError(prevLocation));
 
 
-	
-	
-	for (size_t i = 0; i < input->measurements.size(); i++)
-	{
-		printf ("%8ld %d %d\n", input->measurements[i]->getTimestamp(), input->measurements[i]->getUserBid(), (int)input->measurements[i]->getDistance());
-	}
-
 	solver.solve(input, &results);
 
 	if (results.isFail())
