@@ -291,7 +291,7 @@ bool Solver::checkCutBranch1(SolverInput *input, int currentIdx)
 {
 	for (int i = 0; i < currentIdx; i++)
 	{
-		if (checkBranchCutoff(input->measurements[currentIdx], input->measurements[i]))
+		if (!checkBranchCutoff(input->measurements[currentIdx], input->measurements[i]))
 			return true;
 	}
 	return false;
