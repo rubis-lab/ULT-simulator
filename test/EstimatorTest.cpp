@@ -15,6 +15,7 @@ public :
 std::vector <LogInfo> logList;
 int l_width, l_length, l_height;
 int nBeacon;	
+PlaneList planes;
 
 void clear_log_list(std::vector <LogInfo> &logList)
 {
@@ -227,6 +228,37 @@ bool LoadLog(const char* filename, int *ref_cnt1, int *ref_cnt2)
 	return true;
 }
 
+void SetPlane(Vector p1, Vector p2, Vector p3, Vector p4)
+{
+	Plane plane = Plane(p1, p2, p3, p4);
+	planes.addPlane(plane);
+}
+
+void SetPlanes(int width, int length, int height)
+{
+		
+	double cx = width / 2.0;
+	double cy = length / 2.0;
+	double cz = height;
+
+	Vector v1 = Vector(-cx,  cy, cz);
+	Vector v2 = Vector( cx,  cy, cz);
+	Vector v3 = Vector(-cx, -cy, cz);
+	Vector v4 = Vector( cx, -cy, cz);
+	Vector v5 = Vector(-cx,  cy, 0);
+	Vector v6 = Vector( cx,  cy, 0);
+	Vector v7 = Vector(-cx, -cy, 0);
+	Vector v8 = Vector( cx, -cy, 0);
+
+	SetPlane(v1, v2, v6, v5);		// front plane
+	SetPlane(v2, v4, v8, v6);		// right side plane
+	SetPlane(v4, v3, v7, v8);		// back plane
+	SetPlane(v3, v1, v5, v7);		// left plane
+	SetPlane(v3, v4, v2, v1);		// ceiling
+	SetPlane(v5, v6, v8, v7);		// floor
+	
+}
+
 
 
 int main()
@@ -236,23 +268,8 @@ int main()
 
 	BeaconList beacons;
 	Estimator estimator;
-	EstimatorArgument args;
 
-	args.timeSlot = 50;
-	args.validSize = 4;
-	args.maxMeasError = 50;
-	args.minValidDistance = 10;
-	args.maxValidDistance = 700;
-	args.minBeaconSize = 3;
-	args.strictValidSize = false;
-	args.timeWindow = 1000;
-	args.optimization = OPT::NONE;
-	args.kfMode = KF::PV;
-	args.estimatorMode = EST::TRADITIONAL;
-	args.gatherData = false;
-	args.beacons = &beacons;
-	args.planes = NULL;
-
+	SetPlanes(1000, 1000, 300);	
 	
 	double err1 = 0;
 	
@@ -261,6 +278,29 @@ int main()
 		beacons.addBeacon(logList[0].beaconList[i].beacon_id,
 				logList[0].beaconList[i].location);
 	}
+	beacons.applyPlanes(&planes);
+
+
+
+	EstimatorArgument args;
+	args.timeSlot = 50;
+	args.validSize = 4;
+	args.maxMeasError = 50;
+	args.minValidDistance = 10;
+	args.maxValidDistance = 700;
+	args.minBeaconSize = 3;
+	args.strictValidSize = false;
+	args.timeWindow = 1000;
+	args.optimization = OPT::THRESHOLD;
+	args.kfMode = KF::PV;
+	args.estimatorMode = EST::TRADITIONAL;
+	args.gatherData = false;
+	args.beacons = &beacons;
+	args.planes = &planes;
+
+
+
+
 
 	estimator.setEstimator(args);
 

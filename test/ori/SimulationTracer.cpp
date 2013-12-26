@@ -117,11 +117,11 @@ void simulate(Argument& args, LocationEstimator* estimator, LogRecorder* logger)
 		Vector ori_point, slv_point1, slv_point2;
 		ori_point = logger->logList[iterLogList].vPosition;
 
-//		if (args.SIM_ActiveEstimators & SIM::PROP_EST)
-//			slv_point1 = estimator->SolveEx();
+		if (args.SIM_ActiveEstimators & SIM::PROP_EST)
+			slv_point1 = estimator->SolveEx();
 		
-		if (args.SIM_ActiveEstimators & SIM::PREV_EST)
-			slv_point2 = estimator->Solve();				
+//		if (args.SIM_ActiveEstimators & SIM::PREV_EST)
+//			slv_point2 = estimator->Solve();				
 
 		err1 += slv_point1.getDistance(ori_point);
 		err2 += slv_point2.getDistance(ori_point);
@@ -131,7 +131,7 @@ void simulate(Argument& args, LocationEstimator* estimator, LogRecorder* logger)
 		fprintf(fptr, "%d\t%f\t%d\n", (int)iterLogList, instErr,(int)slv_point1.temp);
 		fclose(fptr);
 
-		fprintf(stdout, "%d\t%f\t%f\n", (int)iterLogList, err2/(double)(iterLogList + 1), 0.0);
+		fprintf(stdout, "%d\t%f\t%f\n", (int)iterLogList, err1/(double)(iterLogList + 1), 0.0);
 		slv_point2.Println();
 	}
 
