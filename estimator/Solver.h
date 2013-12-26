@@ -68,8 +68,9 @@ public:
 	Vector location;
 	double error;		//squared error
 	std::vector<Measurement*> snapshot;
-	bool cutThreshold;
+	bool overThreshold;
 	bool isEmpty;
+	bool isInside;
 
 
 	bool isValid();
@@ -100,7 +101,6 @@ public:
 	~SolverResultList();
 
 	void addResult(SolverInput *input, Vector location);
-	void cutThreshold(double thresholdErrorSquare);
 	size_t size();
 	bool isValid(int idx);
 	Vector getLocation(int idx);

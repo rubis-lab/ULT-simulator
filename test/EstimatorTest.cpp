@@ -293,7 +293,7 @@ int main()
 	args.timeWindow = 1000;
 	args.optimization = OPT::SELECTION | OPT::THRESHOLD;
 	args.kfMode = KF::PV;
-	args.estimatorMode = EST::TRADITIONAL;
+	args.estimatorMode = EST::PROPOSED1;
 	args.gatherData = false;
 	args.beacons = &beacons;
 	args.planes = &planes;

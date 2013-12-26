@@ -14,6 +14,9 @@ public:
 	size_t size();
 	Plane* at(int idx);
 	void addPlane(Plane plane);
+	bool checkInside(Vector location);
+
+
 private:
 
 	std::vector<Plane*> planes;

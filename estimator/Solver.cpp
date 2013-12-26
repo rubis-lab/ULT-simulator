@@ -58,15 +58,16 @@ SolverResult::SolverResult() : isEmpty(true)
 SolverResult::SolverResult(Vector location, std::vector<Measurement*> snapshot) :
 	location(location), 
 	snapshot(snapshot), 
-	cutThreshold(false), 
-	isEmpty(false)
+	overThreshold(false), 
+	isEmpty(false),
+	isInside(true)
 {
 	error = getError(location);
 }
 
 bool SolverResult::isValid()
 {
-	if (cutThreshold || isEmpty) return false;
+	if (overThreshold || isEmpty || !isInside) return false;
 	return true;
 }
 void SolverResult::setCorrectedLocation(Vector vCorrect)
@@ -140,18 +141,6 @@ void SolverResultList::setFail(SolverInput *input)
 	
 }
 
-
-void SolverResultList::cutThreshold(double thresholdErrorSquare)
-{
-	for (size_t i = 0; i < results.size(); i++)
-	{
-		if (results[i].getError() > thresholdErrorSquare)
-		{
-			results[i].cutThreshold = true;
-			// TODO : ANLZ
-		}
-	}
-}
 
 size_t SolverResultList::size()
 {

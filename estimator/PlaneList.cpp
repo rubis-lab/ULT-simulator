@@ -45,3 +45,14 @@ void PlaneList::addPlane(Plane plane)
 
 	planes.push_back(newPlane);
 }
+
+bool PlaneList::checkInside(Vector location)
+{
+	for (size_t i = 0; i < planes.size(); i++)
+	{
+		if (!planes[i]->isBoundary()) continue;
+		if (planes[i]->getSign(location) > 0)
+			return false;
+	}
+	return true;
+}
