@@ -25,3 +25,6 @@ LocationEstimator/Release
 *.suo
 *.filters
 *.user
+
+#dump file
+core.*

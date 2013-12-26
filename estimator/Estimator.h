@@ -85,7 +85,7 @@ public:
 	double cutThreshold;
 
 		
-	OPT::options optimization;
+	int optimization;
 	EST::mode estimatorMode;
 
 	KF::mode kfMode;

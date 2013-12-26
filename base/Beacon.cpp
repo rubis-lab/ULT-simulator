@@ -153,8 +153,9 @@ void BeaconIterator::makeIndex(Beacon *beacon, bool isDFS, bool isFirst)
 			
 			for (size_t i = 0; i < curBeacon->childrenSize(); i++)
 			{
-				beaconIndex.push_back(beacon->childAt(i));
+				beaconIndex.push_back(beacon->childAt(i));				
 			}
+			cur++;
 		}
 	}
 }

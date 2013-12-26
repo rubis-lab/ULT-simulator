@@ -341,5 +341,5 @@ void Plane::setInfinite(bool isInfinite)
 
 bool Plane::isInfinite()
 {
-	return (bool)(property & PROPERTY_INFINITE);
+	return (property & PROPERTY_INFINITE) != 0;
 }

@@ -291,7 +291,7 @@ int main()
 	args.minBeaconSize = 3;
 	args.strictValidSize = false;
 	args.timeWindow = 1000;
-	args.optimization = OPT::THRESHOLD;
+	args.optimization = OPT::SELECTION | OPT::THRESHOLD;
 	args.kfMode = KF::PV;
 	args.estimatorMode = EST::TRADITIONAL;
 	args.gatherData = false;
@@ -325,7 +325,7 @@ int main()
 		fprintf(stdout, "%d\t%f\t%f\n", (int)i, err1/(double)(i + 1), 0.0);
 
 		slv_point1.println();
-//		getchar();
+		getchar();
 	}
 
 	return 0;
