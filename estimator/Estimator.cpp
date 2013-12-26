@@ -112,6 +112,22 @@ void Estimator::measure(unsigned long timestamp, int userBid, double distance)
 }
 
 
+void Estimator::optimize1(SolverResultList *results)
+{
+	SolverResult *result;
+	double sqrThreshold = pow(args.cutThreshold, 2);
+	for (size_t i = 0; i < results->size(); i++)
+	{
+		result = results->at(i);
+		if (result->getError() > sqrThreshold)
+			result->overThreshold = true;
+
+		if (!args.planes->checkInside(result->location))
+			result->isInside = false;
+	}
+	
+}
+
 EstimatorResult Estimator::solve(long currentTime)
 {
 	input->setup(currentTime, prevLocation);
@@ -137,9 +153,9 @@ EstimatorResult Estimator::solve(long currentTime)
 
 	if (args.optimization & OPT::THRESHOLD)
 	{
-		results.cutThreshold(pow(args.cutThreshold, 2));
+		//cut threshold and check inside
+		optimize1(&results);
 	}
-
 
 	EstimatorResult ret;
 	SolverResult result;

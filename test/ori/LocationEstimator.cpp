@@ -353,6 +353,7 @@ Vector LocationEstimator::SolveEx()
 	/*}T3*/args.analyzer->EstimatorSolving.StopTimer();	/* stop */
 	/*V3*/args.analyzer->N_PMS.AddValue((double)n_candidate);
 
+
 	if (args.Optimization & OPT::THRESHOLD)
 	{		
 		/*T4{*/args.analyzer->EstimatorPostProc.StartTimer();	/* start */

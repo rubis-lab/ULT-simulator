@@ -135,6 +135,8 @@ private:
 	void setSolver();
 	void setInput();
 	void setFilterManager();
+	
+	void optimize1(SolverResultList *results);
 
 
 
