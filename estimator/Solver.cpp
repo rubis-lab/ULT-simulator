@@ -216,7 +216,7 @@ void Solver::setSolverCondition(SolverCondition condition)
 
 void Solver::solve(SolverInput *input, SolverResultList *results)
 {
-	if (input->measurements.size() < condition.minBeaconSize)
+	if ((int)input->measurements.size() < condition.minBeaconSize)
 	{
 		results->setFail(input);
 		return;
