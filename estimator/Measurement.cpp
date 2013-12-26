@@ -56,7 +56,13 @@ bool Measurement::nextVBeacon()
 {
 	Beacon *nextBeacon = beacon->next();
 	if (nextBeacon == NULL) return false;
-	beacon = beacon->next();
+	beacon = nextBeacon;
+	return true;
+}
+
+bool Measurement::isValidDistance()
+{	
+	if (distance < beacon->getDistanceToPlane()) return false;
 	return true;
 }
 

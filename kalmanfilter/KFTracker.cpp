@@ -228,6 +228,7 @@ void KFTracker::initTracker(SolverResult *result)
 		X[i] = gsl_matrix_view_array(baseX + (i * 3), size1, 1);
 		KF[i].SetMatrix(KF_X, &X[i].matrix);		
 	}
+
 	predict();
 	//TODO:
 	//predict procee will excuted in next step.
@@ -235,6 +236,9 @@ void KFTracker::initTracker(SolverResult *result)
 
 	Vector vPredict = getX0();
 	result->setPredictedLocation(vPredict);
+
+
+	result->setCorrectedLocation(vPredict);
 }
 
 Vector KFTracker::getX()

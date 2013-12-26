@@ -34,14 +34,13 @@ public:
 	void setIterator(bool isDFS = true);
 	Beacon* getRoot();
 	Beacon* next();
+	double getDistanceToPlane();
 	
-	
-	
-
-	
+		
 private:
 	int bid;								// beacon id allocated by system
 	int userBid;
+	double distanceToPlane;
 
 	int reflectionCount;
 	std::vector<Vector> vLocations;			// track reflected location of beacons
@@ -52,6 +51,7 @@ private:
 	void addChild(Beacon *beacon);
 	Beacon* newReflectedBeacon(Plane *plane);
 	BeaconIterator* iterator;
+
 };
 		
 

@@ -22,6 +22,7 @@ public:
 	unsigned long getTimestamp();
 	void resetIterator();
 	bool nextVBeacon();
+	bool isValidDistance();
 
 
 private:

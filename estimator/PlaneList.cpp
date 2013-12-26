@@ -42,6 +42,7 @@ Plane* PlaneList::at(int idx)
 void PlaneList::addPlane(Plane plane)
 {
 	Plane *newPlane = new Plane(plane);
+	newPlane->setId(planes.size());
 
 	planes.push_back(newPlane);
 }

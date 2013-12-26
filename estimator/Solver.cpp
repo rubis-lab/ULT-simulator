@@ -244,7 +244,11 @@ void Solver::solveWithPlanes(SolverInput *input, SolverResultList *results, int 
 	Measurement *measurement = input->measurements[currentIdx];
 	measurement->resetIterator();
 	while(measurement->nextVBeacon())
-	{
+	{	
+		// check measured distance is long enough to reflect corresponding wall
+		if (!measurement->isValidDistance())
+			continue;
+
 		// check optimization
 		if (condition.cutBranch1)
 		{

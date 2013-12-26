@@ -3,6 +3,7 @@
 Beacon::Beacon(int bid, Vector vLocation) : bid(bid)
 {
 	reflectionCount = 0;
+	distanceToPlane = 0;
 	vLocations.clear();
 	vLocations.push_back(vLocation);
 	pPlanes.clear();
@@ -10,14 +11,16 @@ Beacon::Beacon(int bid, Vector vLocation) : bid(bid)
 	parent = NULL;
 	iterator = new BeaconIterator();
 }
-Beacon::Beacon(Beacon *beacon) : bid(bid)
+Beacon::Beacon(Beacon *beacon) : bid(beacon->bid)
 {
 	this->reflectionCount = beacon->reflectionCount;
 	this->vLocations = beacon->vLocations;
 	this->pPlanes = beacon->pPlanes;
-	this->parent = this;
-	this->children = beacon->children;
+	this->parent = beacon;
+//	this->children = beacon->children;
 	this->iterator = beacon->iterator;
+	this->userBid = beacon->userBid;
+	this->distanceToPlane = beacon->distanceToPlane;
 
 }
 Beacon::~Beacon()
@@ -55,9 +58,11 @@ Beacon* Beacon::newReflectedBeacon(Plane *plane)
 	newBeacon->reflectionCount ++;
 	newBeacon->vLocations.push_back(vReflected);
 	newBeacon->pPlanes.push_back(plane);
+	newBeacon->distanceToPlane += plane->getDistanceToPoint(vReflected);
 	
 	return newBeacon;
 }
+
 
 size_t Beacon::childrenSize()
 {
@@ -70,6 +75,10 @@ Beacon* Beacon::childAt(size_t idx)
 	return children[idx];
 }
 
+double Beacon::getDistanceToPlane()
+{
+	return distanceToPlane;
+}
 
 int Beacon::getReflectionCount()
 {

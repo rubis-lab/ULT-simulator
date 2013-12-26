@@ -231,6 +231,7 @@ bool LoadLog(const char* filename, int *ref_cnt1, int *ref_cnt2)
 void SetPlane(Vector p1, Vector p2, Vector p3, Vector p4)
 {
 	Plane plane = Plane(p1, p2, p3, p4);
+	plane.setBoundary(true);
 	planes.addPlane(plane);
 }
 

@@ -1,5 +1,8 @@
 #include "BeaconList.h"
 
+#define MIN_SEP 10
+
+
 BeaconList::BeaconList()
 {
 	baseBeaconList.clear();
@@ -58,7 +61,11 @@ void BeaconList::applyPlanes(Beacon *beacon)
 
 		// signal can not be reflected on same plane twice
 		if (pid >= 0 && pid == planeList->at(i)->getPid()) 
-			continue;		
+			continue;
+
+		// if beacon is too close to plane, do not reflect
+		if (planeList->at(i)->getDistanceToPoint(beacon->getLocation()) < MIN_SEP)
+			continue;
 
 		beacon->addReflectedBeacon(planeList->at(i));
 	}

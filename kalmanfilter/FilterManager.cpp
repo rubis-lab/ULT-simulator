@@ -117,14 +117,14 @@ SolverResult* FilterManager::processNextStep(SolverResultList *results)
 	return minResult;
 }
 
-bool FilterManager::initFilterInfo(SolverResultList *result)
+bool FilterManager::initFilterInfo(SolverResultList *results)
 {
 	int minIdx = -1;
 	double minValue;
-	for (size_t i=0; i < result->size(); i++)
+	for (size_t i=0; i < results->size(); i++)
 	{
-		if (!result->isValid(i)) continue;
-		double curValue = result->at(i)->error;
+		if (!results->isValid(i)) continue;
+		double curValue = results->at(i)->error;
 		if (minIdx < 0 || minValue > curValue)
 		{
 			minIdx = i;
@@ -134,8 +134,10 @@ bool FilterManager::initFilterInfo(SolverResultList *result)
 
 	if (minIdx < 0) return false;
 
+	SolverResult* result = results->at(minIdx);
 
-	currentTracker->initTracker(result->at(minIdx));
+	currentTracker->initTracker(result);
+	results->setFilteredResult(*result);
 
 	return true;
 }

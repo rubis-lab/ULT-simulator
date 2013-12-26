@@ -124,11 +124,6 @@ void Estimator::optimize1(SolverResultList *results)
 
 		if (!args.planes->checkInside(result->location))
 			result->isInside = false;
-
-			
-		result->location.print();
-		if (!result->isValid()) printf("!");
-		printf("\n");
 	}
 	
 }
