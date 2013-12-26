@@ -1,3 +1,4 @@
+#include <string.h>
 #include "Estimator.h"
 #include "BeaconInfo.h"
 #define MAX_BID 100

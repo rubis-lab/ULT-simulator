@@ -328,7 +328,7 @@ void Plane::setBoundary(bool isBoundary)
 }
 bool Plane::isBoundary()
 {
-	return (bool)property & PROPERTY_BOUNDARY;
+	return (bool)(property & PROPERTY_BOUNDARY);
 }
 
 void Plane::setInfinite(bool isInfinite)
@@ -341,5 +341,5 @@ void Plane::setInfinite(bool isInfinite)
 
 bool Plane::isInfinite()
 {
-	return (bool)property & PROPERTY_INFINITE;
+	return (bool)(property & PROPERTY_INFINITE);
 }

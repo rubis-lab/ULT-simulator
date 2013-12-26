@@ -78,8 +78,8 @@ void Estimator::setSolver()
 
 	condition.solveNaive = (bool)(args.estimatorMode == EST::TRADITIONAL);
 
-	condition.cutBranch1 = (bool)(args.optimization & OPT::BRANCHCUT);
-	condition.cutBranch2 = (bool)(args.optimization & OPT::BRANCHCUT_2);
+	condition.cutBranch1 = (bool)(args.optimization & 4);
+	condition.cutBranch2 = (bool)((int)args.optimization & (int)OPT::BRANCHCUT_2);
 
 	condition.maxMeasError = args.maxMeasError;
 
