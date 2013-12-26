@@ -84,14 +84,15 @@ void Estimator::setSolver()
 	condition.cutBranch2 = (bool)((int)args.optimization & (int)OPT::BRANCHCUT_2);
 
 	condition.maxMeasError = args.maxMeasError;
-
+	
+	condition.minBeaconSize = args.minBeaconSize;
 
 	solver.setSolverCondition(condition);
 }
 
 void Estimator::setInput()
 {
-	input = new SolverInput(measurementList, args.timeWindow);
+	input = new SolverInput(measurementList);
 }
 
 void Estimator::setFilterManager()
@@ -113,42 +114,57 @@ void Estimator::measure(unsigned long timestamp, int userBid, double distance)
 
 EstimatorResult Estimator::solve(long currentTime)
 {
-	measurementList->makeSnapshot(currentTime, args.timeWindow);
 	input->setup(currentTime, prevLocation);
 
 	SolverResultList results;
+	EstimatorResult prevResult(prevLocation, input->getError(prevLocation));
+
+
 	
+	
+	for (size_t i = 0; i < input->measurements.size(); i++)
+	{
+		printf ("%8ld %d %d\n", input->measurements[i]->getTimestamp(), input->measurements[i]->getUserBid(), (int)input->measurements[i]->getDistance());
+	}
+
 	solver.solve(input, &results);
+
+	if (results.isFail())
+	{
+		// number of beacons are too small
+		return prevResult;
+	}
 
 	if (args.optimization & OPT::THRESHOLD)
 	{
 		results.cutThreshold(pow(args.cutThreshold, 2));
 	}
 
+
 	EstimatorResult ret;
+	SolverResult result;
 
-	if (args.estimatorMode == EST::KFONLY || args.estimatorMode == EST::PROPOSED1)
+	switch(args.estimatorMode)
 	{
+	case EST::KFONLY:
+	case EST::PROPOSED1:
+
 		filterManager->getCorrectedResult(&results);
-		SolverResult filteredResult = results.getFilteredResult();
+		result = results.getFilteredResult();
 		
-		ret.location = filteredResult.getCorrectedLocation();
-		ret.error = filteredResult.getCorrectedError();
+		if (!result.isValid())
+		{
+			// there is no valid result
+			return prevResult;
+		}
+		
+		ret.location = result.getCorrectedLocation();
+		ret.error = result.getCorrectedError();
+		break;
 
-		if (!filteredResult.isValid())
-		{
-			ret.location = prevLocation;
-			ret.error = filteredResult.getError(prevLocation);
-		}
-	}
-	else
-	{
-		if (results.size() == 0)
-		{
-			printf("unexpected error. results size is zero. in Estimator::solve\n");
-			exit(20);
-		}
-		SolverResult result = results.getFirstResult();
+	case EST::TRADITIONAL:
+
+		result = results.getFirstResult();
 			
 		if (result.isValid())
 		{
@@ -157,10 +173,18 @@ EstimatorResult Estimator::solve(long currentTime)
 		}
 		else
 		{
-			ret.location = prevLocation;
-			ret.error = result.getError(prevLocation);
+			//the first result is not valid
+			return prevResult;
 		}
+		break;
+	
+	default:
+		printf("unknown esimator mode. %d\n", args.estimatorMode);
+		exit(20);
+		break;
 	}
+
+	prevLocation = ret.location;
 
 	return ret;
 

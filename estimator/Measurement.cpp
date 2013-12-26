@@ -118,8 +118,9 @@ std::vector<Measurement*> MeasurementList::getFilteredMeasurements(unsigned long
 }
 
 //std::vector<Measurement*> MeasurementList::getMeasurements(unsigned long currentTime, unsigned long timeWindow)
-void MeasurementList::makeSnapshot(unsigned long currentTime, unsigned long timeWindow)
+void MeasurementList::makeSnapshot(unsigned long currentTime)
 {
+	unsigned long timeWindow = condition.timeWindow;
 	std::vector<Measurement*> filteredMeasurements = getFilteredMeasurements(currentTime, timeWindow);
 
 	measurements.clear();
@@ -148,7 +149,7 @@ std::vector<Measurement*> MeasurementList::getRandomList(std::vector<Measurement
 	if (size > filteredMeasurements.size()) 
 	{
 		// TODO : ANLZ
-		printf("Warning. MeasurementList::getRandomList. validSize(%lu) is bigger than filteredMeasurements.size(%lu)\n",
+		fprintf(stderr, "Warning. MeasurementList::getRandomList. validSize(%lu) is bigger than filteredMeasurements.size(%lu)\n",
 				size, filteredMeasurements.size());
 		size = filteredMeasurements.size();
 	}
@@ -169,7 +170,7 @@ std::vector<Measurement*> MeasurementList::getSortedList(std::vector<Measurement
 	if (size > filteredMeasurements.size()) 
 	{
 		// TODO : ANLZ
-		printf("Warning. MeasurementList::getSortedList. size(%ld) is bigger than filteredMeasurements.size(%ld)\n",
+		fprintf(stderr, "Warning. MeasurementList::getSortedList. size(%ld) is bigger than filteredMeasurements.size(%ld)\n",
 				size, filteredMeasurements.size());
 		size = filteredMeasurements.size();
 	}

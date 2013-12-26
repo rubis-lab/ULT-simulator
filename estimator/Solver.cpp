@@ -8,9 +8,8 @@
 //////////SolverInput///////////
 ///////////////////////////////
 
-SolverInput::SolverInput(MeasurementList *measurementList, unsigned long):
-		measurementList(measurementList), 
-		timeWindow(timeWindow)
+SolverInput::SolverInput(MeasurementList *measurementList):
+		measurementList(measurementList) 
 {
 }
 
@@ -20,7 +19,7 @@ SolverInput::~SolverInput()
 
 void SolverInput::setup(unsigned long currentTime, Vector previousLocation)
 {
-	measurementList->makeSnapshot(currentTime,timeWindow);
+	measurementList->makeSnapshot(currentTime);
 	measurements = measurementList->getMeasurements(); 
 	initLocation = previousLocation;
 }
@@ -34,6 +33,17 @@ void SolverInput::setInvalidButGather(int flag)
 void SolverInput::resetGatherFlags()
 {
 	memset(invalidButGather, 0, sizeof(bool) * MAX_FLAG_NUM);
+}
+
+double SolverInput::getError(Vector location)
+{
+	double err = 0;
+	for (size_t i = 0; i < measurements.size(); i++)
+	{		
+		err += pow(measurements[i]->getDistance() 
+					- (measurements[i]->getLocation().getDistance(location)),2);
+	}
+	return err / measurements.size();
 }
 
 
@@ -110,6 +120,7 @@ Vector SolverResult::getPredictedLocation()
 
 SolverResultList::SolverResultList()
 {
+	fail = false;
 }
 SolverResultList::~SolverResultList()
 {
@@ -122,17 +133,13 @@ void SolverResultList::addResult(SolverInput *input, Vector location)
 			input->measurements));
 }
 
-double SolverResultList::getError(SolverInput *input, Vector location)
+void SolverResultList::setFail(SolverInput *input)
 {
-	double err = 0;
-	for (size_t i = 0; i < input->measurements.size(); i++)
-	{		
-		err += pow(input->measurements[i]->getDistance() 
-					- (input->measurements[i]->getLocation().getDistance(location)),2);
-	}
-	return err / input->measurements.size();
-
+	results.push_back(SolverResult(input->initLocation, input->measurements));
+	fail = true;
+	
 }
+
 
 void SolverResultList::cutThreshold(double thresholdErrorSquare)
 {
@@ -173,12 +180,22 @@ SolverResult SolverResultList::getFilteredResult()
 
 SolverResult SolverResultList::getFirstResult()
 {
+	if (results.size() == 0)
+	{
+		printf("SolverResultList::getFirstResult(). results.size() == 0\n");
+		exit(30);
+	}
 	return results[0];
 }
 
 void SolverResultList::setFilteredResult(SolverResult result)
 {
 	filteredResult = result;
+}
+
+bool SolverResultList::isFail()
+{
+	return fail;
 }
 
 ////////Solver/////////
@@ -199,6 +216,12 @@ void Solver::setSolverCondition(SolverCondition condition)
 
 void Solver::solve(SolverInput *input, SolverResultList *results)
 {
+	if (input->measurements.size() < condition.minBeaconSize)
+	{
+		results->setFail(input);
+		return;
+	}
+
 	if (condition.solveNaive) 
 	{
 		solveNaive(input, results);
@@ -408,9 +431,9 @@ Vector Solver::NLLeastSquareSolver(SolverInput *input)
 	gsl_multifit_function_fdf f;
 	
 	double x_init[3] = {0.0, 0.0, 150.0};
-	x_init[0] = input->initLocation.x;
-	x_init[1] = input->initLocation.y;
-	x_init[2] = input->initLocation.z;
+//	x_init[0] = input->initLocation.x;
+//	x_init[1] = input->initLocation.y;
+//	x_init[2] = input->initLocation.z;
 	
 	gsl_vector_view x = gsl_vector_view_array(x_init, 3);
 

@@ -35,6 +35,8 @@ public:
 	bool gatherData;		// if true, solver doesn't cut branch. It calculates how much leaves would be cut.kkk
 	bool solveNaive;
 	double maxMeasError;
+
+	int minBeaconSize;
 };
 
 
@@ -42,7 +44,7 @@ public:
 class SolverInput
 {
 public:
-	SolverInput(MeasurementList *measurementList, unsigned long timeWindow = 1000);
+	SolverInput(MeasurementList *measurementList);
 	~SolverInput();
 	MeasurementList *measurementList;
 	std::vector<Measurement*> measurements;
@@ -51,9 +53,10 @@ public:
 	void setup(unsigned long currentTime, Vector previousLocation);
 	void setInvalidButGather(int flag);
 	void resetGatherFlags();
+	double getError(Vector location);
 private:
-	unsigned long timeWindow;
 	bool invalidButGather[MAX_FLAG_NUM];
+	
 };
 
 class SolverResult
@@ -102,6 +105,8 @@ public:
 	bool isValid(int idx);
 	Vector getLocation(int idx);
 	SolverResult* at(int idx);
+	void setFail(SolverInput* input);
+	bool isFail();
 	
 
 	SolverResult getFilteredResult();
@@ -109,10 +114,10 @@ public:
 	void setFilteredResult(SolverResult result);
 
 private:
-	double getError(SolverInput *input, Vector location);
 	std::vector<SolverResult> results;
 
 	SolverResult filteredResult;
+	bool fail;
 
 };
 

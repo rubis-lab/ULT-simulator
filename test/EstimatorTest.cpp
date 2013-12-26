@@ -282,10 +282,10 @@ int main()
 		
 		err1 += slv_point1.getDistance(ori_point);
 
-		fprintf(stderr, "%d\t%f\t%f\n", (int)i, err1/(double)i, 0.0);
+		fprintf(stdout, "%d\t%f\t%f\n", (int)i, err1/(double)(i + 1), 0.0);
 
 		slv_point1.println();
-		getchar();
+//		getchar();
 	}
 
 	return 0;

@@ -62,7 +62,7 @@ public:
 		return true;
 	}
 
-	long timeWindow;
+	unsigned long timeWindow;
 	
 	int minValidDistance;
 };
@@ -75,7 +75,7 @@ public:
 	void setMeasurementCondition(MeasurementCondition condition);
 	int getLid();
 
-	void makeSnapshot(unsigned long currentTime, unsigned long timeWindow);
+	void makeSnapshot(unsigned long currentTime);
 	std::vector<Measurement*> getMeasurements();		//call makeSnapshot before getting measurements
 
 	size_t size();

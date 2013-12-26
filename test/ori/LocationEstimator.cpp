@@ -271,12 +271,13 @@ bool LocationEstimator::makeHeardList(HeardList &heardList, int minBeaconNum, in
 	}
 
 	if ((int)heardList.heardInfo.size() < minBeaconNum) return false;
-	if (fitCheck) 
+//	if (fitCheck) 
 	{
-		heardList.CheckReflectionFitting(planeList);
+//		heardList.CheckReflectionFitting(planeList);
 		heardList.Sort();
 		heardList.Cut(cutSize);
 	}
+#if 0
 	else
 	{
 		heardList.n_valid = heardList.heardInfo.size();
@@ -289,6 +290,7 @@ bool LocationEstimator::makeHeardList(HeardList &heardList, int minBeaconNum, in
 		for (size_t i = 0; i < heardList.heardInfo.size(); i++)
 			heardList.heardInfo[i].valid = true;
 	}
+#endif
 	return true;
 }
 
@@ -299,7 +301,14 @@ Vector LocationEstimator::Solve()
 	HeardList heardList = HeardList(1);	
 	
 	if (!makeHeardList(heardList, minBeaconNum, args.NCut, false)) 
+	{
 		return solver->prevPositionLSQ;
+	}
+
+	for (int i = 0; i < heardList.heardInfo.size(); i++)
+	{
+		printf("%8ld %d %d\n", beaconList[heardList.heardInfo[i].bid]->timestamp, heardList.heardInfo[i].bid, (int)heardList.heardInfo[i].distance);
+	}
 
 	double err = 0;
 	Vector position;
