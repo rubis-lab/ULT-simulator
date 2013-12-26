@@ -80,7 +80,6 @@ void Estimator::setSolver()
 
 	condition.solveNaive = (bool)(args.estimatorMode == EST::TRADITIONAL);
 
-	bool a = (bool) 10;
 	condition.cutBranch1 = (args.optimization & OPT::BRANCHCUT) != 0;
 	condition.cutBranch2 = (args.optimization & OPT::BRANCHCUT_2) != 0;
 
