@@ -354,6 +354,15 @@ Vector LocationEstimator::SolveEx()
 	/*V3*/args.analyzer->N_PMS.AddValue((double)n_candidate);
 
 
+	for (size_t i = 0; i < solver->positionInfo.size(); i++)
+	{
+		solver->positionInfo[i].position.Print();
+		if (!solver->positionInfo[i].valid)
+			printf("!");
+		printf("\n");
+	}
+
+
 	if (args.Optimization & OPT::THRESHOLD)
 	{		
 		/*T4{*/args.analyzer->EstimatorPostProc.StartTimer();	/* start */
