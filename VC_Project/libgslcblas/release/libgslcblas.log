@@ -1,0 +1,389 @@
+﻿빌드 시작: 2011-07-28 오전 8:18:44
+     1>3 노드의 "C:\Users\Administrator\Downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\VC8\libgslcblas\libgslcblas.vcxproj" 프로젝트(rebuild 대상)입니다.
+     1>InitializeBuildStatus:
+         "AlwaysCreate"이(가) 지정되었기 때문에 "Release-StaticLib\libgslcblas.unsuccessfulbuild"을(를) 만들고 있습니다.
+       PreBuildEvent:
+         if not exist .\..\..\config.h goto COPY_CONFIG_H
+         
+         fc .\..\config.h.msvc .\..\..\config.h
+         if NOT ERRORLEVEL 1 goto EXIT_BAT
+         
+         :COPY_CONFIG_H
+         if exist .\..\..\config.h del .\..\..\config.h
+         copy .\..\config.h.msvc .\..\..\config.h
+         goto EXIT_BAT
+         
+         :EXIT_BAT
+         
+         :VCEnd
+         파일을 비교합니다: .\..\config.h.msvc - .\..\..\CONFIG.H
+         FC: 다른 점이 없습니다.
+         
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I.\.. /I.\..\.. /Zi /nologo /W4 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _LIB /D _CRT_SECURE_NO_DEPRECATE /D _VC80_UPGRADE=0x0710 /D _MBCS /Gm- /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release-StaticLib\\" /Fd"Release-StaticLib\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt ..\..\cblas\caxpy.c ..\..\cblas\ccopy.c ..\..\cblas\cdotc_sub.c ..\..\cblas\cdotu_sub.c ..\..\cblas\cgbmv.c ..\..\cblas\cgemm.c ..\..\cblas\cgemv.c ..\..\cblas\cgerc.c ..\..\cblas\cgeru.c ..\..\cblas\chbmv.c ..\..\cblas\chemm.c ..\..\cblas\chemv.c ..\..\cblas\cher.c ..\..\cblas\cher2.c ..\..\cblas\cher2k.c ..\..\cblas\cherk.c ..\..\cblas\chpmv.c ..\..\cblas\chpr.c ..\..\cblas\chpr2.c ..\..\cblas\cscal.c ..\..\cblas\csscal.c ..\..\cblas\cswap.c ..\..\cblas\csymm.c ..\..\cblas\csyr2k.c ..\..\cblas\csyrk.c ..\..\cblas\ctbmv.c ..\..\cblas\ctbsv.c ..\..\cblas\ctpmv.c ..\..\cblas\ctpsv.c ..\..\cblas\ctrmm.c ..\..\cblas\ctrmv.c ..\..\cblas\ctrsm.c ..\..\cblas\ctrsv.c ..\..\cblas\dasum.c ..\..\cblas\daxpy.c ..\..\cblas\dcopy.c ..\..\cblas\ddot.c ..\..\cblas\dgbmv.c ..\..\cblas\dgemm.c ..\..\cblas\dgemv.c ..\..\cblas\dger.c ..\..\cblas\dnrm2.c ..\..\cblas\drot.c ..\..\cblas\drotg.c ..\..\cblas\drotm.c ..\..\cblas\drotmg.c ..\..\cblas\dsbmv.c ..\..\cblas\dscal.c ..\..\cblas\dsdot.c ..\..\cblas\dspmv.c ..\..\cblas\dspr.c ..\..\cblas\dspr2.c ..\..\cblas\dswap.c ..\..\cblas\dsymm.c ..\..\cblas\dsymv.c ..\..\cblas\dsyr.c ..\..\cblas\dsyr2.c ..\..\cblas\dsyr2k.c ..\..\cblas\dsyrk.c ..\..\cblas\dtbmv.c ..\..\cblas\dtbsv.c ..\..\cblas\dtpmv.c ..\..\cblas\dtpsv.c ..\..\cblas\dtrmm.c ..\..\cblas\dtrmv.c ..\..\cblas\dtrsm.c ..\..\cblas\dtrsv.c ..\..\cblas\dzasum.c ..\..\cblas\dznrm2.c ..\..\cblas\icamax.c ..\..\cblas\idamax.c ..\..\cblas\isamax.c ..\..\cblas\izamax.c ..\..\cblas\sasum.c ..\..\cblas\saxpy.c ..\..\cblas\scasum.c ..\..\cblas\scnrm2.c ..\..\cblas\scopy.c ..\..\cblas\sdot.c ..\..\cblas\sdsdot.c ..\..\cblas\sgbmv.c ..\..\cblas\sgemm.c ..\..\cblas\sgemv.c ..\..\cblas\sger.c ..\..\cblas\snrm2.c ..\..\cblas\srot.c ..\..\cblas\srotg.c ..\..\cblas\srotm.c ..\..\cblas\srotmg.c ..\..\cblas\ssbmv.c ..\..\cblas\sscal.c ..\..\cblas\sspmv.c ..\..\cblas\sspr.c ..\..\cblas\sspr2.c ..\..\cblas\sswap.c ..\..\cblas\ssymm.c ..\..\cblas\ssymv.c ..\..\cblas\ssyr.c ..\..\cblas\ssyr2.c ..\..\cblas\ssyr2k.c ..\..\cblas\ssyrk.c ..\..\cblas\stbmv.c ..\..\cblas\stbsv.c ..\..\cblas\stpmv.c ..\..\cblas\stpsv.c ..\..\cblas\strmm.c ..\..\cblas\strmv.c ..\..\cblas\strsm.c ..\..\cblas\strsv.c ..\..\cblas\xerbla.c ..\..\cblas\zaxpy.c ..\..\cblas\zcopy.c ..\..\cblas\zdotc_sub.c ..\..\cblas\zdotu_sub.c ..\..\cblas\zdscal.c ..\..\cblas\zgbmv.c ..\..\cblas\zgemm.c ..\..\cblas\zgemv.c ..\..\cblas\zgerc.c ..\..\cblas\zgeru.c ..\..\cblas\zhbmv.c ..\..\cblas\zhemm.c ..\..\cblas\zhemv.c ..\..\cblas\zher.c ..\..\cblas\zher2.c ..\..\cblas\zher2k.c ..\..\cblas\zherk.c ..\..\cblas\zhpmv.c ..\..\cblas\zhpr.c ..\..\cblas\zhpr2.c ..\..\cblas\zscal.c ..\..\cblas\zswap.c ..\..\cblas\zsymm.c ..\..\cblas\zsyr2k.c ..\..\cblas\zsyrk.c ..\..\cblas\ztbmv.c ..\..\cblas\ztbsv.c ..\..\cblas\ztpmv.c ..\..\cblas\ztpsv.c ..\..\cblas\ztrmm.c ..\..\cblas\ztrmv.c ..\..\cblas\ztrsm.c ..\..\cblas\ztrsv.c
+         caxpy.c
+         ccopy.c
+         cdotc_sub.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_dot_c.h(31): warning C4244: '+=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_dot_c.h(32): warning C4244: '+=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         cdotu_sub.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_dot_c.h(31): warning C4244: '+=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_dot_c.h(32): warning C4244: '+=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         cgbmv.c
+         cgemm.c
+         cgemv.c
+         cgerc.c
+         cgeru.c
+         chbmv.c
+         chemm.c
+         chemv.c
+         cher.c
+         cher2.c
+         cher2k.c
+         cherk.c
+         chpmv.c
+         chpr.c
+         chpr2.c
+         cscal.c
+         코드를 생성하고 있습니다...
+         컴파일하고 있습니다...
+         csscal.c
+         cswap.c
+         csymm.c
+         csyr2k.c
+         csyrk.c
+         ctbmv.c
+         ctbsv.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tbsv_c.h(55): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tbsv_c.h(91): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tbsv_c.h(128): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tbsv_c.h(165): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         ctpmv.c
+         ctpsv.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tpsv_c.h(41): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tpsv_c.h(67): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tpsv_c.h(90): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tpsv_c.h(115): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tpsv_c.h(139): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tpsv_c.h(164): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tpsv_c.h(187): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tpsv_c.h(213): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         ctrmm.c
+         ctrmv.c
+         ctrsm.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsm_c.h(64): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsm_c.h(108): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsm_c.h(152): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsm_c.h(196): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsm_c.h(240): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsm_c.h(283): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsm_c.h(327): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsm_c.h(370): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         ctrsv.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsv_c.h(42): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsv_c.h(68): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsv_c.h(91): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsv_c.h(116): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsv_c.h(140): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsv_c.h(165): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsv_c.h(188): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_trsv_c.h(214): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         dasum.c
+         daxpy.c
+         dcopy.c
+         ddot.c
+         dgbmv.c
+         dgemm.c
+         dgemv.c
+         코드를 생성하고 있습니다...
+         컴파일하고 있습니다...
+         dger.c
+         dnrm2.c
+         drot.c
+         drotg.c
+         drotm.c
+         drotmg.c
+         dsbmv.c
+         dscal.c
+         dsdot.c
+         dspmv.c
+         dspr.c
+         dspr2.c
+         dswap.c
+         dsymm.c
+         dsymv.c
+         dsyr.c
+         dsyr2.c
+         dsyr2k.c
+         dsyrk.c
+         dtbmv.c
+         코드를 생성하고 있습니다...
+         컴파일하고 있습니다...
+         dtbsv.c
+         dtpmv.c
+         dtpsv.c
+         dtrmm.c
+         dtrmv.c
+         dtrsm.c
+         dtrsv.c
+         dzasum.c
+         dznrm2.c
+         icamax.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_iamax_c.h(31): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         idamax.c
+         isamax.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_iamax_r.h(32): warning C4244: '=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         izamax.c
+         sasum.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_asum_r.h(30): warning C4244: '+=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         saxpy.c
+         scasum.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_asum_c.h(30): warning C4244: '+=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         scnrm2.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_nrm2_c.h(35): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_nrm2_c.h(38): warning C4244: '=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_nrm2_c.h(46): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_nrm2_c.h(49): warning C4244: '=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_nrm2_c.h(59): warning C4244: 'return' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         scopy.c
+         sdot.c
+         sdsdot.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_dot_r.h(32): warning C4244: 'return' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         코드를 생성하고 있습니다...
+         컴파일하고 있습니다...
+         sgbmv.c
+         sgemm.c
+         sgemv.c
+         sger.c
+         snrm2.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_nrm2_r.h(29): warning C4244: 'return' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_nrm2_r.h(36): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_nrm2_r.h(39): warning C4244: '=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_nrm2_r.h(49): warning C4244: 'return' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         srot.c
+         srotg.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_rotg.h(22): warning C4244: '초기화 중' : 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_rotg.h(28): warning C4244: '=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_rotg.h(36): warning C4244: '=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         srotm.c
+         srotmg.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_rotmg.h(46): warning C4244: '=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_rotmg.h(47): warning C4244: '=' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         ssbmv.c
+         sscal.c
+         sspmv.c
+         sspr.c
+         sspr2.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_spr2.h(39): warning C4244: '+=' : 'const double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_spr2.h(56): warning C4244: '+=' : 'const double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         sswap.c
+         ssymm.c
+         ssymv.c
+         ssyr.c
+         ssyr2.c
+         ssyr2k.c
+         코드를 생성하고 있습니다...
+         컴파일하고 있습니다...
+         ssyrk.c
+         stbmv.c
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tbmv_r.h(34): warning C4244: '초기화 중' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+     1>c:\users\administrator\downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\cblas\source_tbmv_r.h(52): warning C4244: '초기화 중' : 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+         stbsv.c
+         stpmv.c
+         stpsv.c
+         strmm.c
+         strmv.c
+         strsm.c
+         strsv.c
+         xerbla.c
+         zaxpy.c
+         zcopy.c
+         zdotc_sub.c
+         zdotu_sub.c
+         zdscal.c
+         zgbmv.c
+         zgemm.c
+         zgemv.c
+         zgerc.c
+         zgeru.c
+         코드를 생성하고 있습니다...
+         컴파일하고 있습니다...
+         zhbmv.c
+         zhemm.c
+         zhemv.c
+         zher.c
+         zher2.c
+         zher2k.c
+         zherk.c
+         zhpmv.c
+         zhpr.c
+         zhpr2.c
+         zscal.c
+         zswap.c
+         zsymm.c
+         zsyr2k.c
+         zsyrk.c
+         ztbmv.c
+         ztbsv.c
+         ztpmv.c
+         ztpsv.c
+         ztrmm.c
+         코드를 생성하고 있습니다...
+         컴파일하고 있습니다...
+         ztrmv.c
+         ztrsm.c
+         ztrsv.c
+         코드를 생성하고 있습니다...
+       Lib:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"Release-StaticLib\libgslcblas.lib" /NOLOGO "Release-StaticLib\caxpy.obj"
+         "Release-StaticLib\ccopy.obj"
+         "Release-StaticLib\cdotc_sub.obj"
+         "Release-StaticLib\cdotu_sub.obj"
+         "Release-StaticLib\cgbmv.obj"
+         "Release-StaticLib\cgemm.obj"
+         "Release-StaticLib\cgemv.obj"
+         "Release-StaticLib\cgerc.obj"
+         "Release-StaticLib\cgeru.obj"
+         "Release-StaticLib\chbmv.obj"
+         "Release-StaticLib\chemm.obj"
+         "Release-StaticLib\chemv.obj"
+         "Release-StaticLib\cher.obj"
+         "Release-StaticLib\cher2.obj"
+         "Release-StaticLib\cher2k.obj"
+         "Release-StaticLib\cherk.obj"
+         "Release-StaticLib\chpmv.obj"
+         "Release-StaticLib\chpr.obj"
+         "Release-StaticLib\chpr2.obj"
+         "Release-StaticLib\cscal.obj"
+         "Release-StaticLib\csscal.obj"
+         "Release-StaticLib\cswap.obj"
+         "Release-StaticLib\csymm.obj"
+         "Release-StaticLib\csyr2k.obj"
+         "Release-StaticLib\csyrk.obj"
+         "Release-StaticLib\ctbmv.obj"
+         "Release-StaticLib\ctbsv.obj"
+         "Release-StaticLib\ctpmv.obj"
+         "Release-StaticLib\ctpsv.obj"
+         "Release-StaticLib\ctrmm.obj"
+         "Release-StaticLib\ctrmv.obj"
+         "Release-StaticLib\ctrsm.obj"
+         "Release-StaticLib\ctrsv.obj"
+         "Release-StaticLib\dasum.obj"
+         "Release-StaticLib\daxpy.obj"
+         "Release-StaticLib\dcopy.obj"
+         "Release-StaticLib\ddot.obj"
+         "Release-StaticLib\dgbmv.obj"
+         "Release-StaticLib\dgemm.obj"
+         "Release-StaticLib\dgemv.obj"
+         "Release-StaticLib\dger.obj"
+         "Release-StaticLib\dnrm2.obj"
+         "Release-StaticLib\drot.obj"
+         "Release-StaticLib\drotg.obj"
+         "Release-StaticLib\drotm.obj"
+         "Release-StaticLib\drotmg.obj"
+         "Release-StaticLib\dsbmv.obj"
+         "Release-StaticLib\dscal.obj"
+         "Release-StaticLib\dsdot.obj"
+         "Release-StaticLib\dspmv.obj"
+         "Release-StaticLib\dspr.obj"
+         "Release-StaticLib\dspr2.obj"
+         "Release-StaticLib\dswap.obj"
+         "Release-StaticLib\dsymm.obj"
+         "Release-StaticLib\dsymv.obj"
+         "Release-StaticLib\dsyr.obj"
+         "Release-StaticLib\dsyr2.obj"
+         "Release-StaticLib\dsyr2k.obj"
+         "Release-StaticLib\dsyrk.obj"
+         "Release-StaticLib\dtbmv.obj"
+         "Release-StaticLib\dtbsv.obj"
+         "Release-StaticLib\dtpmv.obj"
+         "Release-StaticLib\dtpsv.obj"
+         "Release-StaticLib\dtrmm.obj"
+         "Release-StaticLib\dtrmv.obj"
+         "Release-StaticLib\dtrsm.obj"
+         "Release-StaticLib\dtrsv.obj"
+         "Release-StaticLib\dzasum.obj"
+         "Release-StaticLib\dznrm2.obj"
+         "Release-StaticLib\icamax.obj"
+         "Release-StaticLib\idamax.obj"
+         "Release-StaticLib\isamax.obj"
+         "Release-StaticLib\izamax.obj"
+         "Release-StaticLib\sasum.obj"
+         "Release-StaticLib\saxpy.obj"
+         "Release-StaticLib\scasum.obj"
+         "Release-StaticLib\scnrm2.obj"
+         "Release-StaticLib\scopy.obj"
+         "Release-StaticLib\sdot.obj"
+         "Release-StaticLib\sdsdot.obj"
+         "Release-StaticLib\sgbmv.obj"
+         "Release-StaticLib\sgemm.obj"
+         "Release-StaticLib\sgemv.obj"
+         "Release-StaticLib\sger.obj"
+         "Release-StaticLib\snrm2.obj"
+         "Release-StaticLib\srot.obj"
+         "Release-StaticLib\srotg.obj"
+         "Release-StaticLib\srotm.obj"
+         "Release-StaticLib\srotmg.obj"
+         "Release-StaticLib\ssbmv.obj"
+         "Release-StaticLib\sscal.obj"
+         "Release-StaticLib\sspmv.obj"
+         "Release-StaticLib\sspr.obj"
+         "Release-StaticLib\sspr2.obj"
+         "Release-StaticLib\sswap.obj"
+         "Release-StaticLib\ssymm.obj"
+         "Release-StaticLib\ssymv.obj"
+         "Release-StaticLib\ssyr.obj"
+         "Release-StaticLib\ssyr2.obj"
+         "Release-StaticLib\ssyr2k.obj"
+         "Release-StaticLib\ssyrk.obj"
+         "Release-StaticLib\stbmv.obj"
+         "Release-StaticLib\stbsv.obj"
+         "Release-StaticLib\stpmv.obj"
+         "Release-StaticLib\stpsv.obj"
+         "Release-StaticLib\strmm.obj"
+         "Release-StaticLib\strmv.obj"
+         "Release-StaticLib\strsm.obj"
+         "Release-StaticLib\strsv.obj"
+         "Release-StaticLib\xerbla.obj"
+         "Release-StaticLib\zaxpy.obj"
+         "Release-StaticLib\zcopy.obj"
+         "Release-StaticLib\zdotc_sub.obj"
+         "Release-StaticLib\zdotu_sub.obj"
+         "Release-StaticLib\zdscal.obj"
+         "Release-StaticLib\zgbmv.obj"
+         "Release-StaticLib\zgemm.obj"
+         "Release-StaticLib\zgemv.obj"
+         "Release-StaticLib\zgerc.obj"
+         "Release-StaticLib\zgeru.obj"
+         "Release-StaticLib\zhbmv.obj"
+         "Release-StaticLib\zhemm.obj"
+         "Release-StaticLib\zhemv.obj"
+         "Release-StaticLib\zher.obj"
+         "Release-StaticLib\zher2.obj"
+         "Release-StaticLib\zher2k.obj"
+         "Release-StaticLib\zherk.obj"
+         "Release-StaticLib\zhpmv.obj"
+         "Release-StaticLib\zhpr.obj"
+         "Release-StaticLib\zhpr2.obj"
+         "Release-StaticLib\zscal.obj"
+         "Release-StaticLib\zswap.obj"
+         "Release-StaticLib\zsymm.obj"
+         "Release-StaticLib\zsyr2k.obj"
+         "Release-StaticLib\zsyrk.obj"
+         "Release-StaticLib\ztbmv.obj"
+         "Release-StaticLib\ztbsv.obj"
+         "Release-StaticLib\ztpmv.obj"
+         "Release-StaticLib\ztpsv.obj"
+         "Release-StaticLib\ztrmm.obj"
+         "Release-StaticLib\ztrmv.obj"
+         "Release-StaticLib\ztrsm.obj"
+         "Release-StaticLib\ztrsv.obj"
+         libgslcblas.vcxproj -> C:\Users\Administrator\Downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\VC8\libgslcblas\Release-StaticLib\libgslcblas.lib
+       FinalizeBuildStatus:
+         "Release-StaticLib\libgslcblas.unsuccessfulbuild" 파일을 삭제하고 있습니다.
+         "Release-StaticLib\libgslcblas.lastbuildstate"에 연결(touching)하고 있습니다.
+     1>"C:\Users\Administrator\Downloads\gsl-1.8-src\src\gsl\1.8\gsl-1.8\VC8\libgslcblas\libgslcblas.vcxproj" 프로젝트를 빌드했습니다(rebuild 대상).
+
+빌드했습니다.
+
+경과 시간: 00:00:53.72
