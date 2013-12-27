@@ -150,6 +150,15 @@ EstimatorResult Estimator::solve(long currentTime)
 		optimize1(&results);
 	}
 
+	for (size_t i = 0; i < results.size(); i++)
+	{
+		SolverResult *result = results.at(i);
+		result->location.print();
+		if (!result->isValid())
+			printf("!");
+		printf("\n");
+	}
+
 	EstimatorResult ret;
 	SolverResult result;
 

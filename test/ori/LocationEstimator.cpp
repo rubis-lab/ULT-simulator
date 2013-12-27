@@ -100,7 +100,7 @@ void LocationEstimator::SetPlane(Vector p1, Vector p2, Vector p3)
 void LocationEstimator::SetPlane(Vector p1, Vector p2, Vector p3, Vector p4)
 {
 	// 안에서 보았을 때 시계방향순으로 경계점
-	Plane plane = Plane(p1, p2, p3, p4);
+	Plane plane = Plane(p1, p2, p3, p4, true);
 	plane.idx = planeList.size();
 	planeList.push_back(plane);	
 	
@@ -351,6 +351,14 @@ Vector LocationEstimator::SolveEx()
 		/*}T4*/args.analyzer->EstimatorPostProc.StopTimer();	/* stop */
 		n_candidate_filtered = solver->positionInfo.size();
 
+	}
+
+	for (size_t i = 0; i < solver->positionInfo.size(); i++)
+	{
+		solver->positionInfo[i].position.Print();
+		if (!solver->positionInfo[i].valid)
+			printf("!");
+		printf("\n");
 	}
 
 	/*T5{*/args.analyzer->EstimatorKFProc.StartTimer();	/* start */
