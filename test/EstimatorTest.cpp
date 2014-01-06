@@ -1,8 +1,9 @@
 #include <string.h>
 #include "Estimator.h"
-#include "BeaconInfo.h"
+#include "Setting.h"
 #define MAX_BID 100
 
+/*
 class LogInfo
 {
 public :
@@ -185,14 +186,6 @@ bool LoadLog(const char* filename, int *ref_cnt1, int *ref_cnt2)
 		return false;
 	}
 
-/*
-	errno_t ret = fopen_s(&fp, filename, "r");
-	if (ret != 0)
-	{		
-//		printf("file %s open error\n");
-		return false;		
-	}
-*/
 	clear_log_list(logList);
 	
 	
@@ -260,65 +253,51 @@ void SetPlanes(int width, int length, int height)
 	
 }
 
+*/
 
 
 int main()
 {
-	int ref_cnt1, ref_cnt2;
-	LoadLog("test_log.dat", &ref_cnt1, &ref_cnt2);
+//	int ref_cnt1, ref_cnt2;
+//	LoadLog("test_log.dat", &ref_cnt1, &ref_cnt2);
 
 	BeaconList beacons;
+	PlaneList planes;
 	Estimator estimator;
-
-	SetPlanes(1000, 1000, 300);	
 	
-	double err1 = 0;
-	
-	for (int i = 0; i < nBeacon; i++)
-	{
-		beacons.addBeacon(logList[0].beaconList[i].beacon_id,
-				logList[0].beaconList[i].location);
-	}
-	beacons.applyPlanes(&planes);
-
-
-
 	EstimatorArgument args;
-	args.timeSlot = 50;
-	args.validSize = 4;
-	args.maxMeasError = 50;
-	args.minValidDistance = 10;
-	args.maxValidDistance = 700;
-	args.minBeaconSize = 3;
-	args.strictValidSize = false;
-	args.timeWindow = 1000;
-	args.optimization = OPT::SELECTION | OPT::THRESHOLD | OPT::BRANCHCUT;
-	args.kfMode = KF::PV;
-	args.estimatorMode = EST::PROPOSED1;
-	args.gatherData = false;
-	args.beacons = &beacons;
-	args.planes = &planes;
+	Setting setting;
 
+	setting.loadEstimatorArgument("conf.txt", &args);
 
+	setting.loadBeaconList(args.beaconConfigFilename, &beacons);
+	setting.loadPlaneList(args.planeConfigFilename, &planes);
 
-
+	beacons.applyPlanes(&planes);
 
 	estimator.setEstimator(args);
 
-	for (size_t i = 0; i < logList.size(); i++)
-	{
-		long timestamp = logList[i].timestamp;
+	EventLogList events;
+	setting.loadEventLogList("test_log.dat", &events);
 
-		for (int j = 0; j < nBeacon; j++)
+	double err1;
+
+	for (size_t i = 0; i < events.size(); i++)
+	{
+		EventLog event = events.events[i];
+
+		unsigned long timestamp = event.timestamp;
+
+		for (int j = 0; j < event.measurements.size(); j++)
 		{
 			estimator.measure(timestamp, 
-					logList[i].beaconList[j].beacon_id,
-					logList[i].beaconList[j].distance);
+					event.measurements[j].bid,
+					event.measurements[j].distance);
 		}
 		EstimatorResult result;
 		result = estimator.solve(timestamp);
 
-		Vector ori_point = logList[i].vPosition;
+		Vector ori_point = event.location;
 		Vector slv_point1 = result.location;
 		
 		err1 += slv_point1.getDistance(ori_point);

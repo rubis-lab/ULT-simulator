@@ -69,6 +69,9 @@ public:
 		kfMode = KF::PV;
 		kfMeasError = 0.001;
 		kfSystemError = 0.0008;
+
+		strcpy(beaconConfigFilename, "beacon.conf");
+		strcpy(planeConfigFilename, "plane.conf");
 		
 	}
 	int lid;			// each listener has its own estimator
@@ -91,6 +94,10 @@ public:
 	KF::mode kfMode;
 	double kfMeasError;
 	double kfSystemError;
+	
+
+	char beaconConfigFilename[255];
+	char planeConfigFilename[255];
 
 	BeaconList *beacons;
 	PlaneList *planes;

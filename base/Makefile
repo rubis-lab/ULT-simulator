@@ -5,7 +5,8 @@ OBJS=Vector.o \
 
 
 SRCS=$(OBJS:.o=.cpp)
-INC=-I../base -I../estimator -I../kalmanfilter
+INC=-I../base -I../estimator -I../kalmanfilter -I../setting
+INC=-I../base -I../estimator -I../kalmanfilter -I../setting -I../simulator
 LIBS=
 CPPFLAGS=$(INC) $(LIBS) -Wall -O2 -DENV_LINUX
 DEBUGFLAGS=$(CPPFLAGS:O2=g)

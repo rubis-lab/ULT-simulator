@@ -9,7 +9,7 @@ char* strtok_r(char* str, char* delim, char** context);
 class Vector
 {
 public:
-	Vector();
+	Vector(bool isNotNull = true);
 	~Vector(void);
 	Vector(double x, double y, double z);
 	Vector(char* string);
@@ -20,6 +20,8 @@ private:
 
 public:
 	double x, y, z;
+	bool isNull;
+
 	Vector operator + (Vector v);
 	Vector operator - (Vector v);
 	Vector operator - ();
@@ -37,4 +39,5 @@ public:
 	void print();
 	void println();
 	Vector getCompCross(Vector &v);
+
 };

@@ -17,7 +17,7 @@ class Beacon
 {
 public:
 	Beacon(int bid, Vector location);
-	Beacon (Beacon *beacon);
+	Beacon(Beacon *beacon);
 	~Beacon();
 
 	void addReflectedBeacon(Plane *plane);

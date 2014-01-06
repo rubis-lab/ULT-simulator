@@ -10,10 +10,10 @@ BeaconList::BeaconList()
 
 BeaconList::~BeaconList()
 {
-	clear();
+	reset();
 }
 
-void BeaconList::clear()
+void BeaconList::reset()
 {
 	for (size_t i = 0; i < baseBeaconList.size(); i++)
 		delete baseBeaconList[i];

@@ -16,7 +16,7 @@ public:
 
 	void addBeacon(int bid, Vector location);
 	void applyPlanes(PlaneList *planeList, int maxReflectionCount = REFLECTION_COUNT_LIMIT);
-	void clear();
+	void reset();
 	size_t size();
 	Beacon* at(int idx);
 

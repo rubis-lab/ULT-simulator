@@ -1,9 +1,6 @@
 CC=g++
-OBJS= BeaconList.o \
-	  PlaneList.o \
-	  Measurement.o \
-	  Solver.o \
-	  Estimator.o \
+OBJS= \
+	  Setting.o \
 
 
 

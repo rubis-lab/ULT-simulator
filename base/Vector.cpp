@@ -18,9 +18,10 @@ bool dEQ(double x, double y)
 	return fabs(x - y) <= precision;
 }
 
-Vector::Vector()
+Vector::Vector(bool isNotNull)
 {
 	x = y = z = 0;
+	isNull = !isNotNull;
 }
 
 Vector::Vector(double x, double y, double z)

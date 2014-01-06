@@ -1,13 +1,14 @@
 CC=g++
 
-INC=-Igsl/include -I../estimator -I../base -I../kalmanfilter
+INC=-Igsl/include -I../estimator -I../base -I../kalmanfilter -I../setting -I../simulator
 LIBS=-lm -lgsl
 CPPFLAGS=$(INC) $(LIBS) -Wall -O2 -DENV_LINUX
 DEBUGFLAGS=$(CPPFLAGS:O2=g)
-OBJS=../base/*.o ../estimator/*.o ../kalmanfilter/*.o
+OBJS=../base/*.o ../estimator/*.o ../kalmanfilter/*.o ../setting/*.o ../simulator/*.o
 SRCS=EstimatorTest.cpp BeaconInfo.cpp
 
-all: estimator base kalmanfilter $(SRCS)
+all: estimator base kalmanfilter setting simulator $(SRCS)
+
 	$(CC) -o estimator_test $(SRCS) -ggdb $(LIBS) $(INC) $(OBJS)
 
 clean:
@@ -27,3 +28,9 @@ base:
 
 kalmanfilter:
 	$(MAKE) -C ../kalmanfilter
+
+setting:
+	$(MAKE) -C ../setting
+	
+simulator:
+	$(MAKE) -C ../simulator
