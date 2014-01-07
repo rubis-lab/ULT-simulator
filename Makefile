@@ -46,5 +46,6 @@ clean:
 	$(MAKE) clean -C base
 	$(MAKE) clean -C kalmanfilter
 	$(MAKE) clean -C setting
+	$(MAKE) clean -C simulator
 	rm *.o -rf
 

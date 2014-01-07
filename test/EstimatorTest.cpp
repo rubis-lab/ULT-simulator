@@ -261,24 +261,34 @@ int main()
 //	int ref_cnt1, ref_cnt2;
 //	LoadLog("test_log.dat", &ref_cnt1, &ref_cnt2);
 
-	BeaconList beacons;
-	PlaneList planes;
 	Estimator estimator;
-	
 	EstimatorArgument args;
-	Setting setting;
 
-	setting.loadEstimatorArgument("conf.txt", &args);
+#if 1
+	Setting.loadEstimatorArgument("conf.txt", &args);
 
-	setting.loadBeaconList(args.beaconConfigFilename, &beacons);
-	setting.loadPlaneList(args.planeConfigFilename, &planes);
+#else
+	args.timeSlot = 50;
+	args.validSize = 4;
+	args.maxMeasError = 50;
+	args.minValidDistance = 10;
+	args.maxValidDistance = 700;
+	args.minBeaconSize = 3;
+	args.strictValidSize = false;
+	args.timeWindow = 1000;
+	args.optimization = OPT::SELECTION | OPT::THRESHOLD | OPT::BRANCHCUT;
+	args.kfMode = KF::PV;
+	args.estimatorMode = EST::PROPOSED1;
+	args.gatherData = false;
+	Setting.loadBeaconList("beacon.conf", &args.beacons);
+	Setting.loadPlaneList("plane.conf", &args.planes);
+#endif
+	
 
-	beacons.applyPlanes(&planes);
-
-	estimator.setEstimator(args);
+	estimator.setEstimator(&args);
 
 	EventLogList events;
-	setting.loadEventLogList("test_log.dat", &events);
+	Setting.loadEventLogList("test_log.dat", &events);
 
 	double err1;
 

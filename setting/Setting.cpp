@@ -43,7 +43,7 @@ bool read_vector(char* str, Vector &v)
 }
 
 
-long read_listener_info(FILE* fp, Vector &vPosition, Vector &vFace)
+bool read_listener_info(FILE* fp, Vector &vPosition, Vector &vFace, unsigned long *timestamp)
 {
 	const int buf_size = 1024;
 	char buf[buf_size + 1];
@@ -58,18 +58,18 @@ long read_listener_info(FILE* fp, Vector &vPosition, Vector &vFace)
 	buf_header = read_header(buf);
 	
 //	if (fgets(buf, buf_size, fp) == NULL) return -1;
-	if (strcmp(buf_header, "endlog") == 0) return -1;
+	if (strcmp(buf_header, "endlog") == 0) 
+		return false;
 	if (strcmp(buf_header, "time") != 0)
 	{
-		printf("incorrect file contents (exit code : 10)\n");
+		printf("incorrect file contents. \"time\" is expected but read %s (exit code : 10)\n", buf_header);
 		getchar();
 		exit(10);
 	}
 	
-	long timestamp;
 	bool ret1, ret2;
 
-	timestamp = read_value_long(NULL);
+	*timestamp = read_value_long(NULL);
 	
 	ret1 = read_vector(NULL, vPosition);
 	ret2 = read_vector(NULL, vFace);
@@ -81,7 +81,7 @@ long read_listener_info(FILE* fp, Vector &vPosition, Vector &vFace)
 		exit(11);
 	}
 
-	return timestamp;
+	return true;
 }
 
 
@@ -169,9 +169,15 @@ void Setting::loadEstimatorArgument(const char *filename, EstimatorArgument *est
 		else if (strcmp(arg, "env_optimization") == 0)
 			estimatorArgument->optimization = atoi(val);
 		else if (strcmp(arg, "env_beacon_config") == 0)
+		{
 			strcpy(estimatorArgument->beaconConfigFilename, val);
+			loadBeaconList(val, &estimatorArgument->beacons);
+		}
 		else if (strcmp(arg, "env_plane_config") == 0)
-			strcpy(estimatorArgument->planeConfigFilename, val);		
+		{
+			strcpy(estimatorArgument->planeConfigFilename, val);
+			loadPlaneList(val, &estimatorArgument->planes);
+		}
 		else if (strcmp(arg, "env_mode") == 0)
 		{
 			if (atoi(val) == 0)
@@ -195,9 +201,11 @@ void Setting::loadEstimatorArgument(const char *filename, EstimatorArgument *est
 			else printf("unknown KF Mode : %s\n", val);		
 		}
 		else if (strncmp(arg, "kf_", 3) == 0)
-			printf("loadEnvironment: unkown argumnet \"%s\"\n", arg);
+			printf("loadEstimatorArgument: unkown argumnet \"%s\"\n", arg);
 	}
 	fclose(fp);
+
+	
 }
 
 void Setting::saveEstimatorArgument(const char *filename, EstimatorArgument *args)
@@ -219,6 +227,12 @@ void Setting::saveEstimatorArgument(const char *filename, EstimatorArgument *arg
 	fprintf(fp, "env_optimization = %d \t# bitwise 'or' value of : selection opt (%d), threshold opt (%d), branch cut opt (%d), branch cut opt 2 (%d)\n", args->optimization, OPT::SELECTION, OPT::THRESHOLD, OPT::BRANCHCUT, OPT::BRANCHCUT_2);
 	fprintf(fp, "env_beacon_config = %s \t# beacon config file\n", args->beaconConfigFilename);
 	fprintf(fp, "env_plane_config = %s \t# plane config file\n", args->planeConfigFilename);
+	fprintf(fp, "env_mode = ");
+	if (args->estimatorMode == EST::TRADITIONAL)
+		fprintf(fp, "0");
+	if (args->estimatorMode == EST::PROPOSED1)
+		fprintf(fp, "1");
+	fprintf(fp, " \t# estimator mode. traditional(0), proposed(1)\n");
 
 	fprintf(fp, "\n");
 
@@ -316,7 +330,7 @@ void Setting::loadEventLogList(const char* filename, EventLogList *events)
 	double distance;
 	Vector reflectedPoint1, reflectedPoint2;
 
-	while ((timestamp = read_listener_info(fp, location, direction)) > 0)
+	while (read_listener_info(fp, location, direction, &timestamp))
 	{
 		events->setNewEvent(timestamp, location, direction);
 

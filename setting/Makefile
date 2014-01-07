@@ -1,6 +1,8 @@
 CC=g++
 OBJS= \
 	  Setting.o \
+	  Random.o \
+
 
 
 

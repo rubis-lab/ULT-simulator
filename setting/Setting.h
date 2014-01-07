@@ -1,10 +1,11 @@
 #pragma once
 #include <stdio.h>
+#include "EstimatorArgument.h"
 #include "BeaconList.h"
 #include "PlaneList.h"
-#include "Estimator.h"
+#include "SimulatorArgument.h"
 #include "EventLog.h"
-
+#include "Random.h"
 
 namespace SIM
 {
@@ -30,7 +31,7 @@ namespace SIM
 	};
 }
 
-class Setting
+static class Setting
 {
 public:
 	Setting(void);
@@ -40,10 +41,13 @@ public:
 	void SaveArgument(const char *filename);
 
 
-	static void loadEstimatorArgument(const char *filename, EstimatorArgument *estimatorArgument);
-	static void loadBeaconList(const char *filename, BeaconList *beacons);
-	static void loadPlaneList(const char* filename, PlaneList *planes);
-	static void loadEventLogList(const char* filename, EventLogList *events);
+	void loadEstimatorArgument(const char *filename, EstimatorArgument *args);
+	void loadSimulatorArgument(const char *filename, SimulatorArgument *args);
+	void loadBeaconList(const char *filename, BeaconList *beacons);
+	void loadPlaneList(const char* filename, PlaneList *planes);
+	void loadEventLogList(const char* filename, EventLogList *events);
+
+
 
 	void saveEstimatorArgument(const char *filename, EstimatorArgument *args);
 
@@ -54,7 +58,7 @@ public:
 
 
 
-	// arguemnts for simulator
+	// arguments for simulator
 	double SIM_SpeedAvg;
 	double SIM_SpeedDev;
 	double SIM_AngularAvg;	
@@ -74,6 +78,8 @@ public:
 
 	char Basename[255];
 
+	
+
 private:
 	void defaultArgs();
 
@@ -84,5 +90,5 @@ private:
 	bool checkConfigFile(const char *filename);
 
 //	void setBaseName();
-};
+} Setting;
 

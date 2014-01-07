@@ -1,6 +1,8 @@
 CC=g++
 OBJS= \
 	  EventLog.o \
+	  BeaconDeploy.o \
+
 #	  Simulator.o \
 
 

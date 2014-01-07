@@ -21,16 +21,16 @@ uninstall:
 	rm *.cpp *.h
 
 estimator:
-	$(MAKE) -C ../estimator
+	$(MAKE) debug -C ../estimator
 
 base:
-	$(MAKE) -C ../base
+	$(MAKE) debug -C ../base
 
 kalmanfilter:
-	$(MAKE) -C ../kalmanfilter
+	$(MAKE) debug -C ../kalmanfilter
 
 setting:
-	$(MAKE) -C ../setting
+	$(MAKE) debug -C ../setting
 	
 simulator:
-	$(MAKE) -C ../simulator
+	$(MAKE) debug -C ../simulator

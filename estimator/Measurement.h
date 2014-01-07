@@ -24,12 +24,18 @@ public:
 	bool nextVBeacon();
 	bool isValidDistance();
 
+// used for simulated measurements
+	void simulate(unsigned long timestamp, Vector location, double noise = 0);
+	void addNoise(double noise);
+	double getSimulatedDistance();
 
-private:
+protected:
 	Beacon* beacon;                                                                  
 	double distance;
 	unsigned long timestamp;
 	int NVSS;
+
+	double simulatedNoise;
 };                                                                                    
 
 class MeasurementCondition
@@ -87,13 +93,13 @@ public:
 public:
 	
 
-private:
+protected:
 	int findBeaconIndexByUserId(int userBid);
 	std::vector<Measurement*> getRandomList(std::vector<Measurement*> filteredMeasurements);
 	std::vector<Measurement*> getSortedList(std::vector<Measurement*> filteredMeasurements);
 	std::vector<Measurement*> getFilteredMeasurements(unsigned long CurrentTime, unsigned long timeWindow);
 
-private:
+protected:
 	const int lid;
 	std::vector<Measurement> allMeasurements;
 	std::vector<Measurement*> measurements;

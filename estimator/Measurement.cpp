@@ -66,6 +66,25 @@ bool Measurement::isValidDistance()
 	return true;
 }
 
+
+// simulated measurement
+void Measurement::simulate(unsigned long timestamp, Vector location, double noise)
+{
+	this->timestamp = timestamp;
+	this->distance = location.getDistance(beacon->getLocation());
+	this->simulatedNoise = noise;
+}
+
+void Measurement::addNoise(double noise)
+{
+	this->simulatedNoise = noise;
+}
+
+double Measurement::getSimulatedDistance()
+{
+	return distance + simulatedNoise;
+}
+
 /////////////////////////////////////////////////////////////////////////
 
 MeasurementList::MeasurementList(int lid, BeaconList *beacons, PlaneList* planes) : 

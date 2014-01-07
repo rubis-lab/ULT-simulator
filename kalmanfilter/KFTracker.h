@@ -1,42 +1,8 @@
 #pragma once
+#include "KFArgument.h"
 #include "KalmanFilter.h"
 #include "Solver.h"
 
-//const double measErr = 0.01;
-const double measErr = 0.001;
-//const double systemErr = 1.5;
-//const double speedErr = 1.5;
-//const double accNoise = 1200;
-const double systemErr = 0.0008;
-// 시간에 대한 matrix로 변경
-
-namespace KF
-{
-	enum mode
-	{
-		P = 0,
-		PV,
-		PVA,
-	};
-}
-
-
-class KFArgument
-{
-public:
-	KFArgument()
-	{
-		mode = KF::PV;
-		timeSlot = 50;
-		KFMeasError = 0.001;
-		KFSystemError = 0.0008;
-	}
-
-	KF::mode mode;
-	unsigned long timeSlot;		// in ms
-	double KFMeasError;
-	double KFSystemError;
-};
 
 
 class KFTracker

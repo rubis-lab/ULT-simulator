@@ -35,11 +35,15 @@ void Estimator::reset()
 }
 
 
-void Estimator::setEstimator(EstimatorArgument estimatorArgument)
+void Estimator::setEstimator(EstimatorArgument *estimatorArgument)
 {
 	reset();
+	
 	args = estimatorArgument;
-	args.setCutThreshold();
+
+	args->applyPlanes();		// make reflected beacons list
+	
+	args->setCutThreshold();
 
 	setMeasurementList();
 	setSolver();
@@ -52,20 +56,20 @@ void Estimator::setEstimator(EstimatorArgument estimatorArgument)
 void Estimator::setMeasurementList()
 {
 
-	measurementList = new MeasurementList(args.lid, args.beacons, args.planes);
+	measurementList = new MeasurementList(args->lid, &args->beacons, &args->planes);
 
 
 	MeasurementCondition measurementCondition;
 
-	measurementCondition.minSize = args.minBeaconSize;
-	measurementCondition.validSize = args.validSize;
-	measurementCondition.strictValidSize = args.strictValidSize;
-	measurementCondition.timeWindow = args.timeWindow;
+	measurementCondition.minSize = args->minBeaconSize;
+	measurementCondition.validSize = args->validSize;
+	measurementCondition.strictValidSize = args->strictValidSize;
+	measurementCondition.timeWindow = args->timeWindow;
 
-	measurementCondition.shortDistanceFirst = (bool)(!args.estimatorMode == EST::TRADITIONAL);
-	measurementCondition.smallerNVSSFirst = (bool)(args.optimization & OPT::SELECTION);
+	measurementCondition.shortDistanceFirst = (bool)(!args->estimatorMode == EST::TRADITIONAL);
+	measurementCondition.smallerNVSSFirst = (bool)(args->optimization & OPT::SELECTION);
 
-	measurementCondition.minValidDistance = args.minValidDistance;
+	measurementCondition.minValidDistance = args->minValidDistance;
 
 	
 	measurementList->setMeasurementCondition(measurementCondition);
@@ -78,14 +82,14 @@ void Estimator::setSolver()
 {
 	SolverCondition condition;
 
-	condition.solveNaive = (bool)(args.estimatorMode == EST::TRADITIONAL);
+	condition.solveNaive = (bool)(args->estimatorMode == EST::TRADITIONAL);
 
-	condition.cutBranch1 = (args.optimization & OPT::BRANCHCUT) != 0;
-	condition.cutBranch2 = (args.optimization & OPT::BRANCHCUT_2) != 0;
+	condition.cutBranch1 = (args->optimization & OPT::BRANCHCUT) != 0;
+	condition.cutBranch2 = (args->optimization & OPT::BRANCHCUT_2) != 0;
 
-	condition.maxMeasError = args.maxMeasError;
+	condition.maxMeasError = args->maxMeasError;
 	
-	condition.minBeaconSize = args.minBeaconSize;
+	condition.minBeaconSize = args->minBeaconSize;
 
 	solver.setSolverCondition(condition);
 }
@@ -98,10 +102,10 @@ void Estimator::setInput()
 void Estimator::setFilterManager()
 {
 	KFArgument kfArgs;
-	kfArgs.mode = args.kfMode;
-	kfArgs.timeSlot = args.timeSlot;
-	kfArgs.KFMeasError = args.kfMeasError;
-	kfArgs.KFSystemError = args.kfSystemError;
+	kfArgs.mode = args->kfMode;
+	kfArgs.timeSlot = args->timeSlot;
+	kfArgs.KFMeasError = args->kfMeasError;
+	kfArgs.KFSystemError = args->kfSystemError;
 	filterManager = new FilterManager(kfArgs);
 }
 
@@ -115,14 +119,14 @@ void Estimator::measure(unsigned long timestamp, int userBid, double distance)
 void Estimator::optimize1(SolverResultList *results)
 {
 	SolverResult *result;
-	double sqrThreshold = pow(args.cutThreshold, 2);
+	double sqrThreshold = pow(args->cutThreshold, 2);
 	for (size_t i = 0; i < results->size(); i++)
 	{
 		result = results->at(i);
 		if (result->getError() > sqrThreshold)
 			result->overThreshold = true;
 
-		if (!args.planes->checkInside(result->location))
+		if (!args->planes.checkInside(result->location))
 			result->isInside = false;
 	}
 	
@@ -144,7 +148,7 @@ EstimatorResult Estimator::solve(long currentTime)
 		return prevResult;
 	}
 
-	if (args.optimization & OPT::THRESHOLD)
+	if (args->optimization & OPT::THRESHOLD)
 	{
 		//cut threshold and check inside
 		optimize1(&results);
@@ -162,7 +166,7 @@ EstimatorResult Estimator::solve(long currentTime)
 	EstimatorResult ret;
 	SolverResult result;
 
-	switch(args.estimatorMode)
+	switch(args->estimatorMode)
 	{
 	case EST::KFONLY:
 	case EST::PROPOSED1:
@@ -197,7 +201,7 @@ EstimatorResult Estimator::solve(long currentTime)
 		break;
 	
 	default:
-		printf("unknown esimator mode. %d\n", args.estimatorMode);
+		printf("unknown esimator mode. %d\n", args->estimatorMode);
 		exit(20);
 		break;
 	}
