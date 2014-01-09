@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "PlaneList.h"
 
 PlaneList::PlaneList()
@@ -56,4 +58,27 @@ bool PlaneList::checkInside(Vector location)
 			return false;
 	}
 	return true;
+}
+
+void PlaneList::load(const char *filename)
+{
+	reset();
+
+	FILE *fp = fopen(filename, "r");
+
+	if (fp == NULL)
+	{
+		printf("can't open plane list file %s\n", filename);
+		exit(20);
+	}
+
+	const int bufSize = 1024;
+	char buf[bufSize + 1];
+
+	while(fgets(buf, bufSize, fp) != NULL)
+	{
+		addPlane(Plane(buf));
+	}
+
+
 }

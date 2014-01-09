@@ -15,6 +15,7 @@ public:
 	Plane* at(int idx);
 	void addPlane(Plane plane);
 	bool checkInside(Vector location);
+	void load(const char *filename);
 
 
 private:

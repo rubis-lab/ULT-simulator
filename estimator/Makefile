@@ -4,6 +4,8 @@ OBJS= BeaconList.o \
 	  Measurement.o \
 	  Solver.o \
 	  Estimator.o \
+	  EstimatorArgument.o \
+
 
 
 

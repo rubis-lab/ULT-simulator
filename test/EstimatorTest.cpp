@@ -1,6 +1,6 @@
 #include <string.h>
 #include "Estimator.h"
-#include "Setting.h"
+#include "EventLog.h"
 #define MAX_BID 100
 
 /*
@@ -265,7 +265,7 @@ int main()
 	EstimatorArgument args;
 
 #if 1
-	Setting.loadEstimatorArgument("conf.txt", &args);
+	args.load("conf.txt");
 
 #else
 	args.timeSlot = 50;
@@ -280,15 +280,15 @@ int main()
 	args.kfMode = KF::PV;
 	args.estimatorMode = EST::PROPOSED1;
 	args.gatherData = false;
-	Setting.loadBeaconList("beacon.conf", &args.beacons);
-	Setting.loadPlaneList("plane.conf", &args.planes);
+	args.beacons.load("beacon.conf");
+	args.planes.load("plane.conf");
 #endif
 	
 
 	estimator.setEstimator(&args);
 
 	EventLogList events;
-	Setting.loadEventLogList("test_log.dat", &events);
+	events.load("test_log.dat");
 
 	double err1;
 

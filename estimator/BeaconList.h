@@ -19,6 +19,7 @@ public:
 	void reset();
 	size_t size();
 	Beacon* at(int idx);
+	void load(const char *filename);
 
 public:
 //	std::vector<Beacon*> beacons;

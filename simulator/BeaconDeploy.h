@@ -2,7 +2,6 @@
 
 #include "SimulatorArgument.h"
 #include "BeaconList.h"
-#include "Setting.h"
 
 
 class BeaconDeploy

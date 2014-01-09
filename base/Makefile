@@ -2,6 +2,9 @@ CC=g++
 OBJS=Vector.o \
 	 Plane.o \
 	 Beacon.o \
+	 IOUtil.o \
+	 Random.o \
+
 
 
 SRCS=$(OBJS:.o=.cpp)

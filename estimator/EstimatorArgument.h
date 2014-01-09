@@ -28,34 +28,9 @@ namespace EST
 class EstimatorArgument
 {
 public:
-	EstimatorArgument()
-	{
-		setDefault();
-		planeApplied = false;
-	}
-	~EstimatorArgument(){}
-	void setDefault()
-	{
-		timeSlot = 50;
-		validSize = 4;
-		maxMeasError = 50;
-		minValidDistance = 1;
-		maxValidDistance = 700;
-		minBeaconSize = 3;
-		strictValidSize = false;
-		timeWindow = 1000;
-		optimization = OPT::NONE;
-		estimatorMode = EST::TRADITIONAL;
-		gatherData = false;
-
-		kfMode = KF::PV;
-		kfMeasError = 0.001;
-		kfSystemError = 0.0008;
-
-		strcpy(beaconConfigFilename, "beacon.conf");
-		strcpy(planeConfigFilename, "plane.conf");
-		
-	}
+	EstimatorArgument();
+	~EstimatorArgument();
+	void setDefault();
 	int lid;			// each listener has its own estimator
 	long timeSlot;		// in ms
 	int validSize;		// N_V
@@ -84,17 +59,10 @@ public:
 	BeaconList beacons;
 	PlaneList planes;
 
-	void setCutThreshold()
-	{
-		cutThreshold = sqrt(pow((double)maxMeasError, 2) / validSize);
-	}
-
-	void applyPlanes()
-	{
-		if (planeApplied) return;
-		beacons.applyPlanes(&planes);
-		planeApplied = true;
-	}
+	void setCutThreshold();
+	void applyPlanes();
+	void load(const char* filename);
+	void save(const char* filename);
 
 
 private:

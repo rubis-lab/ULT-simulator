@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "BeaconDeploy.h"
+#include "Random.h"
 
 #define USE_MATH_DEFINES
 
@@ -45,7 +46,7 @@ void BeaconDeploy::deployBeacons(SimulatorArgument *args)
 
 void BeaconDeploy::deployByFile()
 {
-	Setting.loadBeaconList(args->beaconDeployFilename, &args->beacons);
+	args->beacons.load(args->beaconDeployFilename);
 }
 
 void BeaconDeploy::deployCircular()

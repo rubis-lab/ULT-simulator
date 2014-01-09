@@ -44,13 +44,13 @@ public:
 	void addMeasurement(int bid, double distance);
 	void setMeasurementReflectedPoints(Vector point1, Vector point2);
 	//this function set current event's last measurement's value
+	size_t size();
+	void load(const char *filename);
+	void save(const char *filename);
 	
 
 	int reflectionCount1;
 	int reflectionCount2;
-
-	size_t size();
-
 
 	std::vector<EventLog> events;
 

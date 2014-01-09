@@ -7,10 +7,10 @@ namespace SIM_WALKER
 {
 	enum type
 	{
-		RANDOM,
-		CLOCKWISE,
-		ANTI_CLOCKWISE,
-		PLANE_DETECTION,
+		RANDOM,				// in configuration file, RND
+		CLOCKWISE,			// CW
+		ANTI_CLOCKWISE,		// ACW
+		PLANE_DETECTION,	// PD
 	};
 }
 
@@ -18,12 +18,21 @@ namespace SIM_BEACON
 {
 	enum deploy
 	{
-		BYFILE,
-		CIRCULAR,
-		CIRCULAR2,
-		COULOMB,
-		COULOMB2,
-		RANDOM,
+		BYFILE,				// in configuration file, FILE
+		CIRCULAR,			// CIR
+		CIRCULAR2,			// CIR2
+		COULOMB,			// CLMB
+		COULOMB2,			// CLMB2
+		RANDOM,				// RND
+	};
+}
+
+namespace SIM_PLANE
+{
+	enum type
+	{
+		BYFILE,				// in configuration file, FILE
+		CUBE,				// CUBE
 	};
 }
 
@@ -31,10 +40,7 @@ namespace SIM_BEACON
 class SimulatorArgument
 {
 public:
-	SimulatorArgument()
-	{
-		setDefault();
-	}
+	SimulatorArgument();
 
 	int width;
 	int length;
@@ -44,11 +50,18 @@ public:
 	double angleAvg;
 	double angleDev;
 	int validAngleRange;
+	double distanceNoiseAvg;
+	double distanceNoiseDev;
+	int maxMeasurableDistance;
+	int minMeasurableDistance;
 	
 	SIM_WALKER::type moveType;
 	SIM_BEACON::deploy deployType;
-	char* beaconDeployFilename;
-	int beaconSize;;
+	char beaconDeployFilename[256];
+	int beaconSize;
+
+	SIM_PLANE::type planeType;
+	char planeFilename[256];
 
 
 	int eventSize;
@@ -57,25 +70,7 @@ public:
 	BeaconList beacons;
 	PlaneList planes;
 
-
-	void setDefault()
-	{
-		width = 1000;
-		length = 1000;
-		height = 300;
-		speedAvg = 0.5;
-		speedDev = 0.025;
-		angleAvg = 0.00;
-		angleDev = 1.00;
-		validAngleRange = 170;
-
-		moveType = SIM_WALKER::RANDOM;
-		deployType = SIM_BEACON::RANDOM;
-		beaconDeployFilename = NULL;
-		beaconSize = 10;
-
-		eventSize = 10000;
-		randomSeed = 0;
-
-	}
+	void setDefault();
+	void load(const char *filename);
+	void save(const char *filename);
 };

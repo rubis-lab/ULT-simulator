@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "EventLog.h"
+#include "IOUtil.h"
 
 void EventLog::addMeasurement(int bid, double distance)
 {
@@ -75,3 +76,46 @@ size_t EventLogList::size()
 	return events.size();
 }
 
+
+void EventLogList::load(const char *filename)
+{
+	FILE *fp;
+
+	fp = fopen(filename, "r");
+
+	if (fp == NULL)
+	{
+		printf("EventLogList::load, can't open file %s\n", filename);
+		exit(21);
+	}
+
+	reset();
+
+	const int bufSize = 4095;
+	char buf[bufSize + 1];
+	
+	unsigned long timestamp;
+	Vector location;
+	Vector direction;
+
+	int bid;
+	double distance;
+	Vector reflectedPoint1, reflectedPoint2;
+
+	while (read_listener_info(fp, location, direction, &timestamp))
+	{
+		setNewEvent(timestamp, location, direction);
+
+		while(fgets(buf, bufSize, fp), strcmp(read_header(buf), "dist") == 0)
+		{
+			bid = (int) read_value(NULL);				
+			distance = read_value(NULL);
+			
+			read_vector(NULL, reflectedPoint1);
+			read_vector(NULL, reflectedPoint2);
+
+			addMeasurement(bid, distance);
+			setMeasurementReflectedPoints(reflectedPoint1, reflectedPoint2);
+		}
+	}	
+}

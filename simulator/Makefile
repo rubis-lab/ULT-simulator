@@ -2,6 +2,10 @@ CC=g++
 OBJS= \
 	  EventLog.o \
 	  BeaconDeploy.o \
+	  PlaneGenerator.o \
+	  SimulatorArgument.o \
+
+
 
 #	  Simulator.o \
 

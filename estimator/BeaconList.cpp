@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "BeaconList.h"
 
 #define MIN_SEP 10
@@ -114,4 +116,35 @@ size_t BeaconList::size()
 Beacon* BeaconList::at(int idx)
 {
 	return baseBeaconList[idx];
+}
+
+void BeaconList::load(const char* filename)
+{
+	reset();
+
+	FILE *fp = fopen(filename, "r");
+
+	if (fp == NULL)
+	{
+		printf("can't open beacon list file %s\n", filename);
+		exit(19);
+	}
+
+	const int bufSize = 1024;
+	char buf[bufSize + 1];
+
+
+	while(fgets(buf, bufSize, fp) != NULL)
+	{
+		int bid;
+		Vector location;
+
+		bid = atoi(strtok(buf, ";"));
+
+		location.x = atof(strtok(NULL, ";"));
+		location.y = atof(strtok(NULL, ";"));
+		location.z = atof(strtok(NULL, ";\r\n#"));
+
+		addBeacon(bid, location);
+	}
 }
