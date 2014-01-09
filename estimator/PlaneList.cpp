@@ -82,3 +82,28 @@ void PlaneList::load(const char *filename)
 
 
 }
+
+void PlaneList::save(const char *filename)
+{
+	FILE *fp = fopen(filename, "w");
+
+	if (fp == NULL)
+	{
+		printf("PlaneList::save, can't open file %s\n", filename);
+		exit(21);
+	}
+
+	for (size_t i = 0; i < planes.size(); i++)
+	{
+		Plane* plane = planes[i];
+		char buf[1024];
+
+		plane->getString(buf);
+
+		if (plane->isBoundary())
+			fprintf(fp, "O");
+
+		fprintf(fp, "%s\n", buf);
+	}
+	fclose(fp);
+}

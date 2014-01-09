@@ -20,6 +20,7 @@ public:
 	size_t size();
 	Beacon* at(int idx);
 	void load(const char *filename);
+	void save(const char *filename);
 
 public:
 //	std::vector<Beacon*> beacons;

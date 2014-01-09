@@ -142,3 +142,51 @@ void EventLogList::load(const char *filename)
 		}
 	}	
 }
+
+void EventLogList::save(const char *filename)
+{
+	FILE *fp;
+
+	fp = fopen(filename, "w");
+
+	if (fp == NULL)
+	{
+		printf("EventLogList::save, can't open file %s\n", filename);
+		exit(22);
+	}
+	for (size_t i = 0; i < events.size(); i++)
+	{
+		fprintf(fp, "time;%10lu;%4d;%4d;%4d;", 
+				events[i].timestamp, 
+				(int) events[i].location.x, 
+				(int) events[i].location.y,
+				(int) events[i].location.z);
+	
+		fprintf(fp, "%.4f;%.4f;%.4f;\n", 
+				events[i].facing.x, 
+				events[i].facing.y,
+				events[i].facing.z);
+
+		for (size_t j = 0; j < events[i].measurements.size(); j++)
+		{
+			EventLog::MeasurementLog measurement = events[i].measurements[j];
+
+			fprintf(fp, "dist;%4d;%4.2f;", measurement.bid, measurement.distance);
+
+			Vector point1 = measurement.reflectedPoint1;
+			Vector point2 = measurement.reflectedPoint2;
+			if (!point1.isNull)
+			{
+				fprintf(fp, "%4d;%4d;%4d;", (int)point1.x, (int)point1.y, (int)point1.z);
+			}
+			if (!point2.isNull)
+			{
+				fprintf(fp, "%4d;%4d;%4d;", (int)point2.x, (int)point2.y, (int)point2.z);
+			}
+			fprintf(fp, "\n");
+		}
+		fprintf(fp, "end;\n");
+	}
+	fprintf(fp, "endlog;\n");
+	fclose(fp);
+}

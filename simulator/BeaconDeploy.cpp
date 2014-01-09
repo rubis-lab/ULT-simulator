@@ -109,7 +109,7 @@ void BeaconDeploy::deployCoulomb()
 	std::vector<Vector> vBeacon;
 
 
-	vBeacon.push_back(Vector(0, 0, 0));
+	vBeacon.push_back(Vector(0, 0, args->height));
 	for (int i = 1; i < args->beaconSize; i++)
 	{
 		double baseAngle = 2 * M_PI / (double) (args->beaconSize - 1);

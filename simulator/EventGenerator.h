@@ -24,12 +24,14 @@ protected:
 	MeasurementList *measurementList;
 
 	SimulatorArgument* args;
-	std::vector<DistanceSimulator> distances;
+	std::vector<DistanceSimulator*> distances;
 	std::vector<ListenerInfo> path;
 
 	void setBeacon();
 	void setBeacons();
 	void setDistanceSimulator();
 	void setPath();
+
+	void clearDistanceSimulator();
 
 };

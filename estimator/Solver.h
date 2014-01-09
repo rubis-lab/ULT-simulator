@@ -27,6 +27,7 @@ public:
 		cutBranch2 = false;
 		solveNaive = true;
 		maxMeasError = 50.0;
+		minBeaconSize = 3;
 	}
 	~SolverCondition(){}
 

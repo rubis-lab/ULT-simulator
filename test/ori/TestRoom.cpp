@@ -388,7 +388,7 @@ void TestRoom::SetBeaconByCoulomb(int nBeacon)
 	std::vector<Vector> vBeacon;
 
 
-	vBeacon.push_back(Vector(0, 0, 0));
+	vBeacon.push_back(Vector(0, 0, args.RoomHeight));
 	for (int i = 1; i < nBeacon; i++)
 	{
 		double baseAngle = 2 * M_PI / (double) (nBeacon - 1);

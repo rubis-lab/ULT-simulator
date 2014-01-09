@@ -1,7 +1,7 @@
 CC=g++
 INC=-Iestimator -Ibase
 LIBS=-lgsl -lgslcblas 
-CPPFLAGS = $(INC) -Wall -O2 $(LIBS) 
+CPPFLAGS = $(INC) -Wall -Wextra -O2 $(LIBS) 
 
 OBJS=estimator/*.o base/*.o kalmanfilter/*.o simulator/*.o
 #SRCS=SimulationTracer/SimulationTracer.cpp

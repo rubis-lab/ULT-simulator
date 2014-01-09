@@ -264,7 +264,7 @@ int main()
 	Estimator estimator;
 	EstimatorArgument args;
 
-#if 1
+#if 0
 	args.load("conf.txt");
 
 #else
@@ -289,8 +289,9 @@ int main()
 
 	EventLogList events;
 	events.load("test_log.dat");
+	events.save("event_test.dat");
 
-	double err1;
+	double err1 = 0;
 
 	for (size_t i = 0; i < events.size(); i++)
 	{
@@ -298,7 +299,7 @@ int main()
 
 		unsigned long timestamp = event.timestamp;
 
-		for (int j = 0; j < event.measurements.size(); j++)
+		for (size_t j = 0; j < event.measurements.size(); j++)
 		{
 			estimator.measure(timestamp, 
 					event.measurements[j].bid,

@@ -10,7 +10,7 @@ OBJS= \
 SRCS=$(OBJS:.o=.cpp)
 INC=-I../base -I../estimator -I../kalmanfilter -I../setting -I../simulator
 LIBS=
-CPPFLAGS=$(INC) $(LIBS) -Wall -O2 -DENV_LINUX
+CPPFLAGS=$(INC) $(LIBS) -Wall -Wextra -O2 -DENV_LINUX
 DEBUGFLAGS=$(CPPFLAGS:O2=g)
 
 all:$(OBJS)

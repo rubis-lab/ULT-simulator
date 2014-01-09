@@ -12,6 +12,7 @@ PathGenerator::~PathGenerator()
 
 void PathGenerator::generatePath(SimulatorArgument *args, std::vector<ListenerInfo>& path)
 {
+	this->args = args;
 	ListenerMover listenerMover(args);
 	path.clear();
 
@@ -35,7 +36,9 @@ void PathGenerator::generatePath(SimulatorArgument *args, std::vector<ListenerIn
 		case SIM_WALKER::ANTI_CLOCKWISE: vPos = getPointACW(vPos); break;
 		}
 		listenerMover.setPath(vPos, r_speed);
+		printf("Path Generating .... %3d\r", (int)(i / 5000.0 * 100));
 	}
+	printf("\n");
 
 	for (int i = 0; i < args->eventSize; i++)
 	{

@@ -16,6 +16,8 @@ public:
 	void addPlane(Plane plane);
 	bool checkInside(Vector location);
 	void load(const char *filename);
+	void save(const char *filename);
+
 
 
 private:

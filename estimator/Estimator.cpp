@@ -139,7 +139,6 @@ EstimatorResult Estimator::solve(long currentTime)
 	SolverResultList results;
 	EstimatorResult prevResult(prevLocation, input->getError(prevLocation));
 
-
 	solver.solve(input, &results);
 
 	if (results.isFail())

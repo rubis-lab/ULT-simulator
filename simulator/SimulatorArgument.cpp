@@ -13,6 +13,7 @@ void SimulatorArgument::setDefault()
 	width = 1000;
 	length = 1000;
 	height = 300;
+	timeslot = 50;
 	speedAvg = 0.5;
 	speedDev = 0.025;
 	angleAvg = 0.00;
@@ -20,11 +21,13 @@ void SimulatorArgument::setDefault()
 	validAngleRange = 170;
 	distanceNoiseAvg = 0.0;
 	distanceNoiseDev = 1.5;
+	maxMeasurableDistance = 600;
+	minMeasurableDistance = 20;
 
 	moveType = SIM_WALKER::RANDOM;
-	deployType = SIM_BEACON::RANDOM;
+	deployType = SIM_BEACON::COULOMB;
 	strcpy(beaconDeployFilename, "beacon.conf");
-	beaconSize = 10;
+	beaconSize = 20;
 
 	planeType = SIM_PLANE::CUBE;
 	strcpy(planeFilename, "plane.conf");

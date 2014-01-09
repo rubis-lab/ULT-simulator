@@ -5,8 +5,9 @@
 
 
 
-Measurement::Measurement (Beacon *beacon) : beacon(beacon)
+Measurement::Measurement(Beacon *beacon) : beacon(beacon)
 {
+	distance = 0;
 }
 
 void Measurement::measure(unsigned long timestamp, double distance)
@@ -102,7 +103,7 @@ MeasurementList::~MeasurementList()
 
 void MeasurementList::measure(int userBid, unsigned long timestamp, double distance)
 {
-	if (distance <= 0) return;
+	if (distance <= condition.minValidDistance) return;
 	int idx = findBeaconIndexByUserId(userBid);
 	if (idx < 0) 
 	{
@@ -133,6 +134,8 @@ std::vector<Measurement*> MeasurementList::getFilteredMeasurements(unsigned long
 	filteredMeasurements.clear();
 	for (size_t i = 0; i < allMeasurements.size(); i++)
 	{
+		if (allMeasurements[i].getDistance() < condition.minValidDistance) continue;
+
 		unsigned long timestamp = allMeasurements[i].getTimestamp();
 		if (timestamp <= currentTime && currentTime - timestamp <= timeWindow)
 		{
