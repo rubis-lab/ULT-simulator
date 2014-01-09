@@ -5,6 +5,7 @@
 #include "EventLog.h"
 #include "PlaneGenerator.h"
 #include "BeaconDeploy.h"
+#include "PathGenerator.h"
 
 
 
@@ -16,6 +17,7 @@ public:
 
 	EventLogList events;
 	void generateEvent(SimulatorArgument *args);
+	void save(const char *filename);
 
 protected:
 
@@ -23,9 +25,11 @@ protected:
 
 	SimulatorArgument* args;
 	std::vector<DistanceSimulator> distances;
+	std::vector<ListenerInfo> path;
 
 	void setBeacon();
 	void setBeacons();
 	void setDistanceSimulator();
+	void setPath();
 
 };

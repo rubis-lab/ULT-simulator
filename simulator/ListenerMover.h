@@ -6,6 +6,23 @@
 #define ARM_LENGTH 50
 #define GRAVITY_ACC 9.8
 
+class ListenerInfo
+{
+public:
+	ListenerInfo()
+	{
+	}
+	ListenerInfo(unsigned long timestamp, Vector location, Vector facing) :
+		timestamp(timestamp), 
+		location(location),
+		facing(facing)
+	{
+	}
+
+	unsigned long timestamp;
+	Vector location;
+	Vector facing;
+};
 
 class PathInfo
 {
@@ -20,14 +37,14 @@ public:
 	PathInfo();
 	~PathInfo();
 //	void SetFace(double theta, double phi);
-	void SetFace(Vector faceVector);
-	void SetStartPosition(Vector position);
-	void SetFinishPosition(Vector position);
-	void SetCoefficient(double speed_avg, double speed_dev, 
+	void setFace(Vector faceVector);
+	void setStartPosition(Vector position);
+	void setFinishPosition(Vector position);
+	void setCoefficient(double speed_avg, double speed_dev, 
 						double angular_avg, double angular_dev, double interval);
 	
+	int moveNext();
 
-	int MoveNext();
 
 	double speed_avg;			// speed in m / s
 	double speed_dev;
@@ -43,7 +60,7 @@ public:
 	double thetaZ;
 
 private:
-	Vector GetFaceVector(double theta, double phi);
+	Vector getFaceVector(double theta, double phi);
 	double face_theta;		// projected angle to xy-plane
 	double face_phi;		// angle to z-axis	
 	
@@ -64,12 +81,12 @@ public:
 	
 
 public:
-	void Reset();
-	void Reset(int width, int length, int height);
-	void SetPath(Vector point, double speed);
-	long MoveNext();
-	Vector GetListenerPosition();
-	Vector GetListenerFace();
+	void reset();
+	void reset(int width, int length, int height);
+	void setPath(Vector point, double speed);
+	bool moveNext(ListenerInfo &path);
+	Vector getListenerPosition();
+	Vector getListenerFace();
 
 	
 

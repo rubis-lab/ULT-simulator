@@ -8,6 +8,8 @@ OBJS= \
 	  DistanceSimulator.o \
 	  EventGenerator.o \
 	  ListenerMover.o \
+	  PathGenerator.o \
+
 
 
 

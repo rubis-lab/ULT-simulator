@@ -11,9 +11,11 @@ public:
 	bool setListener(Vector location, Vector facing);
 	double getNoisyDistance();
 	double getExactDistance();
+	double getDistance();
 	bool isValid();
+	int getBid();
 
-	std::vector<Vector> reflectionPoints;
+	std::vector<Vector> reflectedPoints;
 
 protected:
 	double distance;
@@ -24,8 +26,6 @@ protected:
 	Vector listenerFacing;
 
 	Beacon *virtualBeacon;
-	Vector reflectionPoint1;
-	Vector reflectionPoint2;
 
 	SimulatorArgument *args;
 

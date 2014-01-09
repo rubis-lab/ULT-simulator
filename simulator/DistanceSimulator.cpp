@@ -47,7 +47,7 @@ DistanceScenario* DistanceSimulator::findScenario(Vector listenerLocation, Vecto
 		if (!valid) continue;
 
 
-		distance = scenarios[i]->getNoisyDistance();
+		distance = scenarios[i]->getDistance();
 		if (minDistance < 0 || distance < minDistance)
 		{
 			minDistance = distance;

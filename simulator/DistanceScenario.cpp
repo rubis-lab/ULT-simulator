@@ -24,7 +24,7 @@ bool DistanceScenario::setListener(Vector location, Vector facing)
 
 bool DistanceScenario::calculateDistance()
 {
-	reflectionPoints.clear();
+	reflectedPoints.clear();
 	valid = false;
 	distance = virtualBeacon->getLocation().getDistance(listenerLocation);
 	if (distance > args->maxMeasurableDistance) return false;
@@ -99,7 +99,7 @@ bool DistanceScenario::checkValid()
 	//copy reflection points
 	for (size_t i = 0; i < crossPoints.size() - 1; i++)
 	{
-		reflectionPoints.push_back(crossPoints[i]);
+		reflectedPoints.push_back(crossPoints[i]);
 	}
 
 	return true;
@@ -142,7 +142,17 @@ double DistanceScenario::getNoisyDistance()
 	return distance + randomNoise;
 }
 
+double DistanceScenario::getDistance()
+{
+	return getNoisyDistance();
+}
+
 bool DistanceScenario::isValid()
 {
 	return valid;
+}
+
+int DistanceScenario::getBid()
+{
+	return virtualBeacon->getBid();
 }

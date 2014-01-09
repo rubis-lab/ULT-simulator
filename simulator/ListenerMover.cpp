@@ -19,21 +19,21 @@ PathInfo::~PathInfo()
 }
 
 /*
-void PathInfo::SetFace(double theta, double phi)
+void PathInfo::setFace(double theta, double phi)
 {
 	this->face_theta = theta;		// projected angle to xy-plane
 	this->face_phi = phi;			// angle to z-axis
-	face_unit = GetFaceVector(face_theta, face_phi);
+	face_unit = getFaceVector(face_theta, face_phi);
 }
 */
 
-void PathInfo::SetFace(Vector vFace)
+void PathInfo::setFace(Vector vFace)
 {
 	this->uvFace = vFace.getUnitVector();
 	this->face_phi = acos(uvFace.z);
 	this->face_theta = acos(uvFace.x / Vector(uvFace.x, uvFace.y, 0).getSize());
 
-	Vector test = GetFaceVector(face_theta, face_phi);
+	Vector test = getFaceVector(face_theta, face_phi);
 /*
 	if (test.x != vFace.x || test.y != vFace.y || test.z != vFace.z)
 	{
@@ -45,14 +45,14 @@ void PathInfo::SetFace(Vector vFace)
 
 
 // return face vector of listener repect to theta and phi.
-Vector PathInfo::GetFaceVector(double theta, double phi)
+Vector PathInfo::getFaceVector(double theta, double phi)
 {
 	return Vector(sin(phi) * cos(theta),
 					sin(phi) * sin(theta),
 					cos(phi));	
 }
 
-void PathInfo::SetCoefficient(double speed_avg, double speed_dev,
+void PathInfo::setCoefficient(double speed_avg, double speed_dev,
 								  double angular_avg, double angular_dev, double interval)
 {
 	this->speed_avg = speed_avg;
@@ -64,13 +64,13 @@ void PathInfo::SetCoefficient(double speed_avg, double speed_dev,
 }
 
 
-void PathInfo::SetStartPosition(Vector position)
+void PathInfo::setStartPosition(Vector position)
 {
 	this->vPosition = this->vStartPosition = this->vDestination = position;
 
 }
 
-void PathInfo::SetFinishPosition(Vector position)
+void PathInfo::setFinishPosition(Vector position)
 {
 	this->vDestination = position;
 	this->uvDirection = (vDestination - vStartPosition).getUnitVector();
@@ -80,13 +80,13 @@ void PathInfo::SetFinishPosition(Vector position)
 	vFace.y = -vFace.y;
 	vFace = vFace * Vector(0, 0, 1);
 	vFace.y = -vFace.y;
-	this->SetFace(vFace);
+	this->setFace(vFace);
 }
 
 
 								
 
-int PathInfo::MoveNext()
+int PathInfo::moveNext()
 {
 	if (vStartPosition.isEqual(vDestination)) return 0;
 //1	uvDirection = (vDestination - vPosition).getUnitVector();
@@ -97,7 +97,7 @@ int PathInfo::MoveNext()
  	vPosition = vPosition + vDirection;
 	face_phi += (Random.getGaussDist(angular_avg, angular_dev)) * (interval / 1000.0);
 	face_theta += (Random.getGaussDist(angular_avg, angular_dev)) * (interval / 1000.0);
-//	uvFace = GetFaceVector(face_theta, face_phi);
+//	uvFace = getFaceVector(face_theta, face_phi);
 
 	Vector vRemain = vDestination - vOri;
 	if (fabs(vRemain.getUnitVector() & vDirection) > vRemain.getSize()) return 0;
@@ -124,7 +124,7 @@ ListenerMover::ListenerMover(SimulatorArgument *args)
 	this->width = args->width;
 	this->length = args->length;
 	this->height = args->height;
-	Reset();
+	reset();
 	this->args = args;
 }
 
@@ -133,33 +133,33 @@ ListenerMover::~ListenerMover(void)
 }
 
 
-void ListenerMover::Reset()
+void ListenerMover::reset()
 {
 	bFirst = true;
 	pathList.clear();
 	timestamp = 0;
 }
 
-void ListenerMover::Reset(int width, int length, int height)
+void ListenerMover::reset(int width, int length, int height)
 {
 	this->width = width;
 	this->length = length;
 	this->height = height;
-	Reset();
+	reset();
 }
 
-void ListenerMover::SetPath(Vector point, double speed)
+void ListenerMover::setPath(Vector point, double speed)
 {
 	PathInfo pathInfo;
-	pathInfo.SetStartPosition(point);
-	pathInfo.SetCoefficient(speed, args->speedDev, args->angleAvg, 
+	pathInfo.setStartPosition(point);
+	pathInfo.setCoefficient(speed, args->speedDev, args->angleAvg, 
 		args->angleDev, args->timeslot);
 	if (pathList.size() > 0)
-		pathList[pathList.size() - 1].SetFinishPosition(point);
+		pathList[pathList.size() - 1].setFinishPosition(point);
 	pathList.push_back(pathInfo);	
 }
 
-long ListenerMover::MoveNext()
+bool ListenerMover::moveNext(ListenerInfo &path)
 {
 	if (bFirst)
 	{
@@ -173,10 +173,10 @@ long ListenerMover::MoveNext()
 		pArm = vPosition;
 	}	
 
-	while(!itPathList->MoveNext())
+	while(!itPathList->moveNext())
 	{
 		itPathList++;		
-		if (itPathList == pathList.end()) return -1;
+		if (itPathList == pathList.end()) return false;
 		itPathList->vPosition = vPosition;
 	}
 	vPosition = itPathList->vPosition;
@@ -206,18 +206,20 @@ long ListenerMover::MoveNext()
 
 
 	timestamp += (long)args->timeslot;
-	return timestamp;
+
+	path = ListenerInfo(timestamp, pArm, vFace);
+	return true;
 	
 }
 
 
-Vector ListenerMover::GetListenerPosition()
+Vector ListenerMover::getListenerPosition()
 {
 //	return vPosition;
 	return pArm;
 }
 
-Vector ListenerMover::GetListenerFace()
+Vector ListenerMover::getListenerFace()
 {
 	return vFace;
 }

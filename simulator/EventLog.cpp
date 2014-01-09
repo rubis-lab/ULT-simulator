@@ -8,6 +8,7 @@ void EventLog::addMeasurement(int bid, double distance)
 	measurements.push_back(MeasurementLog(bid, distance));
 }
 
+//TODO: manage reflectedPoint as vector
 void EventLog::setReflectedPoints(Vector point1, Vector point2)
 {
 	if (measurements.size() == 0)
@@ -18,6 +19,7 @@ void EventLog::setReflectedPoints(Vector point1, Vector point2)
 	measurements.back().reflectedPoint1 = point1;
 	measurements.back().reflectedPoint2 = point2;
 }
+
 
 
 /////////////////////////////////////
@@ -39,9 +41,13 @@ void EventLogList::reset()
 	reflectionCount2 = 0;
 }
 
-void EventLogList::setNewEvent(unsigned long timestamp, Vector location, Vector direction)
+void EventLogList::setNewEvent(unsigned long timestamp, Vector location, Vector facing)
 {
-	events.push_back(EventLog(timestamp, location, direction));
+	events.push_back(EventLog(timestamp, location, facing));
+}
+void EventLogList::setNewEvent(ListenerInfo listener)
+{
+	setNewEvent(listener.timestamp, listener.location, listener.facing);
 }
 
 void EventLogList::addMeasurement(int bid, double distance)
@@ -71,6 +77,23 @@ void EventLogList::setMeasurementReflectedPoints(Vector point1, Vector point2)
 		reflectionCount2 ++;
 }
 
+void EventLogList::addScenario(DistanceScenario *scenario)
+{
+	addMeasurement(scenario->getBid(), scenario->getDistance());
+
+	//TODO: change below codes to cover reflectedPoint vector
+	Vector rPoint1 = Vector(false);
+	Vector rPoint2 = Vector(false);
+	
+	if (scenario->reflectedPoints.size() > 0)
+		rPoint1 = scenario->reflectedPoints[0];
+	if (scenario->reflectedPoints.size() > 1)
+		rPoint2 = scenario->reflectedPoints[1];
+
+	setMeasurementReflectedPoints(rPoint1, rPoint2);
+	
+}
+
 size_t EventLogList::size()
 {
 	return events.size();
@@ -96,15 +119,15 @@ void EventLogList::load(const char *filename)
 	
 	unsigned long timestamp;
 	Vector location;
-	Vector direction;
+	Vector facing;
 
 	int bid;
 	double distance;
 	Vector reflectedPoint1, reflectedPoint2;
 
-	while (read_listener_info(fp, location, direction, &timestamp))
+	while (read_listener_info(fp, location, facing, &timestamp))
 	{
-		setNewEvent(timestamp, location, direction);
+		setNewEvent(timestamp, location, facing);
 
 		while(fgets(buf, bufSize, fp), strcmp(read_header(buf), "dist") == 0)
 		{

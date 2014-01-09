@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include "Vector.h"
+#include "ListenerMover.h"
+#include "DistanceScenario.h"
 
 class EventLog
 {
@@ -17,14 +19,14 @@ public:
 	};
 
 	EventLog() {}
-	EventLog(unsigned long timestamp, Vector location, Vector direction) :
-			timestamp(timestamp), location(location), direction(direction) {}
+	EventLog(unsigned long timestamp, Vector location, Vector facing) :
+			timestamp(timestamp), location(location), facing(facing) {}
 	~EventLog() {}
 
 
 	unsigned long timestamp;
 	Vector location;
-	Vector direction;
+	Vector facing;
 	std::vector<MeasurementLog> measurements;
 
 	void addMeasurement(int bid, double distance);
@@ -40,8 +42,10 @@ public:
 	
 	void reset();
 	
-	void setNewEvent(unsigned long timestamp, Vector location, Vector direction);
+	void setNewEvent(unsigned long timestamp, Vector location, Vector facing);
+	void setNewEvent(ListenerInfo listener);
 	void addMeasurement(int bid, double distance);
+	void addScenario(DistanceScenario *scenario);
 	void setMeasurementReflectedPoints(Vector point1, Vector point2);
 	//this function set current event's last measurement's value
 	size_t size();
