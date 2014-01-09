@@ -36,6 +36,8 @@ public:
 	Beacon* next();
 	double getDistanceToPlane();
 	
+	std::vector<Vector> vLocations;			// track reflected location of beacons
+	std::vector<Plane*> pPlanes;			// track which planes are reflected to
 		
 private:
 	int bid;								// beacon id allocated by system
@@ -43,8 +45,6 @@ private:
 	double distanceToPlane;
 
 	int reflectionCount;
-	std::vector<Vector> vLocations;			// track reflected location of beacons
-	std::vector<Plane*> pPlanes;			// track which planes are reflected to
 	Beacon *parent;
 	std::vector<Beacon *> children;
 	
