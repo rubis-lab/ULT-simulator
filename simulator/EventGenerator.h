@@ -1,6 +1,10 @@
 #pragma once
 #include "SimulatorArgument.h"
 #include "Measurement.h"
+#include "DistanceSimulator.h"
+#include "EventLog.h"
+#include "PlaneGenerator.h"
+#include "BeaconDeploy.h"
 
 
 
@@ -15,13 +19,13 @@ public:
 
 protected:
 
-	BeaconList *beacons;
-	PlaneList *planes;
 	MeasurementList *measurementList;
 
 	SimulatorArgument* args;
+	std::vector<DistanceSimulator> distances;
 
 	void setBeacon();
-
+	void setBeacons();
+	void setDistanceSimulator();
 
 };

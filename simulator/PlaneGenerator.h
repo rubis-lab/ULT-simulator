@@ -9,7 +9,7 @@ public:
 
 protected:
 	SimulatorArgument *args;
-	void generateCube(SimulatorArgument *args);
+	void generateCube();
 };
 
 

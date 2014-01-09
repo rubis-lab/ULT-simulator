@@ -5,7 +5,7 @@ void PlaneGenerator::generatePlane(SimulatorArgument *args)
 {
 	this-> args = args;
 
-	switch (args->planeTYpe)
+	switch (args->planeType)
 	{
 	case SIM_PLANE::CUBE: 
 		generateCube(); 

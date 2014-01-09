@@ -4,6 +4,13 @@ OBJS= \
 	  BeaconDeploy.o \
 	  PlaneGenerator.o \
 	  SimulatorArgument.o \
+	  DistanceScenario.o \
+	  DistanceSimulator.o \
+	  EventGenerator.o \
+	  ListenerMover.o \
+
+
+
 
 
 

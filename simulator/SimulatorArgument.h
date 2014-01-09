@@ -45,6 +45,7 @@ public:
 	int width;
 	int length;
 	int height;
+	int timeslot;
 	double speedAvg;
 	double speedDev;
 	double angleAvg;

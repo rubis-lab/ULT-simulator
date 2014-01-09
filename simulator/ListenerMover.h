@@ -1,10 +1,7 @@
 #pragma once
 
-#include <vector>
-#include "LocationEstimator.h"
-#include "Random.h"
-#include "SimulationTracer.h"
-#include "Argument.h"
+#include "SimulatorArgument.h"
+
 
 #define ARM_LENGTH 50
 #define GRAVITY_ACC 9.8
@@ -20,7 +17,7 @@ public:
 	
 	Vector uvFace;
 
-	PathInfo(Random *random);
+	PathInfo();
 	~PathInfo();
 //	void SetFace(double theta, double phi);
 	void SetFace(Vector faceVector);
@@ -47,7 +44,6 @@ public:
 
 private:
 	Vector GetFaceVector(double theta, double phi);
-	Random *random;
 	double face_theta;		// projected angle to xy-plane
 	double face_phi;		// angle to z-axis	
 	
@@ -57,12 +53,10 @@ private:
 
 };
 
-
-
 class ListenerMover
 {
 public:
-	ListenerMover(Random *random, Argument args);
+	ListenerMover(SimulatorArgument *args);
 	~ListenerMover(void);
 	std::vector <PathInfo> pathList;
 
@@ -77,7 +71,6 @@ public:
 	Vector GetListenerPosition();
 	Vector GetListenerFace();
 
-	Argument args;
 	
 
 
@@ -85,7 +78,6 @@ public:
 	int width, length, height;
 
 private:
-	Random *random;
 
 	Vector vPosition;
 	Vector vFace;
@@ -96,5 +88,6 @@ private:
 	Vector vArmAcc;
 	Vector vArmVel;
 	Vector pArm;
+	SimulatorArgument *args;
 };
 

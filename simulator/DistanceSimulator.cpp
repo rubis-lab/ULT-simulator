@@ -1,61 +1,59 @@
-#include "DistanceSimulator"
+#include "DistanceSimulator.h"
 
-
-SimulatedDistance::SimulatedDistance(SimulatorArgument *args, Beacon *beacon)
+DistanceSimulator::DistanceSimulator()
 {
-	this->args = args;
-	virtualBeacon = beacon;
+}
+
+DistanceSimulator::~DistanceSimulator()
+{
+	destructor();
+}
+
+void DistanceSimulator::destructor()
+{
+	for (size_t i = 0; i < scenarios.size(); i++)
+	{
+		delete scenarios[i];
+	}
+	scenarios.clear();
+}
+
+void DistanceSimulator::reset()
+{
+	destructor();
 }
 
 
-void SimulatedDistance::setListener(Vector location, Vector facing)
+void DistanceSimulator::setup(SimulatorArgument *args, Beacon* beacon)
 {
-	listenerLocation = location;
-	listenerFacing = facing;
-
-	calculateDistance();
+	beacon->getIterator()->reset();
+	Beacon *curVBeacon = beacon;
+	while((curVBeacon = curVBeacon->next()) != NULL)
+	{
+		scenarios.push_back(new DistanceScenario(args, curVBeacon));
+	}
 }
 
-double getExactDistance()
+
+DistanceScenario* DistanceSimulator::findScenario(Vector listenerLocation, Vector listenerFacing)
 {
-	return distance;
-}
-
-double getNoisyDistance()
-{
-	return distance + randomNoise;
-}
-
-void SimulatedDistance::calculateDistance()
-{
-	distance = virtualBeacon->getLocation().getDistance(listenerLocation);
-	applicationError = getApplicationError();
-	randomNoise = getRandomNoise(applicationError);
-}
-
-double SimulatedDistance::getApplicationError()
-{
-	const double cL = 0.043;
-	const double cB = 0.0289;
-	const double cD = 0.0019;
+	double minDistance = -1;
+	bool valid;
+	double distance;
+	DistanceScenario *bestScenario = NULL;
+	for (size_t i = 0; i < scenarios.size(); i++)
+	{
+		valid = scenarios[i]->setListener(listenerLocation, listenerFacing);
+		if (!valid) continue;
 
 
-	Vector location = virtualBeacon->getLocation();
-	Vector vLToB = location - listenerLocation;
-	Vector vBToL = listenerLocation - location;
+		distance = scenarios[i]->getNoisyDistance();
+		if (minDistance < 0 || distance < minDistance)
+		{
+			minDistance = distance;
+			bestScenario = scenarios[i];
+		}
+	}
 
-	double aLToB = listenerFacing.getAngle(vLToB);
-	double aBToL = Vector(0, 0, -1).getAngle(vBToL);
-	double distance = vLToB.getSize();
-
-	if (aLToB > args->validAngleRange || aBToL > args->validAngleRange /*limite angle*/) return -1;
-
-	double applicationError = cL*aLToB + cB*aBToL + cD*distance;
-
-	return applicationError;
-}
-
-double SimulatedDistance::getRandomNoise(double baseError)
-{
-	return Random.getGaussDist(baseError + noiseAvg, noiseDev);
+	return bestScenario;
 }

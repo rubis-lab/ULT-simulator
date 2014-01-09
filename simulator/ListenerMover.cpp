@@ -1,7 +1,9 @@
+#include <math.h>
 #include "ListenerMover.h"
+#include "Random.h"
 
 
-PathInfo::PathInfo(Random *random)
+PathInfo::PathInfo()
 {
 	vPosition = Vector(0, 0, 0);
 	uvFace = Vector(0, 0, 0);
@@ -9,7 +11,6 @@ PathInfo::PathInfo(Random *random)
 	speed_avg = speed_dev = 0;
 	angular_avg = angular_dev = 0;
 	face_theta = face_phi = 0;
-	this->random = random;
 	
 }
 
@@ -92,10 +93,10 @@ int PathInfo::MoveNext()
 	Vector vOri = vPosition;	
 	/* (cm) * ((ms / 1000) = s) * (((m/s) * 100) = (cm/s)) */
 	Vector vDirection = uvDirection * (interval / 1000.0) * 
-					(random->GetGaussDist(speed_avg, speed_dev) * 100.0);
+					(Random.getGaussDist(speed_avg, speed_dev) * 100.0);
  	vPosition = vPosition + vDirection;
-	face_phi += (random->GetGaussDist(angular_avg, angular_dev)) * (interval / 1000.0);
-	face_theta += (random->GetGaussDist(angular_avg, angular_dev)) * (interval / 1000.0);
+	face_phi += (Random.getGaussDist(angular_avg, angular_dev)) * (interval / 1000.0);
+	face_theta += (Random.getGaussDist(angular_avg, angular_dev)) * (interval / 1000.0);
 //	uvFace = GetFaceVector(face_theta, face_phi);
 
 	Vector vRemain = vDestination - vOri;
@@ -118,13 +119,12 @@ int PathInfo::MoveNext()
 
 /* ListenerMover Class */
 
-ListenerMover::ListenerMover(Random *random, Argument args)
+ListenerMover::ListenerMover(SimulatorArgument *args)
 {
-	this->width = args.RoomWidth;
-	this->length = args.RoomLength;
-	this->height = args.RoomHeight;
+	this->width = args->width;
+	this->length = args->length;
+	this->height = args->height;
 	Reset();
-	this->random = random;
 	this->args = args;
 }
 
@@ -150,10 +150,10 @@ void ListenerMover::Reset(int width, int length, int height)
 
 void ListenerMover::SetPath(Vector point, double speed)
 {
-	PathInfo pathInfo(random);
+	PathInfo pathInfo;
 	pathInfo.SetStartPosition(point);
-	pathInfo.SetCoefficient(speed, args.SIM_SpeedDev, args.SIM_AngularAvg, 
-		args.SIM_AngularDev, args.TimeSlot);
+	pathInfo.SetCoefficient(speed, args->speedDev, args->angleAvg, 
+		args->angleDev, args->timeslot);
 	if (pathList.size() > 0)
 		pathList[pathList.size() - 1].SetFinishPosition(point);
 	pathList.push_back(pathInfo);	
@@ -205,7 +205,7 @@ long ListenerMover::MoveNext()
 	pArm = Vector(x, y, z) + vPosition;
 
 
-	timestamp += args.TimeSlot;
+	timestamp += (long)args->timeslot;
 	return timestamp;
 	
 }

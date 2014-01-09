@@ -64,6 +64,8 @@ void SimulatorArgument::load(const char *filename)
 			length = atoi(val);
 		else if (strcmp(arg, "sim_room_height") == 0)
 			height = atoi(val);
+		else if (strcmp(arg, "sim_timeslot") == 0)
+			timeslot = atoi(val);
 		else if (strcmp(arg, "sim_speed_avg") == 0)
 			speedAvg = atof(val);
 		else if (strcmp(arg, "sim_speed_dev") == 0)
@@ -134,6 +136,7 @@ void SimulatorArgument::save(const char *filename)
 	fprintf(fp, "sim_room_width = %d \t#\n", width);
 	fprintf(fp, "sim_room_length = %d \t#\n", length);
 	fprintf(fp, "sim_room_height = %d \t#\n", height);
+	fprintf(fp, "sim_timeslot = %d \t#time interval of simulator\n", timeslot);
 
 	fprintf(fp, "sim_speed_avg = %f \t#\n", speedAvg);
 	fprintf(fp, "sim_speed_dev = %f \t#\n", speedDev);
