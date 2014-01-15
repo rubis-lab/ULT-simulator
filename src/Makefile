@@ -5,7 +5,7 @@ CPPFLAGS = $(INC) -Wall -Wextra -O2 $(LIBS)
 
 OBJS=estimator/*.o base/*.o kalmanfilter/*.o simulator/*.o analyzer/*.o
 #SRCS=SimulationTracer/SimulationTracer.cpp
-TARGET=bin/simulator
+TARGET=../bin/simulator
 
 
 
