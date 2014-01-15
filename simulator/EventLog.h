@@ -11,8 +11,8 @@ public:
 	class MeasurementLog
 	{
 	public:
-		MeasurementLog(int bid, double distance) : bid(bid), distance(distance) {}
-		int bid;
+		MeasurementLog(int userBid, double distance) : userBid(userBid), distance(distance) {}
+		int userBid;
 		double distance;
 		Vector reflectedPoint1;
 		Vector reflectedPoint2;

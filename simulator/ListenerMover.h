@@ -34,7 +34,7 @@ public:
 	
 	Vector uvFace;
 
-	PathInfo();
+	PathInfo(Random *random);
 	~PathInfo();
 //	void SetFace(double theta, double phi);
 	void setFace(Vector faceVector);
@@ -63,7 +63,7 @@ private:
 	Vector getFaceVector(double theta, double phi);
 	double face_theta;		// projected angle to xy-plane
 	double face_phi;		// angle to z-axis	
-	
+	Random *random;	
 
 
 

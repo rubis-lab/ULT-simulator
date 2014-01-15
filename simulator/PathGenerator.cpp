@@ -1,5 +1,4 @@
 #include "PathGenerator.h"
-#include "Random.h"
 
 
 PathGenerator::PathGenerator()
@@ -24,7 +23,7 @@ void PathGenerator::generatePath(SimulatorArgument *args, std::vector<ListenerIn
 	for (int i = 0; i < 5000; i++)
 	{		
 		double r_speed;
-		while ((r_speed = Random.getGaussDist(args->speedAvg, args->speedDev)) <= 0);
+		while ((r_speed = args->random.getGaussDist(args->speedAvg, args->speedDev)) <= 0);
 
 		
 		switch (args->moveType)
@@ -38,7 +37,7 @@ void PathGenerator::generatePath(SimulatorArgument *args, std::vector<ListenerIn
 		listenerMover.setPath(vPos, r_speed);
 		printf("Path Generating .... %3d\r", (int)(i / 5000.0 * 100));
 	}
-	printf("\n");
+	printf("Path Generating .... done\n");
 
 	for (int i = 0; i < args->eventSize; i++)
 	{
@@ -58,9 +57,9 @@ void PathGenerator::generatePath(SimulatorArgument *args, std::vector<ListenerIn
 Vector PathGenerator::getPoint(Vector vRange, Vector vOffset)
 {
 	Vector vPos;
-	vPos.x = Random.getUniformDist() * vRange.x + vOffset.x;
-	vPos.y = Random.getUniformDist() * vRange.y + vOffset.y;
-	vPos.z = Random.getUniformDist() * vRange.z + vOffset.z;
+	vPos.x = args->random.getUniformDist() * vRange.x + vOffset.x;
+	vPos.y = args->random.getUniformDist() * vRange.y + vOffset.y;
+	vPos.z = args->random.getUniformDist() * vRange.z + vOffset.z;
 
 	return vPos;
 }

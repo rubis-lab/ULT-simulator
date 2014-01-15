@@ -147,6 +147,17 @@ size_t SolverResultList::size()
 	return results.size();
 }
 
+size_t SolverResultList::validSize()
+{
+	size_t ret = 0;
+	for (size_t i = 0; i < results.size(); i++)
+	{
+		if (results[i].isValid()) ret ++;
+	}
+
+	return ret;
+}
+
 SolverResult* SolverResultList::at(int idx)
 {
 	return &results[idx];
@@ -419,6 +430,7 @@ int func_fdf(const gsl_vector *x, void *data, gsl_vector *f, gsl_matrix *J)
 
 Vector Solver::NLLeastSquareSolver(SolverInput *input)
 {
+	/**/condition.analyzer->solverSolving.startTimer();	// ---- ---- T5 start
 	const gsl_multifit_fdfsolver_type *T;
 	gsl_multifit_fdfsolver *s;
 	gsl_multifit_function_fdf f;
@@ -471,6 +483,7 @@ Vector Solver::NLLeastSquareSolver(SolverInput *input)
 	gsl_multifit_fdfsolver_free(s);
 
 
+	/**/condition.analyzer->solverSolving.stopTimer();	// ---- ---- T5 end
 	return point;	
 }
 

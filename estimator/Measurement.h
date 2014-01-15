@@ -4,6 +4,7 @@
 #include "Plane.h"
 #include "Beacon.h"
 #include "BeaconList.h"
+#include "Random.h"
 
 
 class Measurement                                                                    
@@ -48,7 +49,8 @@ public:
 			smallerNVSSFirst(true),
 			shortDistanceFirst(true),
 			timeWindow(1000),
-			minValidDistance(1)
+			minValidDistance(1),
+			random(NULL)
 	{
 	}
 
@@ -72,6 +74,7 @@ public:
 	unsigned long timeWindow;
 	
 	int minValidDistance;
+	Random *random;
 };
 class MeasurementList
 {

@@ -14,6 +14,7 @@ public:
 	double getDistance();
 	bool isValid();
 	int getBid();
+	int getUserBid();
 
 	std::vector<Vector> reflectedPoints;
 

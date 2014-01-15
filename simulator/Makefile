@@ -9,21 +9,17 @@ OBJS= \
 	  EventGenerator.o \
 	  ListenerMover.o \
 	  PathGenerator.o \
+	  Simulator.o \
 
 
 
-
-
-
-
-#	  Simulator.o \
 
 
 
 
 
 SRCS=$(OBJS:.o=.cpp)
-INC=-I../base -I../estimator -I../kalmanfilter -I../setting -I../simulator
+INC=-I../base -I../estimator -I../kalmanfilter -I../simulator -I../analyzer
 LIBS=
 CPPFLAGS=$(INC) $(LIBS) -Wall -Wextra -O2 -DENV_LINUX
 DEBUGFLAGS=$(CPPFLAGS:O2=g)

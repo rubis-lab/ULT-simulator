@@ -8,6 +8,7 @@ EstimatorArgument::EstimatorArgument()
 {
 	setDefault();
 	planeApplied = false;
+	random.setSeed(0);
 }
 
 EstimatorArgument::~EstimatorArgument()

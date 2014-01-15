@@ -1,11 +1,12 @@
 #pragma once
-#include "Vector.h"
-#include "Measurement.h"
 #include <vector>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_multifit_nlin.h>
 #include <gsl/gsl_linalg.h>
+#include "Vector.h"
+#include "Measurement.h"
+#include "Analyzer.h"
 
 //#define REFLECTION_LIMIT 1 
 // REFLECTOIN_LIMIT is defined in HeardList.h
@@ -38,6 +39,8 @@ public:
 	double maxMeasError;
 
 	int minBeaconSize;
+
+	Analyzer *analyzer;
 };
 
 
@@ -103,16 +106,20 @@ public:
 
 	void addResult(SolverInput *input, Vector location);
 	size_t size();
+	size_t validSize();
 	bool isValid(int idx);
 	Vector getLocation(int idx);
 	SolverResult* at(int idx);
 	void setFail(SolverInput* input);
 	bool isFail();
 	
-
 	SolverResult getFilteredResult();
 	SolverResult getFirstResult();
 	void setFilteredResult(SolverResult result);
+
+public:
+	int nOverThreshold;
+	int nOutside;
 
 private:
 	std::vector<SolverResult> results;

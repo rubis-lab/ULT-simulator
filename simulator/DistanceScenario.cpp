@@ -1,5 +1,4 @@
 #include "DistanceScenario.h"
-#include "Random.h"
 
 
 DistanceScenario::DistanceScenario(SimulatorArgument *args, Beacon *beacon)
@@ -34,6 +33,7 @@ bool DistanceScenario::calculateDistance()
 	
 	
 	applicationError = getApplicationError();
+	if (applicationError < 0) return false;			// out of valid angle range
 	randomNoise = getRandomNoise(applicationError);
 
 	
@@ -120,7 +120,7 @@ double DistanceScenario::getApplicationError()
 	double aBToL = Vector(0, 0, -1).getAngle(vBToL);
 	double distance = vLToB.getSize();
 
-	if (aLToB > args->validAngleRange || aBToL > args->validAngleRange /*limite angle*/) return -1;
+	if (aLToB > args->validAngleRange / 2.0 || aBToL > args->validAngleRange / 2.0 /*limited angle*/) return -1;
 
 	double applicationError = cL*aLToB + cB*aBToL + cD*distance;
 
@@ -129,7 +129,7 @@ double DistanceScenario::getApplicationError()
 
 double DistanceScenario::getRandomNoise(double baseError)
 {
-	return Random.getGaussDist(baseError + args->distanceNoiseAvg, args->distanceNoiseDev);
+	return args->random.getGaussDist(baseError + args->distanceNoiseAvg, args->distanceNoiseDev);
 }
 
 double DistanceScenario::getExactDistance()
@@ -155,4 +155,9 @@ bool DistanceScenario::isValid()
 int DistanceScenario::getBid()
 {
 	return virtualBeacon->getBid();
+}
+
+int DistanceScenario::getUserBid()
+{
+	return virtualBeacon->getUserBid();
 }

@@ -184,7 +184,15 @@ std::vector<Measurement*> MeasurementList::getRandomList(std::vector<Measurement
 
 	for (size_t i = 0; i < size; i++)
 	{
-		int idx = rand() % filteredMeasurements.size();
+		int idx;
+		if (condition.random == NULL)
+		{
+			idx = rand() % filteredMeasurements.size();
+		}
+		else
+		{
+			idx = (int)condition.random->getUniformDist(0, filteredMeasurements.size());
+		}
 		measurements.push_back(filteredMeasurements[idx]);
 		filteredMeasurements.erase(filteredMeasurements.begin() + idx);
 	}

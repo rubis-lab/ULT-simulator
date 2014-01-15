@@ -70,6 +70,7 @@ void Estimator::setMeasurementList()
 	measurementCondition.smallerNVSSFirst = (bool)(args->optimization & OPT::SELECTION);
 
 	measurementCondition.minValidDistance = args->minValidDistance;
+	measurementCondition.random = &args->random;
 
 	
 	measurementList->setMeasurementCondition(measurementCondition);
@@ -90,6 +91,8 @@ void Estimator::setSolver()
 	condition.maxMeasError = args->maxMeasError;
 	
 	condition.minBeaconSize = args->minBeaconSize;
+
+	condition.analyzer = &args->analyzer;
 
 	solver.setSolverCondition(condition);
 }
@@ -118,41 +121,71 @@ void Estimator::measure(unsigned long timestamp, int userBid, double distance)
 
 void Estimator::optimize1(SolverResultList *results)
 {
+	results->nOverThreshold = 0;
+	results->nOutside = 0;
+
 	SolverResult *result;
 	double sqrThreshold = pow(args->cutThreshold, 2);
 	for (size_t i = 0; i < results->size(); i++)
 	{
 		result = results->at(i);
 		if (result->getError() > sqrThreshold)
+		{
 			result->overThreshold = true;
+			results->nOverThreshold ++;
+		}
 
 		if (!args->planes.checkInside(result->location))
+		{
 			result->isInside = false;
+			results->nOutside ++;
+		}
 	}
 	
 }
 
 EstimatorResult Estimator::solve(long currentTime)
 {
-	input->setup(currentTime, prevLocation);
+	/**/args->analyzer.estimatorTotal.startTimer();		// T1 start
+	/**/args->analyzer.estimatorSetup.startTimer();	// ---- T2 start
 
+	input->setup(currentTime, prevLocation);
 	SolverResultList results;
 	EstimatorResult prevResult(prevLocation, input->getError(prevLocation));
 
+	/**/args->analyzer.estimatorSetup.stopTimer();		// ---- T2 end
+	/**/args->analyzer.N_selected.addValue(input->measurements.size());	// V1
+	/**/args->analyzer.estimatorSolving.startTimer();	// ---- T3 start
+
 	solver.solve(input, &results);
+
+	/**/args->analyzer.estimatorSolving.stopTimer();	// ---- T3 end
 
 	if (results.isFail())
 	{
 		// number of beacons are too small
+
+		/**/args->analyzer.N_selectionFail.addValue(1.0); // V2
+		/**/args->analyzer.N_selectionFail.commit();	
+		/**/args->analyzer.estimatorTotal.stopTimer();
 		return prevResult;
 	}
+
+	/**/args->analyzer.N_PMS.addValue((double)results.validSize());	// V3
 
 	if (args->optimization & OPT::THRESHOLD)
 	{
 		//cut threshold and check inside
+		/**/args->analyzer.estimatorPostProc.startTimer();	// ---- T4 start
+
 		optimize1(&results);
+		
+		/**/args->analyzer.estimatorPostProc.stopTimer();	// ---- T4 end
+		/**/args->analyzer.N_PMSFiltered.addValue((double)results.validSize());
 	}
 
+#if 0
+	//debug code
 	for (size_t i = 0; i < results.size(); i++)
 	{
 		SolverResult *result = results.at(i);
@@ -161,6 +194,7 @@ EstimatorResult Estimator::solve(long currentTime)
 			printf("!");
 		printf("\n");
 	}
+#endif
 
 	EstimatorResult ret;
 	SolverResult result;
@@ -170,17 +204,23 @@ EstimatorResult Estimator::solve(long currentTime)
 	case EST::KFONLY:
 	case EST::PROPOSED1:
 
+		/**/args->analyzer.estimatorKFProc.startTimer();	// ---- T5 start
+
 		filterManager->getCorrectedResult(&results);
 		result = results.getFilteredResult();
+
+		/**/args->analyzer.estimatorKFProc.stopTimer();	// ---- T5 end
 		
 		if (!result.isValid())
 		{
 			// there is no valid result
-			return prevResult;
+			ret =  prevResult;
 		}
-		
-		ret.location = result.getCorrectedLocation();
-		ret.error = result.getCorrectedError();
+		else
+		{
+			ret.location = result.getCorrectedLocation();
+			ret.error = result.getCorrectedError();
+		}
 		break;
 
 	case EST::TRADITIONAL:
@@ -206,6 +246,9 @@ EstimatorResult Estimator::solve(long currentTime)
 	}
 
 	prevLocation = ret.location;
+	
+	/**/args->analyzer.estimatorTotal.stopTimer();	// T1 end
+	/**/args->analyzer.tickTimeSlot();
 
 	return ret;
 

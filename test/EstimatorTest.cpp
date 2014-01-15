@@ -302,7 +302,7 @@ int main()
 		for (size_t j = 0; j < event.measurements.size(); j++)
 		{
 			estimator.measure(timestamp, 
-					event.measurements[j].bid,
+					event.measurements[j].userBid,
 					event.measurements[j].distance);
 		}
 		EstimatorResult result;

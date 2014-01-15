@@ -16,7 +16,7 @@ private:
 	void deployCircular2();
 	void deployCoulomb();
 	void deployCoulomb2();
-	void deployRandom();
+	void deployRandom(Random *random);
 	
 	
 };

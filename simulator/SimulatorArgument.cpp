@@ -35,6 +35,7 @@ void SimulatorArgument::setDefault()
 
 	eventSize = 10000;
 	randomSeed = 0;
+	random.setSeed(randomSeed);
 }
 
 void SimulatorArgument::load(const char *filename)
@@ -115,8 +116,11 @@ void SimulatorArgument::load(const char *filename)
 		}
 		else if (strcmp(arg, "sim_event_size") == 0)
 			eventSize = atoi(val);
-		else if (strcmp(arg, "random_seed") == 0)
+		else if (strcmp(arg, "sim_random_seed") == 0)
+		{
 			randomSeed = atoi(val);
+			random.setSeed(randomSeed);
+		}
 
 		// exceptions
 		else if (strncmp(arg, "sim_", 4) == 0)
@@ -185,7 +189,7 @@ void SimulatorArgument::save(const char *filename)
 	fprintf(fp, " \t# FILE, CUBE\n");
 	
 	fprintf(fp, "sim_event_size = %d \t#number of event size\n", eventSize);
-	fprintf(fp, "random_seed = %d \t#random seed\n", randomSeed);
+	fprintf(fp, "sim_random_seed = %d \t#random seed\n", randomSeed);
 
 	fclose(fp);
 

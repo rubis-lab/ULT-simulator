@@ -18,4 +18,5 @@ public:
 
 private:
 	void initialization(unsigned long seed);
+	unsigned long seed;
 };

@@ -2,6 +2,8 @@
 #include "BeaconList.h"
 #include "PlaneList.h"
 #include "KFArgument.h"
+#include "Random.h"
+#include "Analyzer.h"
 
 namespace OPT
 {
@@ -58,6 +60,10 @@ public:
 
 	BeaconList beacons;
 	PlaneList planes;
+
+	Random random;
+
+	Analyzer analyzer;
 
 	void setCutThreshold();
 	void applyPlanes();

@@ -79,7 +79,7 @@ void EventLogList::setMeasurementReflectedPoints(Vector point1, Vector point2)
 
 void EventLogList::addScenario(DistanceScenario *scenario)
 {
-	addMeasurement(scenario->getBid(), scenario->getDistance());
+	addMeasurement(scenario->getUserBid(), scenario->getDistance());
 
 	//TODO: change below codes to cover reflectedPoint vector
 	Vector rPoint1 = Vector(false);
@@ -171,7 +171,7 @@ void EventLogList::save(const char *filename)
 		{
 			EventLog::MeasurementLog measurement = events[i].measurements[j];
 
-			fprintf(fp, "dist;%4d;%4.2f;", measurement.bid, measurement.distance);
+			fprintf(fp, "dist;%4d;%4.2f;", measurement.userBid, measurement.distance);
 
 			Vector point1 = measurement.reflectedPoint1;
 			Vector point2 = measurement.reflectedPoint2;

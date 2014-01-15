@@ -1,9 +1,7 @@
 #include <math.h>
 #include "ListenerMover.h"
-#include "Random.h"
 
-
-PathInfo::PathInfo()
+PathInfo::PathInfo(Random *random)
 {
 	vPosition = Vector(0, 0, 0);
 	uvFace = Vector(0, 0, 0);
@@ -11,6 +9,7 @@ PathInfo::PathInfo()
 	speed_avg = speed_dev = 0;
 	angular_avg = angular_dev = 0;
 	face_theta = face_phi = 0;
+	this->random = random;
 	
 }
 
@@ -93,10 +92,10 @@ int PathInfo::moveNext()
 	Vector vOri = vPosition;	
 	/* (cm) * ((ms / 1000) = s) * (((m/s) * 100) = (cm/s)) */
 	Vector vDirection = uvDirection * (interval / 1000.0) * 
-					(Random.getGaussDist(speed_avg, speed_dev) * 100.0);
+					(random->getGaussDist(speed_avg, speed_dev) * 100.0);
  	vPosition = vPosition + vDirection;
-	face_phi += (Random.getGaussDist(angular_avg, angular_dev)) * (interval / 1000.0);
-	face_theta += (Random.getGaussDist(angular_avg, angular_dev)) * (interval / 1000.0);
+	face_phi += (random->getGaussDist(angular_avg, angular_dev)) * (interval / 1000.0);
+	face_theta += (random->getGaussDist(angular_avg, angular_dev)) * (interval / 1000.0);
 //	uvFace = getFaceVector(face_theta, face_phi);
 
 	Vector vRemain = vDestination - vOri;
@@ -150,7 +149,7 @@ void ListenerMover::reset(int width, int length, int height)
 
 void ListenerMover::setPath(Vector point, double speed)
 {
-	PathInfo pathInfo;
+	PathInfo pathInfo(&args->random);
 	pathInfo.setStartPosition(point);
 	pathInfo.setCoefficient(speed, args->speedDev, args->angleAvg, 
 		args->angleDev, args->timeslot);

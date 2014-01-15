@@ -40,7 +40,7 @@ void EventGenerator::generateEvent(SimulatorArgument *args)
 		}
 
 	}
-	printf("\n");
+	printf("Event Generating .... done\n");
 }
 
 void EventGenerator::save(const char *filename)
@@ -58,9 +58,6 @@ void EventGenerator::setBeacons()
 	// plane should be loaded prior to beacons
 	planeGenerator.generatePlane(args);
 	beaconDeploy.deployBeacons(args);
-
-	args->beacons.save("beacon_test");
-	args->planes.save("plane_test");
 
 	args->beacons.applyPlanes(&args->planes, SIM_REFLECTION_LIMIT);
 }

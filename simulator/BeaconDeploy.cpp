@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "BeaconDeploy.h"
-#include "Random.h"
 
 #define USE_MATH_DEFINES
 
@@ -35,7 +34,7 @@ void BeaconDeploy::deployBeacons(SimulatorArgument *args)
 		break;
 
 	case SIM_BEACON::RANDOM :
-		deployRandom();
+		deployRandom(&args->random);
 		break;
 
 	default:
@@ -258,16 +257,16 @@ void BeaconDeploy::deployCoulomb2()
 	}
 }
 
-void BeaconDeploy::deployRandom()
+void BeaconDeploy::deployRandom(Random *random)
 {
 	bool onCeiling = true;
 	for (int i = 0; i < args->beaconSize; i++)
 	{
-		int plane = (int)(Random.getUniformDist()*5);
+		int plane = (int)(random->getUniformDist()*5);
 
-		double x = Random.getUniformDist(-args->width / 2.0, args->width / 2.0);
-		double y = Random.getUniformDist(-args->length / 2.0, args->length / 2.0);
-		double z = Random.getUniformDist(args->height / 2.0, args->height);
+		double x = random->getUniformDist(-args->width / 2.0, args->width / 2.0);
+		double y = random->getUniformDist(-args->length / 2.0, args->length / 2.0);
+		double z = random->getUniformDist(args->height / 2.0, args->height);
 
 
 		if (onCeiling)

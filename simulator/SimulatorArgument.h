@@ -2,6 +2,7 @@
 
 #include "BeaconList.h"
 #include "PlaneList.h"
+#include "Random.h"
 
 namespace SIM_WALKER
 {
@@ -67,6 +68,7 @@ public:
 
 	int eventSize;
 	int randomSeed;
+	Random random;
 	
 	BeaconList beacons;
 	PlaneList planes;

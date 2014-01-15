@@ -33,7 +33,7 @@ clean:
 	rm *.o -rf
 
 debug:
-	$(CC) -c $(SRCS) $(DEBUGFLAGS)
+	$(CC) -o simulator $(SRCS) $(DEBUGFLAGS) $(LIBS) $(INC)
 
 uninstall:
 	rm *.cpp *.h
