@@ -6,6 +6,7 @@ Beacon::Beacon(int bid, Vector vLocation) : bid(bid)
 	distanceToPlane = 0;
 	vLocations.clear();
 	vLocations.push_back(vLocation);
+// TODO : beacon also has to have facing information
 	pPlanes.clear();
 	children.clear();
 	parent = NULL;
@@ -57,6 +58,7 @@ Beacon* Beacon::newReflectedBeacon(Plane *plane)
 
 	newBeacon->reflectionCount ++;
 	newBeacon->vLocations.push_back(vReflected);
+//TODO: beacon facing also has to be treated.
 	newBeacon->pPlanes.push_back(plane);
 	newBeacon->distanceToPlane += plane->getDistanceToPoint(vReflected);
 	

@@ -16,7 +16,6 @@ KalmanFilter::KalmanFilter(int nX, int nU, int nZ)
 
 KalmanFilter::KalmanFilter(KalmanFilter *kf)
 {
-
 	for (int i = 0; i < N_KF; i++)
 	{
 		this->m[i] = gsl_matrix_alloc(kf->m[i]->size1, kf->m[i]->size2);
@@ -177,6 +176,7 @@ void KalmanFilter::correct(gsl_matrix *Z)
 
 
 
+	gsl_matrix_free(Sdup);
 	gsl_permutation_free(p);
 	gsl_matrix_free(Si);
 	gsl_matrix_free(S);

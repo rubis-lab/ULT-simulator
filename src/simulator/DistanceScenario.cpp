@@ -7,6 +7,10 @@ DistanceScenario::DistanceScenario(SimulatorArgument *args, Beacon *beacon)
 	virtualBeacon = beacon;
 	valid = false;
 }
+DistanceScenario::~DistanceScenario()
+{
+	reflectedPoints.clear();
+}
 
 
 bool DistanceScenario::setListener(Vector location, Vector facing)

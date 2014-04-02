@@ -7,6 +7,7 @@ class DistanceScenario
 public:
 	
 	DistanceScenario (SimulatorArgument *args, Beacon *beacon);
+	~DistanceScenario();
 
 	bool setListener(Vector location, Vector facing);
 	double getNoisyDistance();

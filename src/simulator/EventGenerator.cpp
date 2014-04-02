@@ -11,7 +11,7 @@ EventGenerator::EventGenerator()
 
 EventGenerator::~EventGenerator()
 {
-
+	clearDistanceSimulator();
 }
 
 

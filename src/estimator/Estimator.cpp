@@ -50,6 +50,8 @@ void Estimator::setEstimator(EstimatorArgument *estimatorArgument)
 	setInput();
 	setFilterManager();
 
+	analyzer = &args->analyzer;
+
 }
 
 
@@ -66,7 +68,9 @@ void Estimator::setMeasurementList()
 	measurementCondition.strictValidSize = args->strictValidSize;
 	measurementCondition.timeWindow = args->timeWindow;
 
-	measurementCondition.shortDistanceFirst = (bool)(!args->estimatorMode == EST::TRADITIONAL);
+	measurementCondition.shortDistanceFirst = (bool)
+			!(args->estimatorMode == EST::TRADITIONAL || (!args->optimization & OPT::SELECTION));
+//	measurementCondition.shortDistanceFirst = true;
 	measurementCondition.smallerNVSSFirst = (bool)(args->optimization & OPT::SELECTION);
 
 	measurementCondition.minValidDistance = args->minValidDistance;
@@ -146,42 +150,59 @@ void Estimator::optimize1(SolverResultList *results)
 
 EstimatorResult Estimator::solve(long currentTime)
 {
-	/**/args->analyzer.estimatorTotal.startTimer();		// T1 start
-	/**/args->analyzer.estimatorSetup.startTimer();	// ---- T2 start
+	/**/analyzer->N_tick.addValue(1.0);										// N_tick
+	/**/analyzer->estimatorTotal.startTimer();								// T1 start
+	/**/analyzer->estimatorSetup.startTimer();								// <--- T2 start
 
 	input->setup(currentTime, prevLocation);
 	SolverResultList results;
 	EstimatorResult prevResult(prevLocation, input->getError(prevLocation));
 
-	/**/args->analyzer.estimatorSetup.stopTimer();		// ---- T2 end
-	/**/args->analyzer.N_selected.addValue(input->measurements.size());	// V1
-	/**/args->analyzer.estimatorSolving.startTimer();	// ---- T3 start
+	/**/analyzer->estimatorSetup.stopTimer();								// ---> T2 end
+
+	/**/analyzer->N_selected.addValue(input->measurements.size());			// ---- V1
+
+	/**/analyzer->estimatorSolving.startTimer();							// <--- T3 start
 
 	solver.solve(input, &results);
 
-	/**/args->analyzer.estimatorSolving.stopTimer();	// ---- T3 end
+#if 0
+	//debug
+	printf("nPMS = %d\n", results.validSize());
+#endif
+
+	/**/analyzer->estimatorSolving.stopTimer();								// ---> T3 end
 
 	if (results.isFail())
 	{
 		// number of beacons are too small
 
-		/**/args->analyzer.N_selectionFail.addValue(1.0); // V2
-		/**/args->analyzer.N_selectionFail.commit();	
-		/**/args->analyzer.estimatorTotal.stopTimer();
+		/**/analyzer->N_selectionFail.addValue(1.0);						// ---- V2
+		/**/analyzer->N_fail.addValue(1.0);
+
+		/**/analyzer->estimatorTotal.stopTimer();							// T1 stop
+		prevResult.receptionLevel = 2;
 		return prevResult;
 	}
 
-	/**/args->analyzer.N_PMS.addValue((double)results.validSize());	// V3
+	/**/analyzer->N_PMS.addValue((double)results.validSize());				// ----- V3
+
 
 	if (args->optimization & OPT::THRESHOLD)
 	{
 		//cut threshold and check inside
-		/**/args->analyzer.estimatorPostProc.startTimer();	// ---- T4 start
+		/**/analyzer->estimatorPostProc.startTimer();						// <--- T4 start
 
 		optimize1(&results);
 		
-		/**/args->analyzer.estimatorPostProc.stopTimer();	// ---- T4 end
-		/**/args->analyzer.N_PMSFiltered.addValue((double)results.validSize());
+		/**/analyzer->estimatorPostProc.stopTimer();						// ---> T4 end
+
+		/**/analyzer->N_PMSFiltered.addValue((double)results.validSize());	// ---- V4
+
+		if (results.validSize() == 0)
+		{
+			analyzer->N_optThresholdFail.addValue(1.0);						// ---- V5
+		}
 	}
 
 #if 0
@@ -204,17 +225,20 @@ EstimatorResult Estimator::solve(long currentTime)
 	case EST::KFONLY:
 	case EST::PROPOSED1:
 
-		/**/args->analyzer.estimatorKFProc.startTimer();	// ---- T5 start
+		analyzer->N_PMS_KF.addValue((double)results.validSize());
+		/**/analyzer->estimatorKFProc.startTimer();							// <--- T5 start
 
 		filterManager->getCorrectedResult(&results);
 		result = results.getFilteredResult();
 
-		/**/args->analyzer.estimatorKFProc.stopTimer();	// ---- T5 end
+		/**/analyzer->estimatorKFProc.stopTimer();							// ---> T5 end
 		
 		if (!result.isValid())
 		{
 			// there is no valid result
 			ret =  prevResult;
+			analyzer->N_kalmanFilterFail.addValue(1.0);						// ---- V5
+			analyzer->N_fail.addValue(1.0);
 		}
 		else
 		{
@@ -235,7 +259,9 @@ EstimatorResult Estimator::solve(long currentTime)
 		else
 		{
 			//the first result is not valid
-			return prevResult;
+
+			analyzer->N_fail.addValue(1.0);
+			ret = prevResult;
 		}
 		break;
 	
@@ -247,8 +273,16 @@ EstimatorResult Estimator::solve(long currentTime)
 
 	prevLocation = ret.location;
 	
-	/**/args->analyzer.estimatorTotal.stopTimer();	// T1 end
-	/**/args->analyzer.tickTimeSlot();
+	/**/analyzer->estimatorTotal.stopTimer();	// T1 end
+	/**///analyzer->tickTimeSlot();
+
+	if (input->measurements.size() < (size_t)args->minBeaconSize)
+		ret.receptionLevel = 2;
+	else if (input->measurements.size() < (size_t)args->validSize)  	
+		ret.receptionLevel = 1;
+	else
+		ret.receptionLevel = 0;
+	
 
 	return ret;
 

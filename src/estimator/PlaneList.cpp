@@ -79,6 +79,7 @@ void PlaneList::load(const char *filename)
 	{
 		addPlane(Plane(buf));
 	}
+	fclose(fp);
 
 
 }

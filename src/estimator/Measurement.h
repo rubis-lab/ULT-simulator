@@ -101,6 +101,7 @@ protected:
 	std::vector<Measurement*> getRandomList(std::vector<Measurement*> filteredMeasurements);
 	std::vector<Measurement*> getSortedList(std::vector<Measurement*> filteredMeasurements);
 	std::vector<Measurement*> getFilteredMeasurements(unsigned long CurrentTime, unsigned long timeWindow);
+	std::vector<Measurement*> getSortedListInverse(std::vector<Measurement*> filteredMeasurements);
 
 protected:
 	const int lid;

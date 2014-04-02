@@ -167,6 +167,7 @@ void MeasurementList::makeSnapshot(unsigned long currentTime)
 	}
 	else
 	{
+//		getSortedListInverse(filteredMeasurements);
 		getRandomList(filteredMeasurements);
 	}
 }
@@ -177,8 +178,8 @@ std::vector<Measurement*> MeasurementList::getRandomList(std::vector<Measurement
 	if (size > filteredMeasurements.size()) 
 	{
 		// TODO : ANLZ
-		fprintf(stderr, "Warning. MeasurementList::getRandomList. validSize(%lu) is bigger than filteredMeasurements.size(%lu)\n",
-				size, filteredMeasurements.size());
+//		fprintf(stderr, "Warning. MeasurementList::getRandomList. validSize(%lu) is bigger than filteredMeasurements.size(%lu)\n",
+//				size, filteredMeasurements.size());
 		size = filteredMeasurements.size();
 	}
 
@@ -206,10 +207,25 @@ std::vector<Measurement*> MeasurementList::getSortedList(std::vector<Measurement
 	if (size > filteredMeasurements.size()) 
 	{
 		// TODO : ANLZ
-		fprintf(stderr, "Warning. MeasurementList::getSortedList. size(%ld) is bigger than filteredMeasurements.size(%ld)\n",
-				size, filteredMeasurements.size());
+//		fprintf(stderr, "Warning. MeasurementList::getSortedList. size(%ld) is bigger than filteredMeasurements.size(%ld)\n",
+//				size, filteredMeasurements.size());
 		size = filteredMeasurements.size();
 	}
+#if 0
+	//debug
+	printf("\nmeasurement list\n");
+
+	for (size_t i = 0; i < filteredMeasurements.size(); i++)
+	{
+		Vector location = filteredMeasurements[i]->getLocation();
+		int nVSS = filteredMeasurements[i]->getNVSS();
+		double distance = filteredMeasurements[i]->getDistance();
+
+		printf("(%d, %d, %d) : %f\t%d\n", (int)location.x,(int)location.y, (int)location.z, distance, nVSS);
+
+	}
+#endif
+
 
 	int bestIdx;
 	int minNVSS;
@@ -248,10 +264,52 @@ std::vector<Measurement*> MeasurementList::getSortedList(std::vector<Measurement
 		measurements.push_back(filteredMeasurements[bestIdx]);
 		filteredMeasurements.erase(filteredMeasurements.begin() + bestIdx);
 	}
+#if 0
+	printf("sorted list\n");
+	for (size_t i = 0; i < measurements.size(); i++)
+	{
+		Vector location = measurements[i]->getLocation();
+		int nVSS = measurements[i]->getNVSS();
+		double distance = measurements[i]->getDistance();
+
+		printf("(%d, %d, %d) : %f\t%d\n", (int)location.x,(int)location.y, (int)location.z, distance, nVSS);
+
+	}
+	printf("-------------------------------------------\n");
+	getchar();
+#endif
 
 	return measurements;
 }
 
+
+std::vector<Measurement*> MeasurementList::getSortedListInverse(std::vector<Measurement*> filteredMeasurements)
+{
+	size_t size = condition.validSize;
+	if (size > filteredMeasurements.size()) 
+	{
+		size = filteredMeasurements.size();
+	}
+
+	int bestIdx;
+	double maxDistance;
+	for (size_t i = 0; i < size; i++)
+	{
+		bestIdx = -1;
+		for (size_t j = 0; j < filteredMeasurements.size(); j++)
+		{
+			if (bestIdx < 0 || filteredMeasurements[j]->getDistance() > maxDistance)
+			{
+				maxDistance = filteredMeasurements[j]->getDistance();
+				bestIdx = j;
+			}
+		}
+		measurements.push_back(filteredMeasurements[bestIdx]);
+		filteredMeasurements.erase(filteredMeasurements.begin() + bestIdx);
+	}
+
+	return measurements;
+}
 
 
 

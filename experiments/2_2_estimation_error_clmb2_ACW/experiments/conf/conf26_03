@@ -1,0 +1,39 @@
+sim_room_width = 1000 	#
+sim_room_length = 1000 	#
+sim_room_height = 300 	#
+sim_timeslot = 50 	#time interval of simulator
+sim_speed_avg = 0.500000 	#
+sim_speed_dev = 0.025000 	#
+sim_angle_avg = 0.000000 	#
+sim_angle_dev = 1.000000 	#
+sim_angle_range = 170 	#
+sim_distance_noise_avg = 0.000000 	#
+sim_distance_noise_dev = 1.500000 	#
+sim_min_dist = 20 	#
+sim_max_dist = 600 	#
+sim_movetype = ACW 	# CW, ACW, RND, PD
+sim_beacon_deploy = CLMB2 	# FILE, CIR, CIR2, CLMB, CLMB2, RND
+sim_beacon_deploy_file = beacon.conf 	# if deploy type is FILE, load from this file. otherwise wirte to this file
+sim_n_beacon = 20 	#number of beacons. if deploy type is FILE, this value will be ignored
+sim_plane_type = CUBE 	# FILE, CUBE
+sim_event_size = 20001 	#number of event size
+sim_random_seed = 0 	#random seed
+
+
+env_timeslot = 50 	# in ms
+env_n_cut = 4 	# N_V value
+env_max_meas_err = 50 	# maximum measurement error
+env_min_distance = 10 	# minimum valid distance
+env_max_distance = 700 	# maximum valid distance
+env_timewindow = 1000   #
+env_optimization = 7 	# bitwise 'or' value of : selection opt (1), threshold opt (2), branch cut opt (4), branch cut opt 2 (8)
+env_beacon_config = beacon.auto.conf 	# beacon config file
+env_plane_config = plane.auto.conf 	# plane config file
+env_mode = 1
+
+kf_meas_err = 0.001000 	#
+kf_system_err = 0.000800 	#
+kf_mode = PV	# P, PV, PVA 
+
+sim_n_beacon=26
+env_n_cut=03

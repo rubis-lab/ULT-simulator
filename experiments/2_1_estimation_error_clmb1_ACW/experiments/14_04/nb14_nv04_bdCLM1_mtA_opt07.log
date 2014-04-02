@@ -1,0 +1,23 @@
+93.191276	470.684752
+N_steps             : 20001
+error(proposed)     : 93.191276
+error(original)     : 470.684752
+A01_Estimator_Total_Time                           : 6915.967658
+A02_Estimator_Setup_Time                           : 290.437998
+A03_Estimator_Solving_Time                         : 6282.471845
+A04_Estimator_Filtering_Process_Time               : 23.031991
+A05_Estimator_KF_Process_Time                      : 315.733841
+A06_Solver_PMSs_Solving_Time                       : 6116.137442
+B01_Number_of_PMSs                                 : 116.166474
+B02_Number_of_Filtered_PMSs                        : 19.385348
+C01_Number_of_Selection_Fail_Timesteps             : 0.002908
+C02_Number_of_opt1_Fail                            : 0.000000
+C03_Number_of_Threshold_opt_Fail                   : 0.000000
+C04_Number_of_Kalman_Filter_Fail_Timesteps         : 0.000000
+D01_Number_of_Reflections(sim)                     : 4.892794
+D02_Number_of_Reflections_Twice(sim)               : 0.000000
+E01_Number_of_Selected_Beacons                     : 3.982901
+F01_Number_of_Failed_Timesteps                     : 0.002900
+F02_Number_of_Timesteps                            : 20001.000000
+G01_Estimation_Error(sim)                          : 93.191276
+G02_Estimation_Error_Reference(sim)                : 470.684752

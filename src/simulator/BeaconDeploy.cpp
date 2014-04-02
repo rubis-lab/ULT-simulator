@@ -33,6 +33,10 @@ void BeaconDeploy::deployBeacons(SimulatorArgument *args)
 		deployCoulomb();
 		break;
 
+	case SIM_BEACON::COULOMB2 :
+		deployCoulomb2();
+		break;
+
 	case SIM_BEACON::RANDOM :
 		deployRandom(&args->random);
 		break;
@@ -90,12 +94,20 @@ void BeaconDeploy::deployCircular2()
 	if (innerSize == 0) 
 		outterOffset = 0;
 	else
-		outterOffset = 2 * M_PI / (double) innerSize / 2.0;
+		outterOffset = 2 * M_PI / (double) innerSize / 4.0;
 
 	for (int i = 0; i < outterSize; i++)
 	{
-		double baseAngle = 2 * M_PI / (double) outterSize + outterOffset;
-		double rAngle = baseAngle * i;
+		double baseAngle = 2 * M_PI / (double) outterSize;
+		double rAngle = baseAngle * i + outterOffset;
+/*
+		printf("offset = %f\t size = %d; base = %f(%f)\tangle = %f(%f)\n", 
+			outterOffset, 
+			outterSize, 
+			baseAngle / M_PI * 180, baseAngle,
+			rAngle / M_PI * 180, rAngle);
+*/
+
 		double rDistance = args->width/2.0 * 2.0 / 3.0;
 		Vector location = Vector(cos(rAngle) * rDistance, sin(rAngle) * rDistance, args->height);
 
@@ -189,16 +201,16 @@ void BeaconDeploy::deployCoulomb2()
 		vBeacon.push_back(Vector(cos(rAngle) * rDistance, sin(rAngle) * rDistance, args->height));
 	}
 
-	const int qPlane = 60;
-	const int qBeacon = 40;
-	const int k = 4000;
+	const int qPlane = 20;
+	const int qBeacon = 20;
+	const int k = 1000;
 	bool stable = false;
-	std::vector<Vector> vForces(args->beaconSize);
+//	std::vector<Vector> vForces(args->beaconSize);
 
 	do
 	{
 		stable = true;
-		double fScaleFactor = 1.0;
+//		double fScaleFactor = 1.0;
 		for (int i = 0; i < args->beaconSize; i++)
 		{
 			Vector vForce = Vector(0, 0, 0);
@@ -217,18 +229,18 @@ void BeaconDeploy::deployCoulomb2()
 				if (i == j) continue;
 				vNorm = (vBeacon[i] - vBeacon[j]).getUnitVector();
 				distance = vBeacon[i].getDistance(vBeacon[j]);
-				//				if (distance < 1) continue;
+				if (distance < 1) continue;
 				vForce = vForce + (vNorm * (k * qBeacon * qBeacon / (distance * distance)));
 			}
 			vForce.z = 0;
-			if (vForce.getSize() > 5.0) stable = false;
+			if (vForce.getSize() > 0.5) stable = false;
 
-			vForces[i] = vForce;
+//			vForces[i] = vForce;
 			bool inside;
 			do
 			{
 				inside = true;
-				Vector vExpected = vBeacon[i] + (vForce * fScaleFactor);
+				Vector vExpected = vBeacon[i] + vForce;
 				for (size_t j =0; j < args->planes.size(); j++)
 				{
 					if (args->planes.at(j)->getSign(vExpected) > 0)
@@ -237,17 +249,17 @@ void BeaconDeploy::deployCoulomb2()
 						break;
 					}
 				}
-				if (!inside)
-					fScaleFactor /= 1.2;				
+				vForce = vForce * 0.5;
 			}while(!inside);
-			//			vBeacon[i] = vBeacon[i] + vForce;
-			//			printf("%.3f ", vForce.getSize());
+			vBeacon[i] = vBeacon[i] + vForce;
+//			printf("%.3f ", vForce.getSize());
 		}
-
+/*
 		for (int i = 0; i < args->beaconSize; i++)
 		{
 			vBeacon[i] = vBeacon[i] + (vForces[i] * fScaleFactor);
 		}
+*/
 	}while(!stable);	
 
 	int bid = 1;

@@ -17,6 +17,7 @@ public:
 	
 	Vector location;
 	double error;
+	int receptionLevel; 	// 0 : enough, 1 : smaller than N_V, 2 : unable to estimate
 };
 
 
@@ -42,9 +43,9 @@ private:
 	EstimatorArgument *args;
 	MeasurementList *measurementList;
 	FilterManager *filterManager;
+	Analyzer *analyzer;
 
 	SolverInput *input;
-	
 	
 	Vector prevLocation;
 

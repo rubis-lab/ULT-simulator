@@ -147,6 +147,7 @@ void BeaconList::load(const char* filename)
 
 		addBeacon(bid, location);
 	}
+	fclose(fp);
 }
 
 

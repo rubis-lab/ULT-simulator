@@ -34,7 +34,7 @@ public:
 
 	bool cutBranch1;
 	bool cutBranch2;
-	bool gatherData;		// if true, solver doesn't cut branch. It calculates how much leaves would be cut.kkk
+	bool gatherData;		// if true, solver doesn't cut branch. It calculates how much leaves would be cut.
 	bool solveNaive;
 	double maxMeasError;
 
