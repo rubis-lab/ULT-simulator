@@ -109,6 +109,8 @@ bool DistanceScenario::checkValid()
 	return true;
 }
 
+//error caused by sensor property. 
+//transmitting and receiving angle of US signal makes noise
 double DistanceScenario::getApplicationError()
 {
 	const double cL = 0.043;

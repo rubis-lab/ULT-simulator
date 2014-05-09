@@ -17,16 +17,18 @@ class Recorder_
 public:
 	Recorder_(const char* _name) {strncpy(name, _name, sizeof(name)-1);}
 	virtual void reset() = 0;
-//	virtual double getAvg() = 0;			// obsoleted
 	virtual void commit() = 0;
 	virtual void discard() = 0;
-//	virtual void writeCDF() = 0;			// obsoleted
-//	virtual void printAVG(FILE* fp) = 0;	// obsoleted
 	virtual void printAVG(FILE* fp, int count) = 0;
-//	virtual double getSum() = 0;			// obsoleted
 	virtual int getSize() = 0;
 	char* getName() {return name;}
+	virtual double getTotal() = 0;
+	virtual void setTotal(double total) = 0;
 
+//	virtual double getAvg() = 0;			// obsoleted
+//	virtual void writeCDF() = 0;			// obsoleted
+//	virtual void printAVG(FILE* fp) = 0;	// obsoleted
+//	virtual double getSum() = 0;			// obsoleted
 private:
 	char name[100];
 };
@@ -37,17 +39,18 @@ public:
 	Recorder(const char* name):Recorder_(name)	{reset();}
 	~Recorder()	{}
 	virtual void reset();
-//	virtual double getAvg();			// obsoleted
 	virtual void commit();
 	virtual void discard();
-//	virtual void writeCDF();			// obsoleted
-//	virtual void printAVG(FILE* fp);	// obsoleted
 	virtual void printAVG(FILE* fp, int count);
-//	virtual double getSum();			// obsoleted
 	virtual int getSize();
-	virtual double getTotal() = 0;
+//	virtual double getTotal();
+//	virtual void setTotal(double total);
 
 	
+//	virtual double getAvg();			// obsoleted
+//	virtual void writeCDF();			// obsoleted
+//	virtual void printAVG(FILE* fp);	// obsoleted
+//	virtual double getSum();			// obsoleted
 
 protected:
 	std::vector <T> recorded_value;
@@ -68,6 +71,7 @@ public:
 	void commit();
 	void discard();
 	double getTotal();
+	void setTotal(double total);
 
 
 private:
@@ -87,6 +91,7 @@ public:
 	void commit();
 	void discard();
 	double getTotal();
+	void setTotal(double total);
 	
 
 private:
@@ -134,6 +139,8 @@ public:
 	ValueRecorder N_receptionFailStrict2;
 	ValueRecorder estimationErrorExcFail2;
 	ValueRecorder estimationErrorExcStrictFail2;
+
+	void addAnalyzer(const Analyzer &analyzer);
 	
 
 private:

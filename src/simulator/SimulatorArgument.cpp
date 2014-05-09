@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "SimulatorArgument.h"
+#include "PlaneGenerator.h"
+#include "BeaconDeploy.h"
 
+#define SIM_REFLECTION_LIMIT 2
 
 SimulatorArgument::SimulatorArgument()
 {
@@ -38,7 +41,33 @@ void SimulatorArgument::setDefault()
 	random.setSeed(randomSeed);
 }
 
+void SimulatorArgument::setPlane()
+{
+	PlaneGenerator planeGenerator;
+	planeGenerator.generatePlane(this);
+}
+
+void SimulatorArgument::setBeacon()
+{
+	BeaconDeploy beaconDeploy;
+	beaconDeploy.deployBeacons(this);
+	beacons.applyPlanes(&planes, SIM_REFLECTION_LIMIT);
+}
+
 void SimulatorArgument::load(const char *filename)
+{
+	loadArgument(filename);
+	//plane should be defined before calling setBeacon
+	setPlane();
+	setBeacon();
+}
+
+void SimulatorArgument::save(const char *filename)
+{
+	saveArgument(filename);
+}
+
+void SimulatorArgument::loadArgument(const char *filename)
 {
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL)
@@ -130,7 +159,7 @@ void SimulatorArgument::load(const char *filename)
 	fclose(fp);
 }
 
-void SimulatorArgument::save(const char *filename)
+void SimulatorArgument::saveArgument(const char *filename)
 {
 	FILE* fp = fopen(filename, "w");
 

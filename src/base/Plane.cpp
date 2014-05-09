@@ -52,8 +52,16 @@ Plane::Plane(char* string)
 	while((tok = strtok_s(str, "#\r\n", &context)) != NULL)
 	{
 		str = NULL;
-		Vector point = Vector(tok);
-		insertVertex(point);
+		if (tok[0] == 'N')
+		{
+			//Normal vector is given in file stream
+			vNormal = Vector(tok + 1);
+		}
+		else
+		{
+			Vector point = Vector(tok);
+			insertVertex(point);
+		}
 	}
 }
 
@@ -274,6 +282,16 @@ void Plane::getString(char *string)
 			getchar();
 			exit(44);
 		}
+	}
+	if (vertex.size() == 1)
+	{
+		offset += sprintf(buf + offset, "N(%.5f,%.5f,%.5f)#", vNormal.x, vNormal.y, vNormal.z);
+	}
+	if (offset > (int)sizeof(buf))
+	{
+		printf("Plane::getString, buffer overflow\n");
+		getchar();
+		exit(44);
 	}
 	strcpy(string, buf);
 }

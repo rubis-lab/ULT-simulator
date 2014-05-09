@@ -31,6 +31,16 @@ void BeaconList::addBeacon(int userBid, Vector location)
 	addBeacon(beacon);
 }
 
+Beacon* BeaconList::findByUserBid(int userBid)
+{
+	for (size_t i = 0; i < baseBeaconList.size(); i++)
+	{
+		if (baseBeaconList[i]->getUserBid() == userBid)
+			return baseBeaconList[i];
+	}
+	return NULL;
+}
+
 void BeaconList::addBeacon(Beacon *beacon)
 {
 	baseBeaconList.push_back(beacon);

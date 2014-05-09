@@ -1,51 +1,44 @@
-CC=g++
-INC=-Iestimator -Ibase
-LIBS=-lgsl -lgslcblas 
-CPPFLAGS = $(INC) -Wall -Wextra -O2 $(LIBS) 
+include ./include.mk
 
-OBJS=estimator/*.o base/*.o kalmanfilter/*.o simulator/*.o analyzer/*.o
-#SRCS=SimulationTracer/SimulationTracer.cpp
-TARGET=../bin/simulator
+DIRS=estimator \
+	 base \
+	 kalmanfilter \
+	 analyzer \
+	 simulator \
+	 planedetector
 
+OBJS=${DIRS:=/*.o}
 
+#OBJS=estimator/*.o base/*.o kalmanfilter/*.o analyzer/*.o simulator/*.o planedetector/*.o
 
+.PHONY: $(DIRS)
 
-all: estimator base kalmanfilter simulator analyzer $(SRCS)
-	$(MAKE) -C base
-	$(MAKE) -C estimator
-	$(MAKE) -C kalmanfilter
-	$(MAKE) -C simulator
-	$(MAKE) -C analyzer
-	$(CC) -o $(TARGET) $(OBJS) $(CPPFLAGS) 
+all: bin_simulator bin_planedetector bin_simulator_iter bin_planedetector_fixed bin_planedetector_all
 
-debug:
-	$(MAKE) debug -C estimator
-	$(MAKE) debug -C base
-	$(MAKE) debug -C kalmanfilter
-	$(MAKE) debug -C simulator
-	$(MAKE) debug -C analyzer
-	$(CC) -o $(TARGET) $(OBJS) $(CPPFLAGS) -g
-
-estimator:
-	$(MAKE) -C estimator
-
-base:
-	$(MAKE) -C base
-
-kalmanfilter:
-	$(MAKE) -C kalmanfilter
-
-simulator:
-	$(MAKE) -C simulator
-
-analyzer:
-	$(MAKE) -C analyzer
+debug: bin_simulator bin_planedetector
+	for dir in $(DIRS);	do $(MAKE) debug -C $$dir;	done
+	$(CC) -o ../bin/simulator $(OBJS) Simulator.cpp $(DEBUGFLAGS) 
+	$(CC) -o ../bin/planedetector $(OBJS) DetectPlanes.cpp $(DEBUGFLAGS)
 
 clean:
-	$(MAKE) clean -C estimator
-	$(MAKE) clean -C base
-	$(MAKE) clean -C kalmanfilter
-	$(MAKE) clean -C simulator
-	$(MAKE) clean -C analyzer
+	for dir in $(DIRS);	do $(MAKE) clean -C $$dir;	done
 	rm *.o -rf
+
+bin_simulator: $(DIRS) 
+	$(CC) -o ../bin/simulator $(OBJS) Simulator.cpp $(CPPFLAGS) 
+
+bin_planedetector: $(DIRS)
+	$(CC) -o ../bin/planedetector $(OBJS) DetectPlanes.cpp $(CPPFLAGS)
+
+bin_simulator_iter: $(DIRS) 
+	$(CC) -o ../bin/simulator_iter $(OBJS) SimulatorIter.cpp $(CPPFLAGS) 
+
+bin_planedetector_fixed: $(DIRS)
+	$(CC) -o ../bin/planedetector_fixed $(OBJS) DetectPlanesFixedPoint.cpp $(CPPFLAGS)
+
+bin_planedetector_all: $(DIRS)
+	$(CC) -o ../bin/planedetector_all $(OBJS) DetectPlanesAllPoints.cpp $(CPPFLAGS)
+	
+$(DIRS):
+	$(MAKE) -C $@
 

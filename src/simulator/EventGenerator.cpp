@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "EventGenerator.h"
 
-#define SIM_REFLECTION_LIMIT 2
 
 EventGenerator::EventGenerator()
 {
@@ -20,7 +19,6 @@ void EventGenerator::generateEvent(SimulatorArgument *args)
 	this->args = args;
 
 	events.reset();
-	setBeacons();
 	setDistanceSimulator();
 	setPath();
 
@@ -43,24 +41,49 @@ void EventGenerator::generateEvent(SimulatorArgument *args)
 	printf("Event Generating .... done\n");
 }
 
+void EventGenerator::generateEventForPlaneDetection(
+		SimulatorArgument *args, 
+		int listenerInterval, 
+		int minMargin, 
+		int z, 
+		Vector vFacing)
+{
+	this->args = args;
+
+	events.reset();
+	setDistanceSimulator();
+
+	int xStart = -((int)(args->width / 2 - minMargin) / listenerInterval) * listenerInterval;
+	int yStart = -((int)(args->length / 2 - minMargin) / listenerInterval) * listenerInterval;
+	int xEnd = -xStart;
+	int yEnd = -yStart;
+
+	unsigned long timestamp = 0;
+
+	for (int x = xStart; x <= xEnd; x += listenerInterval)
+	{
+		for (int y = yStart; y <= yEnd; y += listenerInterval)
+		{
+			Vector vRealLocation = Vector(x, y, z);
+			events.setNewEvent(timestamp, vRealLocation, vFacing);
+			for (size_t i = 0; i < distances.size(); i++)
+			{
+				DistanceScenario* scenario;
+				scenario = distances[i]->findScenario(vRealLocation, vFacing);
+				if (scenario == NULL || !scenario->isValid()) continue;
+				
+				events.addScenario(scenario);	
+			}
+			timestamp += 10000;
+		}
+	}
+}
+
 void EventGenerator::save(const char *filename)
 {
 	events.save(filename);
 }
 
-
-void EventGenerator::setBeacons()
-{
-	PlaneGenerator planeGenerator;
-	BeaconDeploy beaconDeploy;
-
-	// load plane and beacons in args->planes, args->beacons
-	// plane should be loaded prior to beacons
-	planeGenerator.generatePlane(args);
-	beaconDeploy.deployBeacons(args);
-
-	args->beacons.applyPlanes(&args->planes, SIM_REFLECTION_LIMIT);
-}
 
 
 void EventGenerator::setDistanceSimulator()

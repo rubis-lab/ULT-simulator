@@ -75,5 +75,9 @@ public:
 
 	void setDefault();
 	void load(const char *filename);
+	void loadArgument(const char *filename);
+	void setPlane();
+	void setBeacon();
 	void save(const char *filename);
+	void saveArgument(const char *filename);
 };

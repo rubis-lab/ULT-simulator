@@ -10,6 +10,7 @@ public:
 	~PathGenerator();
 
 	void generatePath(SimulatorArgument *args, std::vector<ListenerInfo> &path);
+	void generatePathForPD(SimulatorArgument *args, std::vector<ListenerInfo> &path);
 	
 
 protected:

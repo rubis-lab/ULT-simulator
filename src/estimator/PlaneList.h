@@ -17,6 +17,7 @@ public:
 	bool checkInside(Vector location);
 	void load(const char *filename);
 	void save(const char *filename);
+	void makeCube(const int width, const int length, const int height);
 
 
 

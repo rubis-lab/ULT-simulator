@@ -14,11 +14,12 @@ public:
 	BeaconList();
 	~BeaconList();
 
-	void addBeacon(int bid, Vector location);
+	void addBeacon(int userBid, Vector location);
 	void applyPlanes(PlaneList *planeList, int maxReflectionCount = REFLECTION_COUNT_LIMIT);
 	void reset();
 	size_t size();
 	Beacon* at(int idx);
+	Beacon* findByUserBid(int userBid);
 	void load(const char *filename);
 	void save(const char *filename);
 

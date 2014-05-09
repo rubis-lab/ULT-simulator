@@ -173,6 +173,15 @@ void Analyzer::printAVG(FILE *fp)
 	N_receptionFailStrict2.printAVG(fp, nTick);
 }
 
+void Analyzer::addAnalyzer(const Analyzer &analyzer)
+{
+	for (size_t i = 0; i < recorderList.size(); i++)
+	{
+		recorderList[i]->setTotal(recorderList[i]->getTotal() + analyzer.recorderList[i]->getTotal());
+	}
+}
+	
+
 /**********************************************
 TimeRecorder Memebers
 **********************************************/
@@ -191,6 +200,7 @@ void TimeRecorder::reset()
 	start_time = 0;
 	execution_time = 0;
 	current_value = 0;
+	total_value = 0;
 }
 
 void TimeRecorder::startTimer()
@@ -221,6 +231,13 @@ double TimeRecorder::getTotal()
 {
 	return (double)total_value;
 }
+
+void TimeRecorder::setTotal(double total)
+{
+	total_value = (unsigned long long) total;
+
+}
+
 
 /**********************************************
 ValueRecorder Memebers
@@ -261,6 +278,11 @@ void ValueRecorder::discard()
 double ValueRecorder::getTotal()
 {
 	return total_value;
+}
+
+void ValueRecorder::setTotal(double total)
+{
+	total_value = total;
 }
 
 
