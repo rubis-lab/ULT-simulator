@@ -19,7 +19,7 @@ public:
 	virtual void reset() = 0;
 	virtual void commit() = 0;
 	virtual void discard() = 0;
-	virtual void printAVG(FILE* fp, int count) = 0;
+	virtual void printAVG(FILE* fp, double count) = 0;
 	virtual int getSize() = 0;
 	char* getName() {return name;}
 	virtual double getTotal() = 0;
@@ -41,7 +41,7 @@ public:
 	virtual void reset();
 	virtual void commit();
 	virtual void discard();
-	virtual void printAVG(FILE* fp, int count);
+	virtual void printAVG(FILE* fp, double count);
 	virtual int getSize();
 //	virtual double getTotal();
 //	virtual void setTotal(double total);

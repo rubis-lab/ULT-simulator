@@ -352,9 +352,9 @@ void Recorder<T>::printAVG(FILE *fp)
 #endif
 
 template <class T>
-void Recorder<T>::printAVG(FILE *fp, int count)
+void Recorder<T>::printAVG(FILE *fp, double count)
 {
-	fprintf(fp, "%-50s : %f\n", getName(), getTotal() / (double) count);
+	fprintf(fp, "%-50s : %f\n", getName(), getTotal() / count);
 }
 
 
