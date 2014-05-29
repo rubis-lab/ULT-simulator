@@ -6,5 +6,5 @@ INC=-I$(ROOT)estimator \
 	-I$(ROOT)planedetector \
 	-I$(ROOT)analyzer
 LIBS=-lgsl -lgslcblas 
-CPPFLAGS = $(INC) -Wall -Wextra -O2 -g $(LIBS)  -DENV_LINUX
+CPPFLAGS = $(INC) -Wall -Wextra -O2 -g $(LIBS)  -DENV_LINUX -fopenmp
 DEBUGFLAGS=$(CPPFLAGS:O2=g)

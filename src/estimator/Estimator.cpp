@@ -99,6 +99,7 @@ void Estimator::setSolver()
 	condition.analyzer = &args->analyzer;
 
 	solver.setSolverCondition(condition);
+	multiSolver.setSolverCondition(condition);
 }
 
 void Estimator::setInput()
@@ -164,7 +165,9 @@ EstimatorResult Estimator::solve(long currentTime)
 
 	/**/analyzer->estimatorSolving.startTimer();							// <--- T3 start
 
+
 	solver.solve(input, &results);
+//	multiSolver.solve(input, &results);
 
 #if 0
 	//debug

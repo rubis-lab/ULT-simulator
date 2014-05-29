@@ -55,10 +55,24 @@ SolverResult::SolverResult() : isEmpty(true)
 }
 
 
-SolverResult::SolverResult(Vector location, std::vector<Measurement*> snapshot) :
+SolverResult::SolverResult(Vector location, std::vector<Measurement*> &measurements) :
 	location(location), 
-	snapshot(snapshot), 
 	overThreshold(false), 
+	isEmpty(false),
+	isInside(true)
+{
+	for (size_t i = 0; i < measurements.size(); i++)
+	{
+		snapshot.push_back(MeasurementInstance(measurements[i]));
+	}
+
+	error = getError(location);
+}
+
+SolverResult::SolverResult(Vector location, std::vector<MeasurementInstance> &snapshot) :
+	location(location),
+	snapshot(snapshot),
+	overThreshold(false),
 	isEmpty(false),
 	isInside(true)
 {
@@ -89,8 +103,8 @@ double SolverResult::getError(Vector location)
 	double err = 0;
 	for (size_t i = 0; i <snapshot.size(); i++)
 	{
-		err += pow(snapshot[i]->getDistance() - 
-				(snapshot[i]->getLocation().getDistance(location)), 2);
+		err += pow(snapshot[i].getDistance() - 
+				(snapshot[i].getLocation().getDistance(location)), 2);
 	}
 
 	return err;
@@ -127,11 +141,21 @@ SolverResultList::~SolverResultList()
 {
 }
 
-void SolverResultList::addResult(SolverInput *input, Vector location)
+void SolverResultList::addResult(Vector location, SolverInput *input)
 {
 	results.push_back(SolverResult(
 			location,
 			input->measurements));
+}
+
+void SolverResultList::addResult(Vector location, std::vector<MeasurementInstance> &snapshot)
+{
+	results.push_back(SolverResult(location, snapshot));
+}
+
+void SolverResultList::addResult(SolverResult &result)
+{
+	results.push_back(result);
 }
 
 void SolverResultList::setFail(SolverInput *input)
@@ -237,7 +261,7 @@ void Solver::solve(SolverInput *input, SolverResultList *results)
 void Solver::solveNaive(SolverInput *input, SolverResultList *results)
 {
 	Vector location = NLLeastSquareSolver(input);
-	results->addResult(input, location);
+	results->addResult(location, input);
 }
 
 void Solver::solveWithPlanes(SolverInput *input, SolverResultList *results, int currentIdx)
@@ -246,7 +270,7 @@ void Solver::solveWithPlanes(SolverInput *input, SolverResultList *results, int 
 	{
 		//end condition
 		Vector location = NLLeastSquareSolver(input);
-		results->addResult(input, location);
+		results->addResult(location, input);
 #ifdef GATHER_DATA
 // add more codes to treat gather data option.
 #endif

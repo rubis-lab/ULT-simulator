@@ -33,74 +33,42 @@ Vector getSimulatedListener(EventLog *event)
 }
 
 Plane detectPlane(
-		Vector fixedPoint,
 		SimulatorArgument *simArgs, 
 		Plane *plane, 
 		int planeIdx,
-		EventLogList *eventsDirect, 
+		EventLog *eventD,
+		EventLog *eventR,
 		Vector *bestLocation, 
 		Vector *bestLocationSimulated,
 		double *pMinError)
 {
-	EventGenerator reflectedEventGenerator;
-	// normal vector of each plane faces outside of cube
-	Vector vFacing = plane->vNormal;
-	
-	printf("\nGenerating events for Plane %d...", planeIdx);
-	fflush(stdout);
-	reflectedEventGenerator.generateEventForPlaneDetection(
-			simArgs, 
-			listenerInterval, 
-			minMargin, 
-			listenerZ, 
-			vFacing);
-	EventLogList *eventsReflected = &reflectedEventGenerator.events;
-	printf("done\n");
-
 	double minError = -1.0;
 	// meaningless plane
 	Plane bestPlane(Vector(0, 0, 0), Vector(0, 0, 1));
 	
 
-	//find nearest point from fixedPoint;
-	double minDistance = -1.0;
-	int fixedPointIdx = -1;
-	for (size_t i = 0; i < eventsDirect->size(); i++)
-	{
-		Vector vLocation = eventsDirect->events[i].location;
-		double distance = vLocation.getDistance(fixedPoint);
-
-		if (minDistance < 0 || distance < minDistance)
-		{
-			fixedPointIdx = i;
-			minDistance = distance;
-		}
-	}
-
 
 	// in here, assume that order of location of each eventDirect is identical to eventReflected 
-	EventLog eventD = eventsDirect->events[fixedPointIdx];
-	EventLog eventR = eventsReflected->events[fixedPointIdx];
-	Vector vRealListener = eventD.location;
+	Vector vRealListener = eventD->location;
 
-	Vector vListener = getSimulatedListener(&eventD);
+	Vector vListener = getSimulatedListener(eventD);
 
 	PlaneDetector planeDetector(vListener);
 
 
 	// not enough measurements. can not detect plane. continue
-	if (eventR.measurements.size() < 4)
+	if (eventR->measurements.size() < 4)
 	{
 		fprintf(stderr, "invalid point!! planeIdx = %d\n", planeIdx);
 		exit(1);
 	}
 
 	//do plane detection
-	for (size_t j = 0; j < eventR.measurements.size(); j++)
+	for (size_t j = 0; j < eventR->measurements.size(); j++)
 	{
-		int bid = eventR.measurements[j].userBid;
+		int bid = eventR->measurements[j].userBid;
 		Vector vBeacon = (simArgs->beacons.findByUserBid(bid))->getLocation();
-		double distance = eventR.measurements[j].distance;
+		double distance = eventR->measurements[j].distance;
 
 		//insert reflected distance data into plane detector
 		planeDetector.addReflectedDistance(vBeacon, distance);
@@ -121,7 +89,7 @@ Plane detectPlane(
 	return bestPlane;
 }
 
-Vector getFixedPoint(Plane *plane)
+Vector getFixedPoint(Plane *plane, double gap)
 {
 	// plane should have four vertexes.
 	
@@ -130,13 +98,44 @@ Vector getFixedPoint(Plane *plane)
 	
 	vMid.z = listenerZ;
 
-	vMid = vMid - (plane->vNormal * 100);
-	vMid.x += 50;
+	vMid = vMid - (plane->vNormal * gap);
+//	vMid.x += 50;
 
 	return vMid;
 
 }
 
+int getFixedPointIndex(Vector fixedPoint, EventLogList *eventsDirect)
+{
+	//find nearest point from fixedPoint;
+	double minDistance = -1.0;
+	int fixedPointIdx = -1;
+	for (size_t i = 0; i < eventsDirect->size(); i++)
+	{
+		Vector vLocation = eventsDirect->events[i].location;
+		double distance = vLocation.getDistance(fixedPoint);
+
+		if (minDistance < 0 || distance < minDistance)
+		{
+			fixedPointIdx = i;
+			minDistance = distance;
+		}
+	}
+	return fixedPointIdx;
+}
+
+
+bool checkReflection(EventLog *event)
+{
+	for (size_t i = 0; i < event->measurements.size(); i++)
+	{
+		if (!event->measurements[i].reflectedPoint1.isNull)
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
 int main(int argc, char** argv)
 {
@@ -186,17 +185,49 @@ int main(int argc, char** argv)
 	
 	for (int i = 0; i < 4; i++)
 	{
-		Vector fixedPoint = getFixedPoint(realPlanes.at(i));
+		EventGenerator reflectedEventGenerator;
+		// normal vector of each plane faces outside of cube
+		Vector vFacing = realPlanes.at(i)->vNormal;
 
-		printf("fixed point for plane %d = ", i);
+		printf("\nGenerating events for Plane %d...", i);
+		fflush(stdout);
+		reflectedEventGenerator.generateEventForPlaneDetection(
+				&simArgs, listenerInterval, minMargin, listenerZ, vFacing);
+		printf("done\n");
+
+		double gap = 100;
+
+		Vector fixedPoint;
+		int fixedPointIdx;
+		EventLog *eventD;
+		EventLog *eventR;
+		
+		for (gap = 100; gap > 0; gap -= 5)
+		{
+
+			fixedPoint = getFixedPoint(realPlanes.at(i), gap);
+			fixedPointIdx = getFixedPointIndex(fixedPoint, &directEventGenerator.events);
+			eventD = &directEventGenerator.events.events[fixedPointIdx];
+			eventR = &reflectedEventGenerator.events.events[fixedPointIdx];
+
+			if (!checkReflection(eventD)) continue;
+			if (eventR->measurements.size() >= 5) break;
+		};
+		if (gap <= 0)
+		{
+			fprintf(stderr, "can not find valid point for plane %d\n", i);
+			exit(1);
+		}
+
+		printf("fixed point for plane %d  (gap : %d) = ", i, (int)gap);
 		fixedPoint.println();
 
 		Plane detectedPlane = detectPlane(
-				fixedPoint,
 				&simArgs, 
 				realPlanes.at(i), 
-				i/*pid*/, 
-				&directEventGenerator.events,
+				i/*pid*/, 				
+				eventD,
+				eventR,
 				&bestLocation[i],
 				&bestLocationSimulated[i],
 				&error[i]);

@@ -1,5 +1,6 @@
 #pragma once
 #include "Solver.h"
+#include "MultiSolver.h"
 #include "FilterManager.h"
 #include "EstimatorArgument.h"
 
@@ -40,6 +41,7 @@ public:
 
 private:
 	Solver solver;
+	MultiSolver multiSolver;
 	EstimatorArgument *args;
 	MeasurementList *measurementList;
 	FilterManager *filterManager;

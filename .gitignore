@@ -28,3 +28,6 @@ LocationEstimator/Release
 
 #dump file
 core.*
+
+#experiment result
+experiment*

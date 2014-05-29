@@ -10,6 +10,7 @@
 // AddReflectionBeacon find reflected Beacon, and then make child node
 
 class BeaconIterator;
+class Measurement;
 
 
 
@@ -38,6 +39,9 @@ public:
 	
 	std::vector<Vector> vLocations;			// track reflected location of beacons
 	std::vector<Plane*> pPlanes;			// track which planes are reflected to
+
+//	void bindMeasurementContainer(Measurement *measurement);
+//	Measurement *getMeasurement();
 		
 private:
 	int bid;								// beacon id allocated by system
@@ -46,11 +50,13 @@ private:
 
 	int reflectionCount;
 	Beacon *parent;
+	Beacon *root;
 	std::vector<Beacon *> children;
 	
 	void addChild(Beacon *beacon);
 	Beacon* newReflectedBeacon(Plane *plane);
 	BeaconIterator* iterator;
+	Measurement* measurement;
 
 };
 		

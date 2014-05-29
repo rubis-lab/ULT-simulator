@@ -67,11 +67,12 @@ class SolverResult
 {
 public:	
 	SolverResult();
-	SolverResult(Vector location, std::vector<Measurement*> snapshot);
+	SolverResult(Vector location, std::vector<Measurement*> &measurements);
+	SolverResult(Vector location, std::vector<MeasurementInstance> &snapshot);
 	
 	Vector location;
 	double error;		//squared error
-	std::vector<Measurement*> snapshot;
+	std::vector<MeasurementInstance> snapshot;
 	bool overThreshold;
 	bool isEmpty;
 	bool isInside;
@@ -104,7 +105,9 @@ public:
 	SolverResultList();
 	~SolverResultList();
 
-	void addResult(SolverInput *input, Vector location);
+	void addResult(Vector location, SolverInput *input);
+	void addResult(Vector location, std::vector<MeasurementInstance> &snapshot);
+	void addResult(SolverResult &result);
 	size_t size();
 	size_t validSize();
 	bool isValid(int idx);
@@ -142,8 +145,6 @@ public:
 	
 private:
 	SolverCondition condition;
-	PlaneList *planes;
-	BeaconList *beacons;
 
 
 	void solveNaive(SolverInput *input, SolverResultList *results);

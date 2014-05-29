@@ -7,6 +7,8 @@
 #include "Random.h"
 
 
+
+
 class Measurement                                                                    
 {                                                                                    
 public:                                                                              
@@ -24,6 +26,7 @@ public:
 	void resetIterator();
 	bool nextVBeacon();
 	bool isValidDistance();
+	Beacon* getBeacon();
 
 // used for simulated measurements
 	void simulate(unsigned long timestamp, Vector location, double noise = 0);
@@ -76,6 +79,30 @@ public:
 	int minValidDistance;
 	Random *random;
 };
+
+////////////
+class MeasurementInstance
+{
+public: 
+	MeasurementInstance(Measurement *measurement)
+	{
+		distance = measurement->getDistance();
+		beacon = measurement->getBeacon();
+	}
+	Vector getLocation()
+	{
+		return beacon->getLocation();
+	}
+	double getDistance()
+	{
+		return distance;
+	}
+protected:
+	Beacon* beacon;
+	double distance;
+};
+
+//////////
 class MeasurementList
 {
 public:
@@ -112,3 +139,4 @@ protected:
 	PlaneList *planes;
 
 };
+

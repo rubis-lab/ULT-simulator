@@ -10,7 +10,9 @@ Beacon::Beacon(int bid, Vector vLocation) : bid(bid)
 	pPlanes.clear();
 	children.clear();
 	parent = NULL;
+	root = this;
 	iterator = new BeaconIterator();
+	measurement = NULL;
 }
 Beacon::Beacon(Beacon *beacon) : bid(beacon->bid)
 {
@@ -18,10 +20,12 @@ Beacon::Beacon(Beacon *beacon) : bid(beacon->bid)
 	this->vLocations = beacon->vLocations;
 	this->pPlanes = beacon->pPlanes;
 	this->parent = beacon;
+	this->root = beacon->root;
 //	this->children = beacon->children;
 	this->iterator = beacon->iterator;
 	this->userBid = beacon->userBid;
 	this->distanceToPlane = beacon->distanceToPlane;
+	this->measurement = beacon->measurement;
 
 }
 Beacon::~Beacon()
@@ -110,8 +114,11 @@ int Beacon::getBid()
 
 Beacon* Beacon::getRoot()
 {
+	return root;
+/*
 	if (parent == NULL) return this;
 	return parent->getRoot();
+*/
 }
 
 void Beacon::setIterator(bool isDFS)
@@ -133,6 +140,17 @@ Beacon* Beacon::next()
 {
 	return iterator->next();
 }
+/*
+void Beacon::bindMeasurementContainer(Measurement *measurement)
+{
+	this->measurement = measurement;
+}
+
+Measurement* Beacon::getMeasurement()
+{
+	return root->measurement;
+}
+*/
 
 
 ///////////////////////////////////////////////////////////////////////

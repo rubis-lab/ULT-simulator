@@ -172,7 +172,6 @@ void simulate(
 
 		fprintf(stderr, "%d\t%5.1f\t%5.1f\r", (int) i, err_sum1 / (i + 1), err_sum2 / (i + 1));
 	}
-	double total = (double)events->size();
 #if 0
 	FILE *fp = fopen(outname, "w");
 	if (fp == NULL)

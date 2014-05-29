@@ -5,9 +5,11 @@
 
 
 
+///////////////////////////////////////////////////////
 Measurement::Measurement(Beacon *beacon) : beacon(beacon)
 {
 	distance = 0;
+//	beacon->bindMeasurementContainer(this);
 }
 
 void Measurement::measure(unsigned long timestamp, double distance)
@@ -65,6 +67,11 @@ bool Measurement::isValidDistance()
 {	
 	if (distance < beacon->getDistanceToPlane()) return false;
 	return true;
+}
+
+Beacon* Measurement::getBeacon()
+{
+	return beacon;
 }
 
 
@@ -361,3 +368,4 @@ std::vector<Measurement*> MeasurementList::getMeasurements()
 {
 	return measurements;
 }
+
