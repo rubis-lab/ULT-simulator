@@ -1,9 +1,10 @@
+#define _USE_MATH_DEFINES
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "BeaconDeploy.h"
 
-#define USE_MATH_DEFINES
+
 
 #define RAND_WIDTH(r) (r * width - (width / 2))
 #define RAND_LENGTH(r) (r * length - (length / 2))
