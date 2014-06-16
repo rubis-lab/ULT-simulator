@@ -181,3 +181,55 @@ void BeaconList::save(const char* filename)
 	fclose(fp);
 }
 
+// this function does not sustain beacon structure.
+// after this function reset beaconlist and re-apply planes should be done
+void BeaconList::modifyAndSave(const char *filename, int userBid, Vector modifiedLocation)
+{
+	FILE *fp = fopen(filename , "w");
+
+	if (fp == NULL)
+	{
+		printf("BeaconList::save, can't open file %s\n", filename);
+		exit(20);
+	}
+
+	for (size_t i = 0; i < baseBeaconList.size(); i++)
+	{
+		Vector location = baseBeaconList[i]->getLocation();
+		
+		if (baseBeaconList[i]->getUserBid() == userBid)
+			location = modifiedLocation;
+		
+		fprintf(fp, "%2d;%5d;%5d;%5d;\n", 
+				baseBeaconList[i]->getUserBid(),
+				(int)location.x, (int)location.y, (int)location.z);
+
+	}
+	fclose(fp);
+}
+// this function does not sustain beacon structure.
+// after this function reset beaconlist and re-apply planes should be done
+void BeaconList::deleteAndSave(const char *filename, int userBid)
+{
+	FILE *fp = fopen(filename , "w");
+
+	if (fp == NULL)
+	{
+		printf("BeaconList::save, can't open file %s\n", filename);
+		exit(20);
+	}
+
+	for (size_t i = 0; i < baseBeaconList.size(); i++)
+	{
+		Vector location = baseBeaconList[i]->getLocation();
+		
+		if (baseBeaconList[i]->getUserBid() == userBid)
+			continue;
+		
+		fprintf(fp, "%2d;%5d;%5d;%5d;\n", 
+				baseBeaconList[i]->getUserBid(),
+				(int)location.x, (int)location.y, (int)location.z);
+
+	}
+	fclose(fp);
+}

@@ -22,6 +22,8 @@ public:
 	Beacon* findByUserBid(int userBid);
 	void load(const char *filename);
 	void save(const char *filename);
+	void modifyAndSave(const char *filename, int userBid, Vector location);
+	void deleteAndSave(const char *filename, int userBid);
 
 public:
 //	std::vector<Beacon*> beacons;
